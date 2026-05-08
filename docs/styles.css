@@ -1,0 +1,188 @@
+/* ======================
+   Layout / Base
+====================== */
+
+body {
+  background: white;
+  font-size: 16px;
+}
+
+/* ======================
+   Sidebar (LEFT)
+====================== */
+
+.sidebar-navigation {
+  background-color: #dbe8ef !important;
+}
+
+.sidebar-navigation .sidebar-item-text {
+  color: #164a73;
+}
+
+.sidebar-navigation .active {
+  font-weight: 700;
+  color: #0b3c5d !important;
+}
+
+/* Hide default title (fixes ugly stacked text) */
+.sidebar-title {
+  display: none;
+}
+
+/* Logo */
+.sidebar-logo {
+  max-width: 170px;
+  margin-bottom: 1rem;
+}
+
+/* ======================
+   Right TOC (WHITE)
+====================== */
+
+.sidebar-margin {
+  background-color: white !important;
+}
+
+/* ======================
+   Typography
+====================== */
+
+h1, h2, h3 {
+  color: #164a73;
+}
+
+a {
+  color: #1267b3;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ======================
+   FILE GRID (NEW)
+====================== */
+
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.file-card {
+  border: 1px solid #dbe4ea;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 1rem 1.15rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.file-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.file-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  color: #164a73;
+  font-size: 1.15rem;
+}
+
+.file-card p {
+  color: #5f6f7a;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.file-card ul {
+  padding-left: 1.15rem;
+  margin-bottom: 0;
+}
+
+.file-card li {
+  margin-bottom: 0.45rem;
+}
+
+.file-card a {
+  font-weight: 600;
+}
+
+.file-card h4 {
+  margin-top: 1rem;
+  margin-bottom: 0.35rem;
+  color: #465a69;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* ======================
+   TABLE CLEANUP (if used)
+====================== */
+
+table {
+  font-size: 15px;
+}
+
+th {
+  background-color: #eef3f7;
+  font-weight: 600;
+}
+
+td {
+  vertical-align: middle;
+}
+
+pre {
+  background: #f8fafc;
+  border: 1px solid #dbe4ea;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  font-size: 0.9rem;
+}
+
+
+/* Wide rendered code pages */
+.code-page pre {
+  max-width: none !important;
+  width: calc(100vw - 380px) !important;
+  overflow-x: auto !important;
+  font-size: 0.82rem;
+}
+
+.code-page pre code {
+  white-space: pre !important;
+}
+
+
+/* GitHub-style source pages */
+.code-shell {
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.code-shell-header {
+  background: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
+  padding: 0.65rem 1rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #24292f;
+}
+
+.code-shell pre {
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  background: #ffffff;
+  font-size: 0.84rem;
+  overflow-x: auto;
+}
+
+.code-shell pre code {
+  white-space: pre;
+}

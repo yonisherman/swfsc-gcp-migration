@@ -1,0 +1,21 @@
+---
+title: "Dockerfile"
+toc: false
+page-layout: full
+---
+
+[← Back to workflow](../../viirs-netpp.html)
+
+Container environment for the VIIRS NetPP Cloud Run workflow.
+
+::: {.code-shell}
+
+::: {.code-shell-header}
+Dockerfile
+:::
+
+```{.dockerfile}
+{{< include workflows/viirs-netpp/Dockerfile >}}
+```
+
+:::

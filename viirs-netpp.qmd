@@ -7,49 +7,99 @@ This chapter documents a cloud-based workflow for generating VIIRS net primary p
 This workflow computes daily and monthly satellite-derived primary productivity products from VIIRS inputs using a containerized Cloud Run Job pattern.
 
 ## Repository structure
+
+The workflow follows a consistent template: configuration, deployment assets, processing scripts, and NetCDF templates.
+
 ```text
-.
-├── CHANGELOG.md
-├── config
+NOAA20-netpp-CloudRun/
+├── config/
 │   ├── config.yml
 │   └── requirements.txt
 ├── deploy_job.sh
 ├── Dockerfile
 ├── entrypoint.sh
-├── LICENSE
-├── README.md
-├── scripts
-│   ├── control_viirs_netpp_monthly.py
+├── scripts/
 │   ├── control_viirs_netpp.py
-│   ├── make_viirs_netpp_monthly.py
-│   └── make_viirs_netpp.py
-├── src
-│   └── __init__.py
-└── templates
-    ├── nasa_noaa20_4km_month.cdl
+│   ├── make_viirs_netpp.py
+│   ├── control_viirs_netpp_monthly.py
+│   └── make_viirs_netpp_monthly.py
+└── templates/
     ├── nasa_noaa20_4km.cdl
-    ├── nasa_snpp_4km_month.cdl
-    └── nasa_snpp_4km.cdl
+    ├── nasa_noaa20_4km_month.cdl
+    ├── nasa_snpp_4km.cdl
+    └── nasa_snpp_4km_month.cdl
 ```
-   
-    ## Source files
 
-- [Dockerfile](workflows/viirs-netpp/Dockerfile)
-- [entrypoint.sh](workflows/viirs-netpp/entrypoint.sh)
-- [deploy_job.sh](workflows/viirs-netpp/deploy_job.sh)
-- [config.yml](workflows/viirs-netpp/config/config.yml)
-- [requirements.txt](workflows/viirs-netpp/config/requirements.txt)
 
-### Scripts
+## Codebase {.unnumbered}
 
-- [control_viirs_netpp.py](workflows/viirs-netpp/scripts/control_viirs_netpp.py)
-- [make_viirs_netpp.py](workflows/viirs-netpp/scripts/make_viirs_netpp.py)
-- [control_viirs_netpp_monthly.py](workflows/viirs-netpp/scripts/control_viirs_netpp_monthly.py)
-- [make_viirs_netpp_monthly.py](workflows/viirs-netpp/scripts/make_viirs_netpp_monthly.py)
+The workflow is structured into modular components that support configuration,
+deployment, processing, and product generation.
 
-### Templates
+```{=html}
+<div class="file-grid">
 
-- [nasa_noaa20_4km.cdl](workflows/viirs-netpp/templates/nasa_noaa20_4km.cdl)
-- [nasa_noaa20_4km_month.cdl](workflows/viirs-netpp/templates/nasa_noaa20_4km_month.cdl)
-- [nasa_snpp_4km.cdl](workflows/viirs-netpp/templates/nasa_snpp_4km.cdl)
-- [nasa_snpp_4km_month.cdl](workflows/viirs-netpp/templates/nasa_snpp_4km_month.cdl)
+<div class="file-card">
+<h3>config/</h3>
+<p>Runtime configuration and Python environment.</p>
+<ul>
+<li><a href="workflows/viirs-netpp/config/config.yml">config.yml</a> — sensor, GCS, API, and processing settings</li>
+<li><a href="workflows/viirs-netpp/config/requirements.txt">requirements.txt</a> — Python dependencies</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>deployment files</h3>
+<p>Top-level files used to build and run the Cloud Run jobs.</p>
+<ul>
+<a href="code-pages/viirs-netpp/dockerfile.html">Dockerfile</a>
+<li><a href="workflows/viirs-netpp/entrypoint.sh">entrypoint.sh</a> — job mode selector</li>
+<li><a href="workflows/viirs-netpp/deploy_job.sh">deploy_job.sh</a> — build, deploy, and schedule jobs</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>scripts/</h3>
+<p>Processing and orchestration logic.</p>
+
+<h4>Daily products</h4>
+<ul>
+<li><a href="workflows/viirs-netpp/scripts/control_viirs_netpp.py">control_viirs_netpp.py</a> — daily run orchestrator</li>
+<li><a href="workflows/viirs-netpp/scripts/make_viirs_netpp.py">make_viirs_netpp.py</a> — daily productivity generator</li>
+</ul>
+
+<h4>Monthly composites</h4>
+<ul>
+<li><a href="workflows/viirs-netpp/scripts/control_viirs_netpp_monthly.py">control_viirs_netpp_monthly.py</a> — monthly run orchestrator</li>
+<li><a href="workflows/viirs-netpp/scripts/make_viirs_netpp_monthly.py">make_viirs_netpp_monthly.py</a> — monthly composite builder</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>templates/</h3>
+<p>CDL templates used to create NetCDF outputs.</p>
+
+<h4>NOAA-20</h4>
+<ul>
+<li><a href="workflows/viirs-netpp/templates/nasa_noaa20_4km.cdl">nasa_noaa20_4km.cdl</a> — daily template</li>
+<li><a href="workflows/viirs-netpp/templates/nasa_noaa20_4km_month.cdl">nasa_noaa20_4km_month.cdl</a> — monthly template</li>
+</ul>
+
+<h4>SNPP</h4>
+<ul>
+<li><a href="workflows/viirs-netpp/templates/nasa_snpp_4km.cdl">nasa_snpp_4km.cdl</a> — daily template</li>
+<li><a href="workflows/viirs-netpp/templates/nasa_snpp_4km_month.cdl">nasa_snpp_4km_month.cdl</a> — monthly template</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>project metadata</h3>
+<p>Documentation, licensing, and change tracking.</p>
+<ul>
+<li><a href="workflows/viirs-netpp/README.md">README.md</a> — project overview</li>
+<li><a href="workflows/viirs-netpp/CHANGELOG.md">CHANGELOG.md</a> — version history and workflow changes</li>
+<li><a href="workflows/viirs-netpp/LICENSE">LICENSE</a> — license terms</li>
+</ul>
+</div>
+
+</div>

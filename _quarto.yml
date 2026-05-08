@@ -1,15 +1,30 @@
 project:
   type: book
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "code-pages/**/*.qmd"
+  resources:
+    - code-wide.css
+    - workflows/**
 
 book:
-  title: "CoastWatch West Coast node / SWFSC ERDDAP migration"
+  title: "SWFSC Cloud Migration Workflows"
   author: "Jonathan Sherman"
+  sidebar:
+    logo: assets/logo.png
+    title: ""
   chapters:
     - index.qmd
     - viirs-netpp.qmd
+  
 
 format:
   html:
     theme: cosmo
+    css: styles.css
+    link-external-icon: true
     toc: true
+    sidebar:
+      collapse-level: 2
+      style: "docked"

@@ -2,31 +2,61 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "CoastWatch West Coast node / SWFSC ERDDAP migration",
+    "title": "SWFSC Cloud Migration Workflows",
     "section": "",
-    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.",
+    "text": "1 SWFSC Cloud Migration\nThis site documents cloud-based satellite data workflows developed for the NOAA CoastWatch West Coast Node / SWFSC ERDDAP migration.",
     "crumbs": [
-      "Preface"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SWFSC Cloud Migration</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#what-youll-find-here",
+    "href": "index.html#what-youll-find-here",
+    "title": "SWFSC Cloud Migration Workflows",
+    "section": "1.1 What you’ll find here",
+    "text": "1.1 What you’ll find here\n\nCloud Run data pipelines for satellite processing\nEnd-to-end reproducible workflows\nExamples of operational ocean data systems",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SWFSC Cloud Migration</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#not-sure-where-to-start",
+    "href": "index.html#not-sure-where-to-start",
+    "title": "SWFSC Cloud Migration Workflows",
+    "section": "1.2 Not sure where to start?",
+    "text": "1.2 Not sure where to start?\n\nExplore the VIIRS NetPP workflow\nReview architecture and deployment patterns\nBrowse code examples and templates",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>SWFSC Cloud Migration</span>"
     ]
   },
   {
     "objectID": "viirs-netpp.html",
     "href": "viirs-netpp.html",
-    "title": "1  VIIRS Net Primary Productivity Cloud Run Workflow",
+    "title": "2  VIIRS Net Primary Productivity Cloud Run Workflow",
     "section": "",
-    "text": "1.1 Purpose\nThis chapter documents a cloud-based workflow for generating VIIRS net primary productivity products.\nThis workflow computes daily and monthly satellite-derived primary productivity products from VIIRS inputs using a containerized Cloud Run Job pattern.",
+    "text": "2.1 Purpose\nThis chapter documents a cloud-based workflow for generating VIIRS net primary productivity products.\nThis workflow computes daily and monthly satellite-derived primary productivity products from VIIRS inputs using a containerized Cloud Run Job pattern.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>VIIRS Net Primary Productivity Cloud Run Workflow</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>VIIRS Net Primary Productivity Cloud Run Workflow</span>"
     ]
   },
   {
     "objectID": "viirs-netpp.html#repository-structure",
     "href": "viirs-netpp.html#repository-structure",
-    "title": "1  VIIRS Net Primary Productivity Cloud Run Workflow",
-    "section": "1.2 Repository structure",
-    "text": "1.2 Repository structure\n.\n├── CHANGELOG.md\n├── config\n│   ├── config.yml\n│   └── requirements.txt\n├── deploy_job.sh\n├── Dockerfile\n├── entrypoint.sh\n├── LICENSE\n├── README.md\n├── scripts\n│   ├── control_viirs_netpp_monthly.py\n│   ├── control_viirs_netpp.py\n│   ├── make_viirs_netpp_monthly.py\n│   └── make_viirs_netpp.py\n├── src\n│   └── __init__.py\n└── templates\n    ├── nasa_noaa20_4km_month.cdl\n    ├── nasa_noaa20_4km.cdl\n    ├── nasa_snpp_4km_month.cdl\n    └── nasa_snpp_4km.cdl\n## Source files\n\nDockerfile\nentrypoint.sh\ndeploy_job.sh\nconfig.yml\nrequirements.txt\n\n\n1.2.1 Scripts\n\ncontrol_viirs_netpp.py\nmake_viirs_netpp.py\ncontrol_viirs_netpp_monthly.py\nmake_viirs_netpp_monthly.py\n\n\n\n1.2.2 Templates\n\nnasa_noaa20_4km.cdl\nnasa_noaa20_4km_month.cdl\nnasa_snpp_4km.cdl\nnasa_snpp_4km_month.cdl",
+    "title": "2  VIIRS Net Primary Productivity Cloud Run Workflow",
+    "section": "2.2 Repository structure",
+    "text": "2.2 Repository structure\nThe workflow follows a consistent template: configuration, deployment assets, processing scripts, and NetCDF templates.\nNOAA20-netpp-CloudRun/\n├── config/\n│   ├── config.yml\n│   └── requirements.txt\n├── deploy_job.sh\n├── Dockerfile\n├── entrypoint.sh\n├── scripts/\n│   ├── control_viirs_netpp.py\n│   ├── make_viirs_netpp.py\n│   ├── control_viirs_netpp_monthly.py\n│   └── make_viirs_netpp_monthly.py\n└── templates/\n    ├── nasa_noaa20_4km.cdl\n    ├── nasa_noaa20_4km_month.cdl\n    ├── nasa_snpp_4km.cdl\n    └── nasa_snpp_4km_month.cdl",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>VIIRS Net Primary Productivity Cloud Run Workflow</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>VIIRS Net Primary Productivity Cloud Run Workflow</span>"
+    ]
+  },
+  {
+    "objectID": "viirs-netpp.html#codebase",
+    "href": "viirs-netpp.html#codebase",
+    "title": "2  VIIRS Net Primary Productivity Cloud Run Workflow",
+    "section": "Codebase",
+    "text": "Codebase\nThe workflow is structured into modular components that support configuration, deployment, processing, and product generation.\n\n\n\nconfig/\n\n\nRuntime configuration and Python environment.\n\n\n\nconfig.yml — sensor, GCS, API, and processing settings\n\n\nrequirements.txt — Python dependencies\n\n\n\n\n\ndeployment files\n\n\nTop-level files used to build and run the Cloud Run jobs.\n\n\nDockerfile\n\nentrypoint.sh — job mode selector\n\n\ndeploy_job.sh — build, deploy, and schedule jobs\n\n\n\n\n\nscripts/\n\n\nProcessing and orchestration logic.\n\n\nDaily products\n\n\n\ncontrol_viirs_netpp.py — daily run orchestrator\n\n\nmake_viirs_netpp.py — daily productivity generator\n\n\n\nMonthly composites\n\n\n\ncontrol_viirs_netpp_monthly.py — monthly run orchestrator\n\n\nmake_viirs_netpp_monthly.py — monthly composite builder\n\n\n\n\n\ntemplates/\n\n\nCDL templates used to create NetCDF outputs.\n\n\nNOAA-20\n\n\n\nnasa_noaa20_4km.cdl — daily template\n\n\nnasa_noaa20_4km_month.cdl — monthly template\n\n\n\nSNPP\n\n\n\nnasa_snpp_4km.cdl — daily template\n\n\nnasa_snpp_4km_month.cdl — monthly template\n\n\n\n\n\nproject metadata\n\n\nDocumentation, licensing, and change tracking.\n\n\n\nREADME.md — project overview\n\n\nCHANGELOG.md — version history and workflow changes\n\n\nLICENSE — license terms",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>VIIRS Net Primary Productivity Cloud Run Workflow</span>"
     ]
   }
 ]

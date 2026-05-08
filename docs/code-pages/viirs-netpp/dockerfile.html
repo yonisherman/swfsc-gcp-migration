@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>2&nbsp; VIIRS Net Primary Productivity Cloud Run Workflow – SWFSC Cloud Migration Workflows</title>
+<title>Dockerfile</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,134 +23,36 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./index.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
-  "copy-button": false,
-  "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
-  "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
-  }
-}</script>
+<script src="dockerfile_files/libs/clipboard/clipboard.min.js"></script>
+<script src="dockerfile_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="dockerfile_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="dockerfile_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="dockerfile_files/libs/quarto-html/popper.min.js"></script>
+<script src="dockerfile_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="dockerfile_files/libs/quarto-html/anchor.min.js"></script>
+<link href="dockerfile_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="dockerfile_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="dockerfile_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="dockerfile_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="dockerfile_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
-<link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="quarto-light">
 
-<div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./viirs-netpp.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
-<!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
-      <a href="./index.html" class="sidebar-logo-link">
-      <img src="./assets/logo.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="./assets/logo.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
-      </a>
-    <div class="sidebar-title mb-0 py-0">
-      <a href="./">SWFSC Cloud Migration Workflows</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SWFSC Cloud Migration</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./viirs-netpp.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#purpose" id="toc-purpose" class="nav-link active" data-scroll-target="#purpose"><span class="header-section-number">2.1</span> Purpose</a></li>
-  <li><a href="#repository-structure" id="toc-repository-structure" class="nav-link" data-scroll-target="#repository-structure"><span class="header-section-number">2.2</span> Repository structure</a></li>
-  <li><a href="#codebase" id="toc-codebase" class="nav-link" data-scroll-target="#codebase">Codebase</a></li>
-  </ul>
-</nav>
-    </div>
-<!-- main -->
-<main class="content" id="quarto-document-content">
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full">
+
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></h1>
+<h1 class="title">Dockerfile</h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page">
 
     
   
@@ -162,154 +64,93 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This chapter documents a cloud-based workflow for generating VIIRS net primary productivity products.</p>
-<section id="purpose" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="purpose"><span class="header-section-number">2.1</span> Purpose</h2>
-<p>This workflow computes daily and monthly satellite-derived primary productivity products from VIIRS inputs using a containerized Cloud Run Job pattern.</p>
-</section>
-<section id="repository-structure" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="repository-structure"><span class="header-section-number">2.2</span> Repository structure</h2>
-<p>The workflow follows a consistent template: configuration, deployment assets, processing scripts, and NetCDF templates.</p>
-<pre class="text"><code>NOAA20-netpp-CloudRun/
-├── config/
-│   ├── config.yml
-│   └── requirements.txt
-├── deploy_job.sh
-├── Dockerfile
-├── entrypoint.sh
-├── scripts/
-│   ├── control_viirs_netpp.py
-│   ├── make_viirs_netpp.py
-│   ├── control_viirs_netpp_monthly.py
-│   └── make_viirs_netpp_monthly.py
-└── templates/
-    ├── nasa_noaa20_4km.cdl
-    ├── nasa_noaa20_4km_month.cdl
-    ├── nasa_snpp_4km.cdl
-    └── nasa_snpp_4km_month.cdl</code></pre>
-</section>
-<section id="codebase" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="codebase">Codebase</h2>
-<p>The workflow is structured into modular components that support configuration, deployment, processing, and product generation.</p>
-<div class="file-grid">
-<div class="file-card">
-<h3 class="anchored">
-config/
-</h3>
-<p>
-Runtime configuration and Python environment.
-</p>
-<ul>
-<li>
-<a href="workflows/viirs-netpp/config/config.yml">config.yml</a> — sensor, GCS, API, and processing settings
-</li>
-<li>
-<a href="workflows/viirs-netpp/config/requirements.txt">requirements.txt</a> — Python dependencies
-</li>
-</ul>
-</div>
-<div class="file-card">
-<h3 class="anchored">
-deployment files
-</h3>
-<p>
-Top-level files used to build and run the Cloud Run jobs.
-</p>
-<ul>
-<a href="code-pages/viirs-netpp/dockerfile.html">Dockerfile</a>
-<li>
-<a href="workflows/viirs-netpp/entrypoint.sh">entrypoint.sh</a> — job mode selector
-</li>
-<li>
-<a href="workflows/viirs-netpp/deploy_job.sh">deploy_job.sh</a> — build, deploy, and schedule jobs
-</li>
-</ul>
-</div>
-<div class="file-card">
-<h3 class="anchored">
-scripts/
-</h3>
-<p>
-Processing and orchestration logic.
-</p>
-<h4 class="anchored">
-Daily products
-</h4>
-<ul>
-<li>
-<a href="workflows/viirs-netpp/scripts/control_viirs_netpp.py">control_viirs_netpp.py</a> — daily run orchestrator
-</li>
-<li>
-<a href="workflows/viirs-netpp/scripts/make_viirs_netpp.py">make_viirs_netpp.py</a> — daily productivity generator
-</li>
-</ul>
-<h4 class="anchored">
-Monthly composites
-</h4>
-<ul>
-<li>
-<a href="workflows/viirs-netpp/scripts/control_viirs_netpp_monthly.py">control_viirs_netpp_monthly.py</a> — monthly run orchestrator
-</li>
-<li>
-<a href="workflows/viirs-netpp/scripts/make_viirs_netpp_monthly.py">make_viirs_netpp_monthly.py</a> — monthly composite builder
-</li>
-</ul>
-</div>
-<div class="file-card">
-<h3 class="anchored">
-templates/
-</h3>
-<p>
-CDL templates used to create NetCDF outputs.
-</p>
-<h4 class="anchored">
-NOAA-20
-</h4>
-<ul>
-<li>
-<a href="workflows/viirs-netpp/templates/nasa_noaa20_4km.cdl">nasa_noaa20_4km.cdl</a> — daily template
-</li>
-<li>
-<a href="workflows/viirs-netpp/templates/nasa_noaa20_4km_month.cdl">nasa_noaa20_4km_month.cdl</a> — monthly template
-</li>
-</ul>
-<h4 class="anchored">
-SNPP
-</h4>
-<ul>
-<li>
-<a href="workflows/viirs-netpp/templates/nasa_snpp_4km.cdl">nasa_snpp_4km.cdl</a> — daily template
-</li>
-<li>
-<a href="workflows/viirs-netpp/templates/nasa_snpp_4km_month.cdl">nasa_snpp_4km_month.cdl</a> — monthly template
-</li>
-</ul>
-</div>
-<div class="file-card">
-<h3 class="anchored">
-project metadata
-</h3>
-<p>
-Documentation, licensing, and change tracking.
-</p>
-<ul>
-<li>
-<a href="workflows/viirs-netpp/README.md">README.md</a> — project overview
-</li>
-<li>
-<a href="workflows/viirs-netpp/CHANGELOG.md">CHANGELOG.md</a> — version history and workflow changes
-</li>
-<li>
-<a href="workflows/viirs-netpp/LICENSE">LICENSE</a> — license terms
-</li>
-</ul>
-</div>
-</div>
+<p><a href="../../viirs-netpp.html">← Back to workflow</a></p>
+<section id="dockerfile" class="level1">
+<h1>Dockerfile</h1>
+<p>Container environment for the VIIRS NetPP Cloud Run workflow.</p>
+<div class="code-page">
+<pre class="{bash}"><code>#| code-fold: false
+#| code-tools: true
+# =============================================================================
+# Dockerfile - VIIRS primary productivity Cloud Run job
+#
+# Builds a single image used by two Cloud Run jobs:
+#   viirs-netpp-nrt-daily   (JOB_MODE=nrt_daily)
+#   viirs-netpp-sq-sweep    (JOB_MODE=sq_sweep)
+#
+# The entrypoint reads JOB_MODE and calls control_viirs_netpp.py accordingly.
+# =============================================================================
 
+FROM python:3.11-slim
 
+# Limit numpy/scipy thread oversubscription inside a container
+ENV OMP_NUM_THREADS=1 \
+    OPENBLAS_NUM_THREADS=1 \
+    MKL_NUM_THREADS=1 \
+    NUMEXPR_NUM_THREADS=1 \
+    VECLIB_MAXIMUM_THREADS=1
+
+# ---------------------------------------------------------------------------
+# System dependencies
+# ---------------------------------------------------------------------------
+RUN apt-get update &amp;&amp; apt-get install -y --no-install-recommends \
+        wget \
+        curl \
+        gnupg \
+        ca-certificates \
+        libhdf5-dev \
+        libnetcdf-dev \
+        netcdf-bin \
+        nco \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+# ---------------------------------------------------------------------------
+# Google Cloud SDK  (for gsutil used inside make_viirs_netpp.py)
+# ---------------------------------------------------------------------------
+RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] \
+        https://packages.cloud.google.com/apt cloud-sdk main" \
+        | tee /etc/apt/sources.list.d/google-cloud-sdk.list \
+    &amp;&amp; curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+        | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg \
+    &amp;&amp; apt-get update \
+    &amp;&amp; apt-get install -y --no-install-recommends google-cloud-cli \
+    &amp;&amp; rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# ---------------------------------------------------------------------------
+# Python dependencies
+# ---------------------------------------------------------------------------
+COPY config/requirements.txt ./config/
+RUN pip install --no-cache-dir -r config/requirements.txt
+
+# ---------------------------------------------------------------------------
+# Application source
+# ---------------------------------------------------------------------------
+COPY config/config.yml      ./config/config.yml
+COPY templates/              ./templates/
+COPY scripts/               ./scripts/
+COPY entrypoint.sh          ./entrypoint.sh
+
+RUN chmod +x entrypoint.sh scripts/control_viirs_netpp.py scripts/make_viirs_netpp.py
+
+# ---------------------------------------------------------------------------
+# Runtime environment
+# ---------------------------------------------------------------------------
+ENV PYTHONPATH="/app:/app/scripts" \
+    PYTHONUNBUFFERED=1 \
+    NPP_LOCAL_SCRATCH="/tmp/npp_scratch" \
+    HOME="/tmp" \
+    NPP_NCO_DIR="/usr/bin"
+
+RUN mkdir -p /tmp/npp_scratch
+
+ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
+</code></pre>
+</div>
 </section>
 
-</main> <!-- /main -->
+</main>
+<!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -397,8 +238,6 @@ Documentation, licensing, and change tracking.
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
-            // default icon
-            link.classList.add("external");
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -712,15 +551,6 @@ Documentation, licensing, and change tracking.
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="SWFSC Cloud Migration">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SWFSC Cloud Migration</span></span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-  </div>
-</nav>
 </div> <!-- /content -->
 
 

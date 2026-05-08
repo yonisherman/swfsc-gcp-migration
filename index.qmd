@@ -1,5 +1,15 @@
-# Preface {.unnumbered}
+# SWFSC Cloud Migration
 
-This is a Quarto book.
+This site documents cloud-based satellite data workflows developed for the NOAA CoastWatch West Coast Node / SWFSC ERDDAP migration.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
+## What you’ll find here
+
+- Cloud Run data pipelines for satellite processing
+- End-to-end reproducible workflows
+- Examples of operational ocean data systems
+
+## Not sure where to start?
+
+- Explore the VIIRS NetPP workflow
+- Review architecture and deployment patterns
+- Browse code examples and templates

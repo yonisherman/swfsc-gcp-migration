@@ -8,7 +8,7 @@
 
 <meta name="author" content="Jonathan Sherman">
 
-<title>CoastWatch West Coast node / SWFSC ERDDAP migration</title>
+<title>SWFSC Cloud Migration Workflows</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,6 +72,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -83,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SWFSC Cloud Migration</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -98,9 +99,11 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="./index.html" class="sidebar-logo-link">
+      <img src="./assets/logo.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./assets/logo.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">CoastWatch West Coast node / SWFSC ERDDAP migration</a> 
+      <a href="./">SWFSC Cloud Migration Workflows</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -113,13 +116,13 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Preface</span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SWFSC Cloud Migration</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./viirs-netpp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></span></a>
   </div>
 </li>
     </ul>
@@ -132,7 +135,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
+  <li><a href="#swfsc-cloud-migration" id="toc-swfsc-cloud-migration" class="nav-link active" data-scroll-target="#swfsc-cloud-migration"><span class="header-section-number">1</span> SWFSC Cloud Migration</a>
+  <ul class="collapse">
+  <li><a href="#what-youll-find-here" id="toc-what-youll-find-here" class="nav-link" data-scroll-target="#what-youll-find-here"><span class="header-section-number">1.1</span> What you’ll find here</a></li>
+  <li><a href="#not-sure-where-to-start" id="toc-not-sure-where-to-start" class="nav-link" data-scroll-target="#not-sure-where-to-start"><span class="header-section-number">1.2</span> Not sure where to start?</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -141,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">CoastWatch West Coast node / SWFSC ERDDAP migration</h1>
+<h1 class="title">SWFSC Cloud Migration Workflows</h1>
 </div>
 
 
@@ -164,12 +171,27 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>This is a Quarto book.</p>
-<p>To learn more about Quarto books visit <a href="https://quarto.org/docs/books" class="uri">https://quarto.org/docs/books</a>.</p>
+<section id="swfsc-cloud-migration" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> SWFSC Cloud Migration</h1>
+<p>This site documents cloud-based satellite data workflows developed for the NOAA CoastWatch West Coast Node / SWFSC ERDDAP migration.</p>
+<section id="what-youll-find-here" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="what-youll-find-here"><span class="header-section-number">1.1</span> What you’ll find here</h2>
+<ul>
+<li>Cloud Run data pipelines for satellite processing</li>
+<li>End-to-end reproducible workflows</li>
+<li>Examples of operational ocean data systems</li>
+</ul>
+</section>
+<section id="not-sure-where-to-start" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="not-sure-where-to-start"><span class="header-section-number">1.2</span> Not sure where to start?</h2>
+<ul>
+<li>Explore the VIIRS NetPP workflow</li>
+<li>Review architecture and deployment patterns</li>
+<li>Browse code examples and templates</li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -260,6 +282,8 @@ ul.task-list li input[type="checkbox"] {
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+            // default icon
+            link.classList.add("external");
         }
       }
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
@@ -578,7 +602,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./viirs-netpp.html" class="pagination-link" aria-label="VIIRS Net Primary Productivity Cloud Run Workflow">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
