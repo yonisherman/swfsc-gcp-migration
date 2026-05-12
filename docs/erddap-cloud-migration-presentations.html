@@ -94,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
@@ -426,11 +426,9 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
-    </div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -439,7 +437,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-right">
 
     
   
@@ -453,9 +451,38 @@ ul.task-list li input[type="checkbox"] {
 
 <p>This page contains the ERDDAP Cloud Migration presentation used for project updates and stakeholder briefings.</p>
 <p>The presentation is updated continuously as we present to more groups over time.</p>
-<div class="slide-container">
-<p><img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide1.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide2.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide3.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide4.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide5.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide6.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide7.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide8.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide9.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide10.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide11.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide12.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide13.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide14.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide15.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide16.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide17.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide18.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide19.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide20.png"> <img class="slide-img" src="assets/presentations/erddap-cloud-migration/Slide21.png"></p>
+<div class="slideshow">
+<p><button class="slide-btn prev" onclick="changeSlide(-1)">❮</button></p>
+<p><img id="current-slide" class="slide-show-img" src="assets/presentations/erddap-cloud-migration/Slide1.png" alt="ERDDAP Cloud Migration slide"></p>
+<p><button class="slide-btn next" onclick="changeSlide(1)">❯</button></p>
 </div>
+<div class="slide-counter">
+<p>Slide <span id="slide-num">1</span> of 21</p>
+</div>
+<script>
+let currentSlide = 1;
+const totalSlides = 21;
+
+function showSlide(n) {
+  if (n > totalSlides) currentSlide = 1;
+  if (n < 1) currentSlide = totalSlides;
+
+  document.getElementById("current-slide").src =
+    `assets/presentations/erddap-cloud-migration/Slide${currentSlide}.png`;
+
+  document.getElementById("slide-num").textContent = currentSlide;
+}
+
+function changeSlide(step) {
+  currentSlide += step;
+  showSlide(currentSlide);
+}
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "ArrowRight") changeSlide(1);
+  if (event.key === "ArrowLeft") changeSlide(-1);
+});
+</script>
 
 
 
@@ -862,7 +889,7 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-page-right">
   <div class="nav-page nav-page-previous">
       <a href="./erddap-vm-setup.html" class="pagination-link" aria-label="ERDDAP Server &amp; Dataproc VM Setup">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">ERDDAP Server &amp; Dataproc VM Setup</span></span>

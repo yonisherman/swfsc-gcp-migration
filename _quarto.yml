@@ -82,4 +82,6 @@ project:
   pre-render: python build-chapters.py
   resources:
   - workflows/**
+  - assets/presentations/**
+  
   type: book
