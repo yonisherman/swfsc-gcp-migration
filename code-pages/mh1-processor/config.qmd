@@ -1,0 +1,18 @@
+---
+title: "config.yml"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mh1-processor.html)
+
+Runtime configuration — GCS buckets, NASA endpoints, publish targets.
+
+::: {.code-shell}
+
+```{.yaml}
+{{< include ../../workflows/mh1-mpoc-mpic-processor/config/config.yml >}}
+```
+
+:::

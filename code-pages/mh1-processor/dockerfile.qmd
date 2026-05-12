@@ -1,0 +1,18 @@
+---
+title: "Dockerfile"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mh1-processor.html)
+
+Container environment for the MH1/MPOC/MPIC processor workflow.
+
+::: {.code-shell}
+
+```{.dockerfile}
+{{< include ../../workflows/mh1-mpoc-mpic-processor/Dockerfile >}}
+```
+
+:::

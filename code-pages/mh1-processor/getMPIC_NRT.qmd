@@ -1,0 +1,18 @@
+---
+title: "getMPIC_NRT.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mh1-processor.html)
+
+NRT MODIS-Aqua particulate inorganic carbon (PIC) retrieval.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/mh1-mpoc-mpic-processor/scripts/MPIC/getMPIC_NRT.py >}}
+```
+
+:::

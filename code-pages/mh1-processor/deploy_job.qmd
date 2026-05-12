@@ -1,0 +1,18 @@
+---
+title: "deploy_job.sh"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mh1-processor.html)
+
+Builds, pushes, and deploys the Cloud Run job and scheduler.
+
+::: {.code-shell}
+
+```{.bash}
+{{< include ../../workflows/mh1-mpoc-mpic-processor/deploy_job.sh >}}
+```
+
+:::

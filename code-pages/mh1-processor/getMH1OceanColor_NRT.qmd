@@ -1,0 +1,18 @@
+---
+title: "getMH1OceanColor_NRT.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mh1-processor.html)
+
+NRT MODIS-Aqua ocean color retrieval (chlorophyll-a, nFLH, PAR, Kd490).
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/mh1-mpoc-mpic-processor/scripts/MH1/getMH1OceanColor_NRT.py >}}
+```
+
+:::

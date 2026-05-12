@@ -1,0 +1,18 @@
+---
+title: "getMPOC_Sci.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mh1-processor.html)
+
+Science quality MODIS-Aqua particulate organic carbon (POC) retrieval.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/mh1-mpoc-mpic-processor/scripts/MPOC/getMPOC_Sci.py >}}
+```
+
+:::

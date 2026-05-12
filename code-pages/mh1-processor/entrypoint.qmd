@@ -1,0 +1,18 @@
+---
+title: "entrypoint.sh"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mh1-processor.html)
+
+Cloud Run entrypoint; runs all NRT then all Science suites in sequence.
+
+::: {.code-shell}
+
+```{.bash}
+{{< include ../../workflows/mh1-mpoc-mpic-processor/entrypoint.sh >}}
+```
+
+:::

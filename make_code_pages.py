@@ -2,6 +2,94 @@ from pathlib import Path
 
 pages = [
     # =========================================================
+    # MH1 / MPOC / MPIC PROCESSOR
+    # =========================================================
+
+    ("code-pages/mh1-processor/dockerfile.qmd",
+     "Dockerfile",
+     "dockerfile",
+     "Container environment for the MH1/MPOC/MPIC processor workflow.",
+     "workflows/mh1-mpoc-mpic-processor/Dockerfile"),
+
+    ("code-pages/mh1-processor/entrypoint.qmd",
+     "entrypoint.sh",
+     "bash",
+     "Cloud Run entrypoint; runs all NRT then all Science suites in sequence.",
+     "workflows/mh1-mpoc-mpic-processor/entrypoint.sh"),
+
+    ("code-pages/mh1-processor/deploy_job.qmd",
+     "deploy_job.sh",
+     "bash",
+     "Builds, pushes, and deploys the Cloud Run job and scheduler.",
+     "workflows/mh1-mpoc-mpic-processor/deploy_job.sh"),
+
+    ("code-pages/mh1-processor/config.qmd",
+     "config.yml",
+     "yaml",
+     "Runtime configuration — GCS buckets, NASA endpoints, publish targets.",
+     "workflows/mh1-mpoc-mpic-processor/config/config.yml"),
+
+    ("code-pages/mh1-processor/requirements.qmd",
+     "requirements.txt",
+     "text",
+     "Python dependencies.",
+     "workflows/mh1-mpoc-mpic-processor/config/requirements.txt"),
+
+    ("code-pages/mh1-processor/roylib.qmd",
+     "roylib.py",
+     "python",
+     "Shared GCS helpers, NASA API queries, and processing utilities.",
+     "workflows/mh1-mpoc-mpic-processor/src/roylib.py"),
+
+    ("code-pages/mh1-processor/getMH1OceanColor_NRT.qmd",
+     "getMH1OceanColor_NRT.py",
+     "python",
+     "NRT MODIS-Aqua ocean color retrieval (chlorophyll-a, nFLH, PAR, Kd490).",
+     "workflows/mh1-mpoc-mpic-processor/scripts/MH1/getMH1OceanColor_NRT.py"),
+
+    ("code-pages/mh1-processor/getMH1OceanColor_Sci.qmd",
+     "getMH1OceanColor_Sci.py",
+     "python",
+     "Science quality MODIS-Aqua ocean color retrieval (chlorophyll-a, nFLH, PAR, Kd490).",
+     "workflows/mh1-mpoc-mpic-processor/scripts/MH1/getMH1OceanColor_Sci.py"),
+
+    ("code-pages/mh1-processor/getMH1SST_NRT.qmd",
+     "getMH1SST_NRT.py",
+     "python",
+     "NRT MODIS-Aqua SST retrieval and qual_sst masking.",
+     "workflows/mh1-mpoc-mpic-processor/scripts/MH1/getMH1SST_NRT.py"),
+
+    ("code-pages/mh1-processor/getMH1SST_Sci.qmd",
+     "getMH1SST_Sci.py",
+     "python",
+     "Science quality MODIS-Aqua SST retrieval and qual_sst masking.",
+     "workflows/mh1-mpoc-mpic-processor/scripts/MH1/getMH1SST_Sci.py"),
+
+    ("code-pages/mh1-processor/getMPIC_NRT.qmd",
+     "getMPIC_NRT.py",
+     "python",
+     "NRT MODIS-Aqua particulate inorganic carbon (PIC) retrieval.",
+     "workflows/mh1-mpoc-mpic-processor/scripts/MPIC/getMPIC_NRT.py"),
+
+    ("code-pages/mh1-processor/getMPIC_Sci.qmd",
+     "getMPIC_Sci.py",
+     "python",
+     "Science quality MODIS-Aqua particulate inorganic carbon (PIC) retrieval.",
+     "workflows/mh1-mpoc-mpic-processor/scripts/MPIC/getMPIC_Sci.py"),
+
+    ("code-pages/mh1-processor/getMPOC_NRT.qmd",
+     "getMPOC_NRT.py",
+     "python",
+     "NRT MODIS-Aqua particulate organic carbon (POC) retrieval.",
+     "workflows/mh1-mpoc-mpic-processor/scripts/MPOC/getMPOC_NRT.py"),
+
+    ("code-pages/mh1-processor/getMPOC_Sci.qmd",
+     "getMPOC_Sci.py",
+     "python",
+     "Science quality MODIS-Aqua particulate organic carbon (POC) retrieval.",
+     "workflows/mh1-mpoc-mpic-processor/scripts/MPOC/getMPOC_Sci.py"),
+
+    # =========================================================
     # MUR SST
     # =========================================================
 

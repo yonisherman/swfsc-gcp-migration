@@ -178,5 +178,50 @@
   },
   "erddap-cloud-migration-presentations.qmd": {
     "erddap-cloud-migration-presentations.html": "0136f3e4"
+  },
+  "code-pages/mh1-processor/config.qmd": {
+    "config.html": "2225cb97"
+  },
+  "code-pages/mh1-processor/deploy_job.qmd": {
+    "deploy_job.html": "f74496a9"
+  },
+  "code-pages/mh1-processor/dockerfile.qmd": {
+    "dockerfile.html": "842ff435"
+  },
+  "code-pages/mh1-processor/entrypoint.qmd": {
+    "entrypoint.html": "fce1b9a6"
+  },
+  "code-pages/mh1-processor/getMH1OceanColor_NRT.qmd": {
+    "getMH1OceanColor_NRT.html": "31c37e90"
+  },
+  "code-pages/mh1-processor/getMH1OceanColor_Sci.qmd": {
+    "getMH1OceanColor_Sci.html": "09a6ca76"
+  },
+  "code-pages/mh1-processor/getMH1SST_NRT.qmd": {
+    "getMH1SST_NRT.html": "e456299a"
+  },
+  "code-pages/mh1-processor/getMH1SST_Sci.qmd": {
+    "getMH1SST_Sci.html": "12fe3255"
+  },
+  "code-pages/mh1-processor/getMPIC_NRT.qmd": {
+    "getMPIC_NRT.html": "30f856a6"
+  },
+  "code-pages/mh1-processor/getMPIC_Sci.qmd": {
+    "getMPIC_Sci.html": "effe0d91"
+  },
+  "code-pages/mh1-processor/getMPOC_NRT.qmd": {
+    "getMPOC_NRT.html": "16652cdf"
+  },
+  "code-pages/mh1-processor/getMPOC_Sci.qmd": {
+    "getMPOC_Sci.html": "c59af835"
+  },
+  "code-pages/mh1-processor/requirements.qmd": {
+    "requirements.html": "40e2460d"
+  },
+  "code-pages/mh1-processor/roylib.qmd": {
+    "roylib.html": "dbd8f0b3"
+  },
+  "mh1-processor.qmd": {
+    "mh1-processor.html": "e56b486e"
   }
 }
