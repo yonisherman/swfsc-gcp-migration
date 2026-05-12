@@ -1,8 +1,8 @@
 ---
-title: "CHARM Harmful Algal Bloom Workflows"
+title: "CHARM"
 ---
 
-This chapter documents the Cloud Run workflow for generating CHARM harmful algal bloom products and derived habitat prediction datasets.
+This chapter documents the Cloud Run workflow for generating CHARM products and derived habitat prediction datasets.
 
 ## Purpose
 
