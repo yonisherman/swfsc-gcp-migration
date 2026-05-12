@@ -13,8 +13,3 @@ This site documents cloud-based satellite data workflows developed for the NOAA 
 - Explore the VIIRS NetPP workflow
 - Review architecture and deployment patterns
 - Browse code examples and templates
-
-chapters:
-  - index.qmd
-  - erddap-vm-setup.qmd
-  - viirs-netpp.qmd

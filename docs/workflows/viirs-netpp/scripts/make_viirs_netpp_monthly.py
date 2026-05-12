@@ -369,7 +369,7 @@ def composite_month(
 
     daily_uris = find_daily_files_for_month(cfg, sensor, dtype, year, month)
     if not daily_uris:
-        print(f"  ⏭  No daily files found in GCS for {year}-{month:02d} [{sensor}/{dtype}] — skipping.")
+        print(f"  ⏭  No daily files found in GCS for {year}-{month:02d} [{sensor}/{dtype}] - skipping.")
         return True
 
     print(f"  Found {len(daily_uris)} daily files.")
@@ -387,11 +387,11 @@ def composite_month(
         try:
             gcs_download(uri, dest_path)
         except RuntimeError as exc:
-            print(f"  ✗ Download failed: {exc} — skipping this file.")
+            print(f"  ✗ Download failed: {exc} - skipping this file.")
             continue
 
         if not _validate_nc(dest_path):
-            print(f"  ✗ Invalid NetCDF after download: {fname} — skipping.")
+            print(f"  ✗ Invalid NetCDF after download: {fname} - skipping.")
             try:
                 os.remove(dest_path)
             except OSError:
@@ -417,7 +417,7 @@ def composite_month(
             # Fallback: (time, lat, lon)
             _, nlat, nlon = shape
         else:
-            print(f"  ✗ Unexpected productivity shape {shape} — cannot composite.")
+            print(f"  ✗ Unexpected productivity shape {shape} - cannot composite.")
             try:
                 os.remove(first_valid_path)
             except OSError:
@@ -490,11 +490,11 @@ def composite_month(
         try:
             gcs_download(uri, dest_path)
         except RuntimeError as exc:
-            print(f"  ✗ Download failed: {exc} — skipping this file.")
+            print(f"  ✗ Download failed: {exc} - skipping this file.")
             continue
 
         if not _validate_nc(dest_path):
-            print(f"  ✗ Invalid NetCDF after download: {fname} — skipping.")
+            print(f"  ✗ Invalid NetCDF after download: {fname} - skipping.")
             try:
                 os.remove(dest_path)
             except OSError:

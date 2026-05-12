@@ -14,7 +14,7 @@ Before modifying the environment, access the centralized configuration in Google
 
 1. Log into the Google Cloud Console.
 2. Start Cloud Shell: Click the terminal icon (`>_`) in the top right header.
-3. Clone the repository — ensure you have read access to the project.
+3. Clone the repository - ensure you have read access to the project.
 
 ```{.bash}
 git clone YOUR_TERRAFORM_REPO_URL
@@ -43,7 +43,7 @@ Ensure `instance.tf` in the Cloud Source repo defines the C4 architecture (GVNIC
 
 ```{.bash}
 terraform plan   # Review changes
-terraform apply  # Build the hardware — sometimes needs to run twice
+terraform apply  # Build the hardware - sometimes needs to run twice
 ```
 
 ## Step 4: OS Environment & Group Setup
@@ -64,7 +64,7 @@ newgrp cwatch
 
 ## Step 5: Storage Initialization
 
-Setup the 4 TB data disk. Check for existing data first — **do not format if the disk was reattached from a previous instance.**
+Setup the 4 TB data disk. Check for existing data first - **do not format if the disk was reattached from a previous instance.**
 
 ```{.bash}
 # 1) Check for existing filesystem

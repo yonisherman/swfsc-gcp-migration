@@ -1,0 +1,18 @@
+---
+title: "for_Rrs_556_v4.init"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+DINEOF forecast configuration for Rrs_556.
+
+::: {.code-shell}
+
+```{.text}
+{{< include ../../workflows/charm/config/dineof/Rrs_556/for_Rrs_556_v4.init >}}
+```
+
+:::

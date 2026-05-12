@@ -1,0 +1,20 @@
+# Configuration
+pyyaml
+
+# Data Processing
+numpy
+scipy
+netCDF4
+xarray
+h5netcdf
+beautifulsoup4
+requests
+python-dateutil
+
+# Google Cloud (Essential for Cloud Run)
+google-cloud-storage
+gcsfs
+fsspec
+
+# Compatibility
+future

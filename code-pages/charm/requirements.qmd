@@ -1,0 +1,18 @@
+---
+title: "requirements.txt"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+Python dependencies for the CHARM container.
+
+::: {.code-shell}
+
+```{.text}
+{{< include ../../workflows/charm/config/requirements.txt >}}
+```
+
+:::

@@ -1,0 +1,18 @@
+---
+title: "charm_model_functions.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+Model functions for CHARM habitat prediction.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/charm/src/python/charm_model_functions.py >}}
+```
+
+:::

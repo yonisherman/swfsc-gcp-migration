@@ -1,0 +1,18 @@
+---
+title: "calc_mur_fronts.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mur-sst.html)
+
+Front detection workflow for MUR SST.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/mur-daily-workflows/scripts/fronts/calc_mur_fronts.py >}}
+```
+
+:::

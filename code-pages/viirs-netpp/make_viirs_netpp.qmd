@@ -3,12 +3,11 @@ title: "make_viirs_netpp.py"
 toc: false
 page-layout: full
 number-sections: false
-
 ---
 
 [← Back to workflow](../../viirs-netpp.html)
 
-Daily productivity generator.
+Daily Net Primary Productivity generation.
 
 ::: {.code-shell}
 

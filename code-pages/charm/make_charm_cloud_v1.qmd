@@ -1,0 +1,18 @@
+---
+title: "make_charm_cloud_v1.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+Primary CHARM cloud processing script.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/charm/scripts/make_charm_cloud_v1.py >}}
+```
+
+:::

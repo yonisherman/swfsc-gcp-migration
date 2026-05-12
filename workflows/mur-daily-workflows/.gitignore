@@ -1,0 +1,12 @@
+.mypy_cache
+__pycache__
+*.pyc
+**/.env
+.venv
+config.*
+**/config/
+.DS_Store
+.vscode
+.netrc
+.urs_cookies
+deploy_job.sh

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>VIIRS Net Primary Productivity Cloud Run Workflow – SWFSC Cloud Migration Workflows</title>
+<title>VIIRS Net Primary Productivity – SWFSC Cloud Migration Workflows</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +30,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./code-pages/viirs-netpp/config.html" rel="next">
+<link href="./mur-sst.html" rel="next">
 <link href="./gcp-templates.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -84,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./viirs-netpp.html"><span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./viirs-netpp.html"><span class="chapter-title">VIIRS Net Primary Productivity</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -130,18 +130,245 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./viirs-netpp.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></a>
+  <a href="./viirs-netpp.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">VIIRS Net Primary Productivity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mur-sst.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">MUR SST Workflows</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./charm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CHARM Processing Workflow</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">viirs-netpp</span></a>
+ <span class="menu-text">charm</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/charm_data_process_functions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">charm_data_process_functions.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/charm_dineof_functions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">charm_dineof_functions.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/charm_helper_functions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">charm_helper_functions.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/charm_model_functions.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">charm_model_functions.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/config.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">config.yaml</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/control_charm_cron_v1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">control_charm_cron_v1.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/delpoy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">delpoy_job.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/dockerfile.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Dockerfile</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/entrypoint.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">entrypoint.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/for_Rrs_489_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">for_Rrs_489_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/for_Rrs_556_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">for_Rrs_556_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/for_bf_Rrs_489_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">for_bf_Rrs_489_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/for_bf_Rrs_556_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">for_bf_Rrs_556_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/for_bf_chlor_a_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">for_bf_chlor_a_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/for_chlor_a_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">for_chlor_a_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/make_charm_cloud_v1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">make_charm_cloud_v1.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/now_Rrs_489_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">now_Rrs_489_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/now_Rrs_556_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">now_Rrs_556_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/now_bf_Rrs_489_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">now_bf_Rrs_489_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/now_bf_Rrs_556_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">now_bf_Rrs_556_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/now_bf_chlor_a_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">now_bf_chlor_a_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/now_chlor_a_v4.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">now_chlor_a_v4.init</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/requirements.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">requirements.txt</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/charm/viirs_L3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">viirs_L3.cdl</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">mur-sst</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/Canny1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Canny1.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/Canny2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Canny2.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/CompMURmon.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CompMURmon.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/CompMurAnomMon.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">CompMurAnomMon.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/MUR41_MonProc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">MUR41_MonProc.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/MURanom1day.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">MURanom1day.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/calc_mur_fronts.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">calc_mur_fronts.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/canny_lib.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">canny_lib.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/config.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">config.yml</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/deploy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">deploy_job.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/dockerfile.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Dockerfile</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/entrypoint.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">entrypoint.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/mur_v41_downloader_dailyproc.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">mur_v41_downloader_dailyproc.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/mur_v42_downloader.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">mur_v42_downloader.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/requirements.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">requirements.txt</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">viirs-netpp</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./code-pages/viirs-netpp/config.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">config.yml</span></a>
@@ -201,6 +428,10 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#purpose" id="toc-purpose" class="nav-link active" data-scroll-target="#purpose">Purpose</a></li>
   <li><a href="#repository-structure" id="toc-repository-structure" class="nav-link" data-scroll-target="#repository-structure">Repository structure</a></li>
+  <li><a href="#cloud-run-jobs" id="toc-cloud-run-jobs" class="nav-link" data-scroll-target="#cloud-run-jobs">Cloud Run jobs</a></li>
+  <li><a href="#processing-pipeline" id="toc-processing-pipeline" class="nav-link" data-scroll-target="#processing-pipeline">Processing pipeline</a></li>
+  <li><a href="#monthly-composites" id="toc-monthly-composites" class="nav-link" data-scroll-target="#monthly-composites">Monthly composites</a></li>
+  <li><a href="#templates-and-static-assets" id="toc-templates-and-static-assets" class="nav-link" data-scroll-target="#templates-and-static-assets">Templates and static assets</a></li>
   <li><a href="#codebase" id="toc-codebase" class="nav-link" data-scroll-target="#codebase">Codebase</a></li>
   </ul>
 </nav>
@@ -210,7 +441,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></h1>
+<h1 class="title"><span class="chapter-title">VIIRS Net Primary Productivity</span></h1>
 </div>
 
 
@@ -227,150 +458,152 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This chapter documents a cloud-based workflow for generating VIIRS net primary productivity products.</p>
+<p>This chapter documents the Cloud Run workflow for generating daily and monthly VIIRS net primary productivity products.</p>
 <section id="purpose" class="level2">
 <h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
-<p>This workflow computes daily and monthly satellite-derived primary productivity products from VIIRS inputs using a containerized Cloud Run Job pattern.</p>
+<p>The workflow computes daily and monthly satellite-derived primary productivity products from VIIRS ocean color inputs using a containerized Cloud Run Job pattern.</p>
+<p>Products are supported for:</p>
+<ul>
+<li><strong>NOAA-20 VIIRS</strong> - daily and monthly productivity products</li>
+<li><strong>SNPP VIIRS</strong> - daily and monthly productivity products</li>
+</ul>
 </section>
 <section id="repository-structure" class="level2">
 <h2 class="anchored" data-anchor-id="repository-structure">Repository structure</h2>
-<p>The workflow follows a consistent template: configuration, deployment assets, processing scripts, and NetCDF templates.</p>
-<pre class="text"><code>NOAA20-netpp-CloudRun/
+<pre class="text"><code>viirs-netpp/
 ├── config/
-│   ├── config.yml
-│   └── requirements.txt
-├── deploy_job.sh
-├── Dockerfile
-├── entrypoint.sh
+│   ├── config.yml          # Runtime settings
+│   └── requirements.txt    # Python dependencies
+├── deploy_job.sh           # Build, push, and deploy Cloud Run jobs
+├── Dockerfile              # Container definition
+├── entrypoint.sh           # Job mode selector
 ├── scripts/
-│   ├── control_viirs_netpp.py
-│   ├── make_viirs_netpp.py
-│   ├── control_viirs_netpp_monthly.py
-│   └── make_viirs_netpp_monthly.py
+│   ├── control_viirs_netpp.py          # Daily workflow controller
+│   ├── make_viirs_netpp.py             # Daily productivity processor
+│   ├── control_viirs_netpp_monthly.py  # Monthly workflow controller
+│   └── make_viirs_netpp_monthly.py     # Monthly productivity processor
 └── templates/
-    ├── nasa_noaa20_4km.cdl
-    ├── nasa_noaa20_4km_month.cdl
-    ├── nasa_snpp_4km.cdl
-    └── nasa_snpp_4km_month.cdl</code></pre>
+    ├── nasa_noaa20_4km.cdl        # NOAA-20 daily template
+    ├── nasa_noaa20_4km_month.cdl  # NOAA-20 monthly template
+    ├── nasa_snpp_4km.cdl          # SNPP daily template
+    └── nasa_snpp_4km_month.cdl    # SNPP monthly template</code></pre>
+</section>
+<section id="cloud-run-jobs" class="level2">
+<h2 class="anchored" data-anchor-id="cloud-run-jobs">Cloud Run jobs</h2>
+<p>The workflow runs as separate Cloud Run jobs, all built from the same container image and dispatched by <code>entrypoint.sh</code>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Job mode</th>
+<th>Script</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>daily</code></td>
+<td><code>control_viirs_netpp.py</code></td>
+<td>Daily VIIRS productivity processing</td>
+</tr>
+<tr class="even">
+<td><code>monthly</code></td>
+<td><code>control_viirs_netpp_monthly.py</code></td>
+<td>Monthly VIIRS productivity composites</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="processing-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="processing-pipeline">Processing pipeline</h2>
+<p>Each daily run follows this general sequence:</p>
+<pre class="text"><code>Cloud Scheduler → Cloud Run Job → Download inputs → Compute productivity → Apply template metadata → Publish to GCS → ERDDAP ingestion</code></pre>
+<p>The daily controller handles date selection, sensor configuration, input discovery, and calls the product generation script for each target date.</p>
+</section>
+<section id="monthly-composites" class="level2">
+<h2 class="anchored" data-anchor-id="monthly-composites">Monthly composites</h2>
+<p>Monthly processing is triggered through the monthly job mode.</p>
+<p>The monthly workflow gathers the required daily productivity files, builds a monthly composite, applies the appropriate CDL template, and publishes the final NetCDF output for ERDDAP.</p>
+</section>
+<section id="templates-and-static-assets" class="level2">
+<h2 class="anchored" data-anchor-id="templates-and-static-assets">Templates and static assets</h2>
+<p>The workflow uses CDL templates to define the output NetCDF structure and metadata.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nasa_noaa20_4km.cdl</code></td>
+<td>NOAA-20 daily NetCDF template</td>
+</tr>
+<tr class="even">
+<td><code>nasa_noaa20_4km_month.cdl</code></td>
+<td>NOAA-20 monthly NetCDF template</td>
+</tr>
+<tr class="odd">
+<td><code>nasa_snpp_4km.cdl</code></td>
+<td>SNPP daily NetCDF template</td>
+</tr>
+<tr class="even">
+<td><code>nasa_snpp_4km_month.cdl</code></td>
+<td>SNPP monthly NetCDF template</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="codebase" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="codebase">Codebase</h2>
-<p>The workflow is structured into modular components that support configuration, deployment, processing, and product generation.</p>
 <div class="file-grid">
+
 <div class="file-card">
-<h3 class="anchored">
-config/
-</h3>
-<p>
-Runtime configuration and Python environment.
-</p>
+<h3 class="anchored">Deployment</h3>
+<p>Container and job configuration.</p>
 <ul>
-<li>
-<a href="code-pages/viirs-netpp/config.html">config.yml</a> — sensor, GCS, API, and processing settings
-</li>
-<li>
-<a href="code-pages/viirs-netpp/requirements.html">requirements.txt</a> — Python dependencies
-</li>
+<li><a href="code-pages/viirs-netpp/dockerfile.html">Dockerfile</a></li>
+<li><a href="code-pages/viirs-netpp/entrypoint.html">entrypoint.sh</a></li>
+<li><a href="code-pages/viirs-netpp/deploy_job.html">deploy_job.sh</a></li>
+<li><a href="code-pages/viirs-netpp/config.html">config.yml</a></li>
+<li><a href="code-pages/viirs-netpp/requirements.html">requirements.txt</a></li>
 </ul>
 </div>
+
 <div class="file-card">
-<h3 class="anchored">
-deployment files
-</h3>
-<p>
-Top-level files used to build and run the Cloud Run jobs.
-</p>
+<h3 class="anchored">Daily scripts</h3>
+<p>Daily VIIRS productivity orchestration and processing.</p>
 <ul>
-<li>
-<a href="code-pages/viirs-netpp/dockerfile.html">Dockerfile</a>
-</li>
-<li>
-<a href="code-pages/viirs-netpp/entrypoint.html">entrypoint.sh</a>
-</li>
-<li>
-<a href="code-pages/viirs-netpp/deploy_job.html">deploy_job.sh</a> — build, deploy, and schedule jobs
-</li>
+<li><a href="code-pages/viirs-netpp/control_viirs_netpp.html">control_viirs_netpp.py</a> - daily workflow controller</li>
+<li><a href="code-pages/viirs-netpp/make_viirs_netpp.html">make_viirs_netpp.py</a> - daily productivity processor</li>
 </ul>
 </div>
+
 <div class="file-card">
-<h3 class="anchored">
-scripts/
-</h3>
-<p>
-Processing and orchestration logic.
-</p>
-<h4 class="anchored">
-Daily products
-</h4>
+<h3 class="anchored">Monthly composites</h3>
+<p>Monthly VIIRS productivity compositing.</p>
 <ul>
-<li>
-<a href="code-pages/viirs-netpp/control_viirs_netpp.html">control_viirs_netpp.py</a>
-</li>
-<li>
-<a href="code-pages/viirs-netpp/make_viirs_netpp.html">make_viirs_netpp.py</a>
-</li>
-</ul>
-<h4 class="anchored">
-Monthly composites
-</h4>
-<ul>
-<li>
-<a href="code-pages/viirs-netpp/control_viirs_netpp_monthly.html">control_viirs_netpp_monthly.py</a> — monthly run orchestrator
-</li>
-<li>
-<a href="code-pages/viirs-netpp/make_viirs_netpp_monthly.html">make_viirs_netpp_monthly.py</a> — monthly composite builder
-</li>
+<li><a href="code-pages/viirs-netpp/control_viirs_netpp_monthly.html">control_viirs_netpp_monthly.py</a> - monthly workflow controller</li>
+<li><a href="code-pages/viirs-netpp/make_viirs_netpp_monthly.html">make_viirs_netpp_monthly.py</a> - monthly composite builder</li>
 </ul>
 </div>
+
 <div class="file-card">
-<h3 class="anchored">
-templates/
-</h3>
-<p>
-CDL templates used to create NetCDF outputs.
-</p>
-<h4 class="anchored">
-NOAA-20
-</h4>
+<h3 class="anchored">Templates and static assets</h3>
+<p>Reference CDL templates and static NetCDF structure definitions.</p>
 <ul>
-<li>
-<a href="workflows/viirs-netpp/templates/nasa_noaa20_4km.cdl">nasa_noaa20_4km.cdl</a> — daily template
-</li>
-<li>
-<a href="workflows/viirs-netpp/templates/nasa_noaa20_4km_month.cdl">nasa_noaa20_4km_month.cdl</a> — monthly template
-</li>
-</ul>
-<h4 class="anchored">
-SNPP
-</h4>
-<ul>
-<li>
-<a href="workflows/viirs-netpp/templates/nasa_snpp_4km.cdl">nasa_snpp_4km.cdl</a> — daily template
-</li>
-<li>
-<a href="workflows/viirs-netpp/templates/nasa_snpp_4km_month.cdl">nasa_snpp_4km_month.cdl</a> — monthly template
-</li>
+<li>nasa_noaa20_4km.cdl</li>
+<li>nasa_noaa20_4km_month.cdl</li>
+<li>nasa_snpp_4km.cdl</li>
+<li>nasa_snpp_4km_month.cdl</li>
 </ul>
 </div>
-<div class="file-card">
-<h3 class="anchored">
-project metadata
-</h3>
-<p>
-Documentation, licensing, and change tracking.
-</p>
-<ul>
-<li>
-<a href="workflows/viirs-netpp/README.md">README.md</a> — project overview
-</li>
-<li>
-<a href="workflows/viirs-netpp/CHANGELOG.md">CHANGELOG.md</a> — version history and workflow changes
-</li>
-<li>
-<a href="workflows/viirs-netpp/LICENSE">LICENSE</a> — license terms
-</li>
-</ul>
-</div>
+
 </div>
 
 
@@ -786,8 +1019,8 @@ Documentation, licensing, and change tracking.
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./code-pages/viirs-netpp/config.html" class="pagination-link" aria-label="config.yml">
-        <span class="nav-page-text"><span class="chapter-title">config.yml</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./mur-sst.html" class="pagination-link" aria-label="MUR SST Workflows">
+        <span class="nav-page-text"><span class="chapter-title">MUR SST Workflows</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

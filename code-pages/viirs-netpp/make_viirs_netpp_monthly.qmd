@@ -3,13 +3,11 @@ title: "make_viirs_netpp_monthly.py"
 toc: false
 page-layout: full
 number-sections: false
-
-
 ---
 
 [← Back to workflow](../../viirs-netpp.html)
 
-Monthly productivity generator.
+Monthly Net Primary Productivity generation.
 
 ::: {.code-shell}
 

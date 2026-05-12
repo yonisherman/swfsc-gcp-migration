@@ -1,0 +1,136 @@
+---
+title: "MUR SST"
+---
+
+This chapter documents the Cloud Run workflow for generating daily and monthly MUR Sea Surface Temperature products from NASA's Multi-scale Ultra-high Resolution (MUR) SST analysis.
+
+## Purpose
+
+The workflow ingests MUR SST data from NASA PO.DAAC, computes daily anomalies and frontal edge detections, and generates monthly composites. It handles the full NRT → Final upgrade cycle automatically, detecting when NASA has promoted a near-real-time granule to science quality and re-downloading accordingly.
+
+Two MUR versions are supported:
+
+- **MUR v4.1** - full processing: download, anomaly computation, fronts detection, and monthly composites
+- **MUR v4.2** - download only (smart sync with NRT → Final upgrade detection)
+
+## Repository structure
+
+```text
+mur-daily-workflows/
+├── config/
+│   ├── config.yml          # Runtime settings (GCS paths, collection names, intervals)
+│   └── requirements.txt    # Python dependencies
+├── deploy_job.sh           # Build, push, and deploy Cloud Run jobs
+├── Dockerfile              # Container definition
+├── entrypoint.sh           # Job mode selector
+├── src/
+│   └── roylib.py           # Shared internal utility library
+├── scripts/
+│   ├── MURanom1day.py                  # Daily anomaly computation (MUR v4.1)
+│   ├── mur_v41_downloader_dailyproc.sh # MUR v4.1 smart sync + processing
+│   ├── mur_v42_downloader.sh           # MUR v4.2 smart sync (download only)
+│   ├── fronts/
+│   │   ├── calc_mur_fronts.py          # Fronts runner (WC + ATL regions)
+│   │   ├── canny_lib.py                # Unified Canny edge detection library
+│   │   ├── Canny1.py                   # WC region Canny implementation
+│   │   └── Canny2.py                   # ATL region Canny implementation
+│   └── MonthlyProc/
+│       ├── MUR41_MonProc.sh            # Monthly processing runner
+│       ├── CompMURmon.py               # Monthly SST composite
+│       └── CompMurAnomMon.py           # Monthly anomaly composite
+└── templates/
+    ├── murAnomTemplate.nc      # Template for daily anomaly output
+    ├── murSSTmday.nc           # Template for monthly SST composite
+    └── murSSTmdayAnom.nc       # Template for monthly anomaly composite
+```
+
+## Cloud Run jobs
+
+The workflow runs as three separate Cloud Run jobs, all built from the same container image and dispatched via `JOB_MODE` in `entrypoint.sh`:
+
+| Job mode | Script | Description |
+|---|---|---|
+| `mur41_daily` | `mur_v41_downloader_dailyproc.sh` | MUR v4.1 download + anomaly + fronts |
+| `mur42_daily` | `mur_v42_downloader.sh` | MUR v4.2 download only |
+| `mur41_monthly` | `MUR41_MonProc.sh` | Monthly SST and anomaly composites |
+
+## Processing pipeline (MUR v4.1 daily)
+
+Each day in the lookback window goes through the following stages:
+
+```text
+GCS probe → NASA stage check → Download (PO.DAAC) → Anomaly → Fronts (WC + ATL) → Publish
+```
+
+**NRT → Final upgrade logic:** The downloader checks both the GCS copy (via GDAL metadata) and the NASA CMR/OPeNDAP metadata to detect when a near-real-time file has been promoted to science quality. If GCS has NRT and NASA has Final, the file is re-downloaded and reprocessed automatically.
+
+## Fronts detection
+
+Daily SST frontal edges are computed for two regional subsets using the Canny edge detection algorithm:
+
+| Region | Coverage |
+|---|---|
+| West Coast (WC) | 22°N-51°N, 135°W-105°W |
+| East Coast (ATL) | 20°N-50°N, 90°W-60°W |
+
+The WC and ATL regions use slightly different Canny implementations (`Canny1` and `Canny2`) which are unified through `canny_lib.py`. Output includes frontal edges, x/y gradients, and gradient magnitude in NetCDF format.
+
+## Monthly composites
+
+Monthly processing is triggered by `JOB_MODE=mur41_monthly` and runs two compositors in sequence:
+
+1. **`CompMURmon.py`** - averages all daily SST files for the target month into a single monthly mean, using parallel GCS downloads and chunked stripe accumulation to stay within container memory limits.
+2. **`CompMurAnomMon.py`** - averages all daily anomaly files for the target month into a monthly anomaly composite using the same pattern.
+
+The target month is controlled by the `MONTH_OFFSET` environment variable (default: 1 = last completed month).
+
+## Codebase {.unnumbered}
+
+```{=html}
+<div class="file-grid">
+
+<div class="file-card">
+<h3>Deployment</h3>
+<p>Container and job configuration.</p>
+<ul>
+<li><a href="code-pages/mur-sst/dockerfile.html">Dockerfile</a></li>
+<li><a href="code-pages/mur-sst/entrypoint.html">entrypoint.sh</a></li>
+<li><a href="code-pages/mur-sst/deploy_job.html">deploy_job.sh</a></li>
+<li><a href="code-pages/mur-sst/config.html">config.yml</a></li>
+<li><a href="code-pages/mur-sst/requirements.html">requirements.txt</a></li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>Daily scripts</h3>
+<p>Download, anomaly, and fronts processing.</p>
+<ul>
+<li><a href="code-pages/mur-sst/mur_v41_downloader_dailyproc.html">mur_v41_downloader_dailyproc.sh</a> - MUR v4.1 smart sync + processing</li>
+<li><a href="code-pages/mur-sst/mur_v42_downloader.html">mur_v42_downloader.sh</a> - MUR v4.2 download only</li>
+<li><a href="code-pages/mur-sst/MURanom1day.html">MURanom1day.py</a> - daily anomaly computation</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>Fronts</h3>
+<p>Canny edge detection for WC and ATL regions.</p>
+<ul>
+<li><a href="code-pages/mur-sst/calc_mur_fronts.html">calc_mur_fronts.py</a> - fronts runner</li>
+<li><a href="code-pages/mur-sst/canny_lib.html">canny_lib.py</a> - unified Canny library</li>
+<li><a href="code-pages/mur-sst/Canny1.html">Canny1.py</a> - WC implementation</li>
+<li><a href="code-pages/mur-sst/Canny2.html">Canny2.py</a> - ATL implementation</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>Monthly composites</h3>
+<p>SST and anomaly monthly averaging.</p>
+<ul>
+<li><a href="code-pages/mur-sst/MUR41_MonProc.html">MUR41_MonProc.sh</a> - monthly runner</li>
+<li><a href="code-pages/mur-sst/CompMURmon.html">CompMURmon.py</a> - monthly SST composite</li>
+<li><a href="code-pages/mur-sst/CompMurAnomMon.html">CompMurAnomMon.py</a> - monthly anomaly composite</li>
+</ul>
+</div>
+
+</div>
+```

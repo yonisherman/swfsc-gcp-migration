@@ -1,0 +1,18 @@
+---
+title: "entrypoint.sh"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+Cloud Run entrypoint and job mode selector.
+
+::: {.code-shell}
+
+```{.bash}
+{{< include ../../workflows/charm/entrypoint.sh >}}
+```
+
+:::

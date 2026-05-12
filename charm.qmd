@@ -1,0 +1,136 @@
+---
+title: "CHARM"
+---
+
+This chapter documents the Cloud Run workflow for generating CHARM products and derived anomaly datasets.
+
+## Purpose
+
+The workflow ingests satellite and environmental inputs, generates CHARM bloom products, computes anomaly layers, and publishes NetCDF outputs for ERDDAP distribution.
+
+The system supports:
+
+- Daily CHARM bloom products
+- Daily anomaly generation
+- Monthly composite workflows
+- ERDDAP-ready NetCDF publication
+
+## Repository structure
+
+```text
+charm/
+├── config/
+│   ├── config.yml          # Runtime settings
+│   └── requirements.txt    # Python dependencies
+├── deploy_job.sh           # Build, push, and deploy Cloud Run jobs
+├── Dockerfile              # Container definition
+├── entrypoint.sh           # Job mode selector
+├── scripts/
+│   ├── control_charm.py            # Daily workflow controller
+│   ├── make_charm.py               # Daily CHARM processor
+│   ├── control_charm_monthly.py    # Monthly workflow controller
+│   ├── make_charm_monthly.py       # Monthly composite processor
+│   └── make_charm_anomaly.py       # Anomaly generation
+└── templates/
+    ├── charm_template.nc           # Daily NetCDF template
+    ├── charm_monthly_template.nc   # Monthly NetCDF template
+    └── charm_anomaly_template.nc   # Anomaly template
+```
+
+## Cloud Run jobs
+
+The workflow runs as multiple Cloud Run jobs using a shared container image and dispatch logic from `entrypoint.sh`.
+
+| Job mode | Script | Description |
+|---|---|---|
+| `daily` | `control_charm.py` | Daily CHARM workflow |
+| `monthly` | `control_charm_monthly.py` | Monthly CHARM composites |
+| `anomaly` | `make_charm_anomaly.py` | Daily anomaly generation |
+
+## Processing pipeline
+
+Each daily run follows this sequence:
+
+```text
+Cloud Scheduler → Cloud Run Job → Download inputs → Generate CHARM product → Apply templates → Publish to GCS → ERDDAP ingestion
+```
+
+The controller script manages runtime configuration, date handling, input discovery, and calls the processing routines for each target date.
+
+## Monthly composites
+
+Monthly processing gathers daily CHARM outputs and generates monthly composite products for publication.
+
+The workflow applies the monthly NetCDF templates and publishes finalized outputs to cloud storage for ERDDAP ingestion.
+
+## Anomaly processing
+
+The anomaly workflow computes departures from baseline or climatological conditions and publishes derived anomaly datasets.
+
+These products are generated independently from the monthly compositing workflow and follow their own scheduled execution path.
+
+## Templates and static assets
+
+The workflow uses NetCDF templates and static reference assets to standardize output structure and metadata.
+
+| File | Purpose |
+|---|---|
+| `charm_template.nc` | Daily CHARM template |
+| `charm_monthly_template.nc` | Monthly composite template |
+| `charm_anomaly_template.nc` | Anomaly dataset template |
+
+## Codebase {.unnumbered}
+
+```{=html}
+<div class="file-grid">
+
+<div class="file-card">
+<h3>Deployment</h3>
+<p>Container and Cloud Run deployment configuration.</p>
+<ul>
+<li><a href="code-pages/charm/dockerfile.html">Dockerfile</a></li>
+<li><a href="code-pages/charm/entrypoint.html">entrypoint.sh</a></li>
+<li><a href="code-pages/charm/deploy_job.html">deploy_job.sh</a></li>
+<li><a href="code-pages/charm/config.html">config.yml</a></li>
+<li><a href="code-pages/charm/requirements.html">requirements.txt</a></li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>Daily processing</h3>
+<p>Daily CHARM orchestration and product generation.</p>
+<ul>
+<li><a href="code-pages/charm/control_charm.html">control_charm.py</a> - daily workflow controller</li>
+<li><a href="code-pages/charm/make_charm.html">make_charm.py</a> - daily CHARM processor</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>Monthly composites</h3>
+<p>Monthly CHARM compositing workflows.</p>
+<ul>
+<li><a href="code-pages/charm/control_charm_monthly.html">control_charm_monthly.py</a> - monthly workflow controller</li>
+<li><a href="code-pages/charm/make_charm_monthly.html">make_charm_monthly.py</a> - monthly composite builder</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>Anomaly processing</h3>
+<p>Derived anomaly generation workflows.</p>
+<ul>
+<li><a href="code-pages/charm/make_charm_anomaly.html">make_charm_anomaly.py</a> - anomaly generator</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3>Templates and static assets</h3>
+<p>Reference NetCDF templates and static metadata assets.</p>
+<ul>
+<li>charm_template.nc</li>
+<li>charm_monthly_template.nc</li>
+<li>charm_anomaly_template.nc</li>
+</ul>
+</div>
+
+</div>
+```

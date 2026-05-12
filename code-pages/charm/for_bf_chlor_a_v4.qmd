@@ -1,0 +1,18 @@
+---
+title: "for_bf_chlor_a_v4.init"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+Backfill DINEOF forecast configuration for chlorophyll-a.
+
+::: {.code-shell}
+
+```{.text}
+{{< include ../../workflows/charm/config/bf_dineof/chlor_a/for_bf_chlor_a_v4.init >}}
+```
+
+:::

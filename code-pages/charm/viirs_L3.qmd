@@ -1,0 +1,18 @@
+---
+title: "viirs_L3.cdl"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+CDL template for VIIRS L3 NetCDF formatting.
+
+::: {.code-shell}
+
+```{.text}
+{{< include ../../workflows/charm/templates/viirs_L3.cdl >}}
+```
+
+:::

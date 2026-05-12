@@ -1,0 +1,18 @@
+---
+title: "mur_v41_downloader_dailyproc.sh"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mur-sst.html)
+
+Daily MUR v4.1 download and processing driver.
+
+::: {.code-shell}
+
+```{.bash}
+{{< include ../../workflows/mur-daily-workflows/scripts/mur_v41_downloader_dailyproc.sh >}}
+```
+
+:::

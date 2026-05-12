@@ -7,7 +7,7 @@ number-sections: false
 
 [← Back to workflow](../../viirs-netpp.html)
 
-Monthly run orchestrator.
+Monthly VIIRS NetPP controller.
 
 ::: {.code-shell}
 

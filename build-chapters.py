@@ -20,7 +20,7 @@ for folder, files in groupby(sorted(code_pages), key=key):
         "chapters": list(files)
     })
 
-new_chapters = ["index.qmd", "erddap-vm-setup.qmd", "gcp-templates.qmd", "viirs-netpp.qmd"] + parts
+new_chapters = ["index.qmd", "erddap-vm-setup.qmd", "gcp-templates.qmd", "viirs-netpp.qmd", "mur-sst.qmd", "charm.qmd"] + parts
 
 # Load current _quarto.yml
 with open("_quarto.yml") as f:

@@ -65,10 +65,10 @@ git clone https://github.com/erd-coastwatch/YOUR_NEW_REPO.git
 cd YOUR_NEW_REPO
 ```
 
-4. **Fill in `config.yml`** with your project-specific settings — sensor names, GCS bucket paths, date ranges, and any API parameters.
+4. **Fill in `config.yml`** with your project-specific settings - sensor names, GCS bucket paths, date ranges, and any API parameters.
 5. **Add your scripts and notebooks** to the appropriate directories.
 6. For Cloud Run projects, **build and deploy** using `deploy_job.sh` once your Dockerfile and scripts are ready.
 
 ::: {.callout-note}
-These templates are intentionally minimal — they provide structure, not implementation. Each project will fill in the logic specific to its data source and processing requirements.
+These templates are intentionally minimal - they provide structure, not implementation. Each project will fill in the logic specific to its data source and processing requirements.
 :::

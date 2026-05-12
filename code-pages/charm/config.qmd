@@ -1,0 +1,18 @@
+---
+title: "config.yaml"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+Main CHARM workflow configuration.
+
+::: {.code-shell}
+
+```{.yaml}
+{{< include ../../workflows/charm/config/config.yaml >}}
+```
+
+:::

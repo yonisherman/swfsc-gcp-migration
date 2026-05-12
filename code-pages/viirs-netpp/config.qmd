@@ -7,7 +7,7 @@ number-sections: false
 
 [← Back to workflow](../../viirs-netpp.html)
 
-Runtime configuration for the VIIRS NetPP workflow.
+Workflow configuration.
 
 ::: {.code-shell}
 

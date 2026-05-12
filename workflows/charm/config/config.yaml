@@ -1,0 +1,113 @@
+# ------------------------------------------------------------
+# Base paths + directory endpoints
+# ------------------------------------------------------------
+---
+home: /app
+eof: /app/src/DINEOF
+python: python3
+cwutil: /opt/cwutils/bin
+
+dirs_endpts:
+  work_dirs: /tmp/data/work_dirs
+  data_dir: /tmp/data
+  # REDIRECTED TO TMP: Allows DINEOF to write status/log files
+  resources_dir: /tmp/templates
+  config_dirs: /tmp/config
+
+# ------------------------------------------------------------
+# Satellite variables for DINEOF nc file
+# ------------------------------------------------------------
+---
+gappy:
+  - chlor_a
+  - Rrs_489
+  - Rrs_556
+filled:
+  - chlor_a_filled
+  - Rrs_489_filled
+  - Rrs_556_filled
+
+# ------------------------------------------------------------
+# Input/output paths
+# ------------------------------------------------------------
+---
+nasa_base: "https://oceandata.sci.gsfc.nasa.gov/directdataaccess/Level-3%20Mapped/NOAA20-VIIRS"
+erddap: /tmp/charm_results 
+
+# ------------------------------------------------------------
+# Re-gridding / subsetting constants and filenames
+# ------------------------------------------------------------
+---
+chl_pattern: L3m.DAY.CHL.chlor_a.4km.NRT.nc
+r489_pattern: L3m.DAY.RRS.Rrs_489.4km.NRT.nc
+r556_pattern: L3m.DAY.RRS.Rrs_556.4km.NRT.nc
+
+nc_template: mod_nc.nc4
+nc_cdl: viirs_L3.cdl
+
+ofile: nasa_temp.nc
+cwutil_ofile_hdf: nasa_3k.hdf
+cwutil_ofile_nc: nasa_3k.nc
+cwutil_master_nc: charm_3k_grid.nc
+
+LAT_MIN: 31.0
+LAT_MAX: 43.5
+LON_MIN: -127.5
+LON_MAX: -117.0
+
+# ------------------------------------------------------------
+# DINEOF template output names
+# ------------------------------------------------------------
+---
+first: first_dineof_{}.nc
+second: second_dineof_{}.nc
+
+# ------------------------------------------------------------
+# WCOFS configuration
+# ------------------------------------------------------------
+---
+st_0:
+  st_day: 24
+  ed_day: 25
+  forecast: false
+st_1:
+  st_day: 24
+  ed_day: 25
+  forecast: true
+st_2:
+  st_day: 48
+  ed_day: 49
+  forecast: true
+st_3:
+  st_day: 72
+  ed_day: 73
+  forecast: true
+
+# ------------------------------------------------------------
+# GCP bucket + publish configuration
+# ------------------------------------------------------------
+---
+ERDWORK_BUCKET: "data-swfsc-erd"
+ERDPROD_BUCKET: "erddap-swfsc-erd"
+
+WORK_L2_PREFIX: "edge/c-harm/processed_nasa_data"
+CHARM_WORK_PREFIX: "c-harm"
+CHARM_WORK_PROCESSED_PREFIX: "c-harm/processed_nasa_data"
+CHARM_WORK_DINEOF_PREFIX: "c-harm/dineof"
+CHARM_WORK_LOGS_PREFIX: "c-harm/logs"
+
+CHARM_LOCAL_STAGE_ROOT: "/tmp/charm" 
+CHARM_HISTORY_DAYS_REQUIRED: 180
+
+PUBLISH_TARGETS:
+  prod:
+    bucket: "erddap-swfsc-erd"
+    root: "edge/charm_v4"
+    interval_fmt: "{interval}day"
+
+C_HARM:
+  local_stage_subdir: "charm"
+  prod_dst_dir: "C-HARM/charm"
+  interval: "1"
+  forecast_days: [0, 1, 2, 3]
+  

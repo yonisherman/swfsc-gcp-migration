@@ -1,0 +1,18 @@
+---
+title: "requirements.txt"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mur-sst.html)
+
+Python dependencies.
+
+::: {.code-shell}
+
+```{.text}
+{{< include ../../workflows/mur-daily-workflows/config/requirements.txt >}}
+```
+
+:::

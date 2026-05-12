@@ -1,0 +1,18 @@
+---
+title: "now_bf_Rrs_556_v4.init"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+Backfill DINEOF nowcast configuration for Rrs_556.
+
+::: {.code-shell}
+
+```{.text}
+{{< include ../../workflows/charm/config/bf_dineof/Rrs_556/now_bf_Rrs_556_v4.init >}}
+```
+
+:::

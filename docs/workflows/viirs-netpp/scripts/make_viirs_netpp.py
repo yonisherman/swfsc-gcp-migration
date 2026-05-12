@@ -1,4 +1,4 @@
-"""Create primary productivity satellite-based products — GCP edition.
+"""Create primary productivity satellite-based products - GCP edition.
 
 Supports:
   Sensors : VIIRS SNPP (snpp), NOAA-20 (noaa20), NOAA-21 (noaa21)
@@ -195,9 +195,9 @@ def download_nasa_file(url: str, dest_dir: str, max_attempts: int = 3) -> str:
         if _validate_nc(dest):
             return dest
 
-        # File exists but is not valid HDF5 — log size for diagnostics
+        # File exists but is not valid HDF5 - log size for diagnostics
         bad_size = os.path.getsize(dest)
-        print(f"  ✗ HDF5 validation failed for {fname} ({bad_size:,} bytes) — likely corrupt download.")
+        print(f"  ✗ HDF5 validation failed for {fname} ({bad_size:,} bytes) - likely corrupt download.")
         os.remove(dest)
         if attempt == max_attempts:
             raise RuntimeError(
@@ -445,7 +445,7 @@ def process_date(
     print(f"{'='*60}")
 
     # ------------------------------------------------------------------
-    # Download inputs to scratch — these are temp files only, not archived
+    # Download inputs to scratch - these are temp files only, not archived
     # ------------------------------------------------------------------
     local_inputs = {}
     for var in ["chl", "par", "sst"]:
@@ -514,7 +514,7 @@ def process_date(
             lon = nc["longitude"][:]
             nlat = len(lat)
             nlon = len(lon)
-            day_len_1d = daylength(doy, lat)  # (nlat,) — compute once
+            day_len_1d = daylength(doy, lat)  # (nlat,) - compute once
 
             nc["time"][0] = noon_ts
             write_nc_metadata(nc, sensor, dtype, current_date, noon_ts, now, cfg)
@@ -557,7 +557,7 @@ def process_date(
         print(f"  ✗ Failed during chunked compute/write: {exc}")
         return False
 
-    # Delete input files immediately — free disk and RAM pressure before nccopy
+    # Delete input files immediately - free disk and RAM pressure before nccopy
     for p in local_inputs.values():
         try:
             os.remove(p)
@@ -656,7 +656,7 @@ def main():
     if args.sensor not in cfg.get("sensors", {}):
         sys.exit(f"Sensor '{args.sensor}' not found in config sensors block.")
 
-    # Enforce sensor operational start date — silently clip the range
+    # Enforce sensor operational start date - silently clip the range
     op_start = sensor_start_date(cfg, args.sensor)
     if end_date < op_start:
         sys.exit(

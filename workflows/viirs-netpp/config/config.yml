@@ -1,14 +1,14 @@
 # =============================================================================
-# config.yml  —  GCP deployment config for VIIRS NRT + SQ primary productivity
+# config.yml  -  GCP deployment config for VIIRS NRT + SQ primary productivity
 #
 # Sensors covered:
-#   noaa20  — VIIRS NOAA-20  (JPSS-1),  operational 2018-01-01 onward
-#   noaa21  — VIIRS NOAA-21  (JPSS-2),  operational 2023-02-10 onward
-#   snpp    — VIIRS Suomi-NPP,           operational 2012-01-02 onward
+#   noaa20  - VIIRS NOAA-20  (JPSS-1),  operational 2018-01-01 onward
+#   noaa21  - VIIRS NOAA-21  (JPSS-2),  operational 2023-02-10 onward
+#   snpp    - VIIRS Suomi-NPP,           operational 2012-01-02 onward
 #
 # Data types covered:
-#   nrt — Near Real Time  (NASA sensor_id varies by sensor, dtid = NRT stream)
-#   sq  — Science Quality (NASA sensor_id varies by sensor, dtid = SQ stream)
+#   nrt - Near Real Time  (NASA sensor_id varies by sensor, dtid = NRT stream)
+#   sq  - Science Quality (NASA sensor_id varies by sensor, dtid = SQ stream)
 #
 # Machine-specific secrets and paths come from environment variables.
 # Everything else lives here.
@@ -23,11 +23,11 @@
 # ---------------------------------------------------------------------------
 # GCS buckets
 #
-# erddap_bucket — final productivity NetCDF products only
+# erddap_bucket - final productivity NetCDF products only
 #   NRT:  gs://YOUR_GCS_BUCKET/edge/{sensor}_netpp/{interval}/{year}/1day_nrt/<file>.nc
 #   SQ:   gs://YOUR_GCS_BUCKET/edge/{sensor}_netpp/{interval}/{year}/1day/<file>.nc
 #
-# Input files (chl/par/sst) are NOT archived — they are downloaded, used,
+# Input files (chl/par/sst) are NOT archived - they are downloaded, used,
 # and removed from local scratch without being uploaded to GCS.
 # ---------------------------------------------------------------------------
 gcs:

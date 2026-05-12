@@ -4,7 +4,7 @@ Control script for VIIRS monthly primary productivity composites.
 
 Purpose
 -------
-Orchestrator only — decides which sensor / dtype / year-month combinations
+Orchestrator only - decides which sensor / dtype / year-month combinations
 to run, then calls make_viirs_netpp_monthly.py as a subprocess for each.
 
 Typical uses
@@ -212,7 +212,7 @@ def main() -> None:
     else:
         months = [args.month]
 
-    # Current UTC year-month — never composite an incomplete month
+    # Current UTC year-month - never composite an incomplete month
     now        = datetime.utcnow()
     cur_year   = now.year
     cur_month  = now.month
@@ -230,7 +230,7 @@ def main() -> None:
                 if (year, month) < (start_yr, start_mo):
                     print(
                         f"  ⏭  {year}-{month:02d} [{sensor}/{dtype}] "
-                        f"before sensor start ({start_yr}-{start_mo:02d}) — skipping."
+                        f"before sensor start ({start_yr}-{start_mo:02d}) - skipping."
                     )
                     continue
 
@@ -238,7 +238,7 @@ def main() -> None:
                 if (year, month) >= (cur_year, cur_month):
                     print(
                         f"  ⏭  {year}-{month:02d} [{sensor}/{dtype}] "
-                        "is the current or a future month — skipping."
+                        "is the current or a future month - skipping."
                     )
                     continue
 

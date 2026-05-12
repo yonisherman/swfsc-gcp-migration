@@ -1,0 +1,13 @@
+# Credentials (CRITICAL)
+.netrc
+.urs_cookies
+
+# Python artifacts
+**/__pycache__/
+*.pyc
+
+# Local data/logs
+data/
+logs/
+
+deploy_job.sh

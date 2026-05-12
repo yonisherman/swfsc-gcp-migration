@@ -7,10 +7,9 @@ number-sections: false
 
 [← Back to workflow](../../viirs-netpp.html)
 
-Job mode selector entrypoint script.
+Cloud Run entrypoint and job mode selector.
 
 ::: {.code-shell}
-
 
 ```{.bash}
 {{< include ../../workflows/viirs-netpp/entrypoint.sh >}}

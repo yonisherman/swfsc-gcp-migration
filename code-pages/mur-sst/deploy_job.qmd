@@ -1,0 +1,18 @@
+---
+title: "deploy_job.sh"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mur-sst.html)
+
+Builds, deploys, and schedules Cloud Run jobs.
+
+::: {.code-shell}
+
+```{.bash}
+{{< include ../../workflows/mur-daily-workflows/deploy_job.sh >}}
+```
+
+:::

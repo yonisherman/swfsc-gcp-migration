@@ -1,0 +1,18 @@
+---
+title: "charm_helper_functions.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../charm.html)
+
+General helper functions for the CHARM workflow.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/charm/src/python/charm_helper_functions.py >}}
+```
+
+:::
