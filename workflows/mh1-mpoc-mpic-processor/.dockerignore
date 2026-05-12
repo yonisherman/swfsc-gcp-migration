@@ -1,0 +1,20 @@
+# Credentials (CRITICAL)
+.netrc
+.urs_cookies
+
+#config
+config/config.yml
+
+# Old Individual Scripts (Cleanup)
+scripts/MH1/original_scripts/
+scripts/MPIC/original_scripts/
+scripts/MPOC/original_scripts/
+
+# Python artifacts
+**/__pycache__/
+*.pyc
+
+# Local data/logs
+data/
+resources/
+logs/
