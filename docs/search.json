@@ -160,11 +160,61 @@
     ]
   },
   {
+    "objectID": "viirs-netpp.html#purpose",
+    "href": "viirs-netpp.html#purpose",
+    "title": "VIIRS Net Primary Productivity",
+    "section": "",
+    "text": "NOAA-20 VIIRS - daily and monthly productivity products\nSNPP VIIRS - daily and monthly productivity products",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
+    ]
+  },
+  {
     "objectID": "viirs-netpp.html#repository-structure",
     "href": "viirs-netpp.html#repository-structure",
     "title": "VIIRS Net Primary Productivity",
     "section": "Repository structure",
     "text": "Repository structure\nviirs-netpp/\n├── config/\n│   ├── config.yml          # Runtime settings\n│   └── requirements.txt    # Python dependencies\n├── deploy_job.sh           # Build, push, and deploy Cloud Run jobs\n├── Dockerfile              # Container definition\n├── entrypoint.sh           # Job mode selector\n├── scripts/\n│   ├── control_viirs_netpp.py          # Daily workflow controller\n│   ├── make_viirs_netpp.py             # Daily productivity processor\n│   ├── control_viirs_netpp_monthly.py  # Monthly workflow controller\n│   └── make_viirs_netpp_monthly.py     # Monthly productivity processor\n└── templates/\n    ├── nasa_noaa20_4km.cdl        # NOAA-20 daily template\n    ├── nasa_noaa20_4km_month.cdl  # NOAA-20 monthly template\n    ├── nasa_snpp_4km.cdl          # SNPP daily template\n    └── nasa_snpp_4km_month.cdl    # SNPP monthly template",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
+    ]
+  },
+  {
+    "objectID": "viirs-netpp.html#cloud-run-jobs",
+    "href": "viirs-netpp.html#cloud-run-jobs",
+    "title": "VIIRS Net Primary Productivity",
+    "section": "Cloud Run jobs",
+    "text": "Cloud Run jobs\nThe workflow runs as separate Cloud Run jobs, all built from the same container image and dispatched by entrypoint.sh.\n\n\n\n\n\n\n\n\nJob mode\nScript\nDescription\n\n\n\n\ndaily\ncontrol_viirs_netpp.py\nDaily VIIRS productivity processing\n\n\nmonthly\ncontrol_viirs_netpp_monthly.py\nMonthly VIIRS productivity composites",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
+    ]
+  },
+  {
+    "objectID": "viirs-netpp.html#processing-pipeline",
+    "href": "viirs-netpp.html#processing-pipeline",
+    "title": "VIIRS Net Primary Productivity",
+    "section": "Processing pipeline",
+    "text": "Processing pipeline\nEach daily run follows this general sequence:\nCloud Scheduler → Cloud Run Job → Download inputs → Compute productivity → Apply template metadata → Publish to GCS → ERDDAP ingestion\nThe daily controller handles date selection, sensor configuration, input discovery, and calls the product generation script for each target date.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
+    ]
+  },
+  {
+    "objectID": "viirs-netpp.html#monthly-composites",
+    "href": "viirs-netpp.html#monthly-composites",
+    "title": "VIIRS Net Primary Productivity",
+    "section": "Monthly composites",
+    "text": "Monthly composites\nMonthly processing is triggered through the monthly job mode.\nThe monthly workflow gathers the required daily productivity files, builds a monthly composite, applies the appropriate CDL template, and publishes the final NetCDF output for ERDDAP.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
+    ]
+  },
+  {
+    "objectID": "viirs-netpp.html#templates-and-static-assets",
+    "href": "viirs-netpp.html#templates-and-static-assets",
+    "title": "VIIRS Net Primary Productivity",
+    "section": "Templates and static assets",
+    "text": "Templates and static assets\nThe workflow uses CDL templates to define the output NetCDF structure and metadata.\n\n\n\nFile\nPurpose\n\n\n\n\nnasa_noaa20_4km.cdl\nNOAA-20 daily NetCDF template\n\n\nnasa_noaa20_4km_month.cdl\nNOAA-20 monthly NetCDF template\n\n\nnasa_snpp_4km.cdl\nSNPP daily NetCDF template\n\n\nnasa_snpp_4km_month.cdl\nSNPP monthly NetCDF template",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
     ]
@@ -264,19 +314,19 @@
     "href": "charm.html",
     "title": "CHARM",
     "section": "",
-    "text": "Purpose\nThis chapter documents the Cloud Run workflow for generating CHARM products and derived anomaly datasets.\nThe workflow ingests satellite and environmental inputs, generates CHARM bloom products, computes anomaly layers, and publishes NetCDF outputs for ERDDAP distribution.\nThe system supports:",
+    "text": "Purpose\nThis chapter documents the Cloud Run workflow for generating CHARM products and derived habitat prediction datasets.\nThe workflow ingests VIIRS ocean color inputs, applies DINEOF gap-filling and CHARM model logic, and generates gridded bloom prediction products for ERDDAP publication.\nThe system includes:",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
     ]
   },
   {
-    "objectID": "charm.html#workflow-overview",
-    "href": "charm.html#workflow-overview",
-    "title": "CHARM Processing Workflow",
-    "section": "Workflow overview",
-    "text": "Workflow overview\nCloud Scheduler\n      ↓\nCloud Run Job\n      ↓\nentrypoint.sh\n      ↓\ncontrol_charm_cron_v1.py\n      ↓\nmake_charm_cloud_v1.py\n      ↓\nDINEOF input preparation\n      ↓\nCHARM model processing\n      ↓\nNetCDF formatting/templates\n      ↓\nGCS publication\n      ↓\nERDDAP ingestion",
+    "objectID": "charm.html#purpose",
+    "href": "charm.html#purpose",
+    "title": "CHARM",
+    "section": "",
+    "text": "Cloud Run orchestration\nDINEOF configuration management\nCHARM model processing\nNetCDF template generation\nERDDAP-ready publication",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM Processing Workflow</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
     ]
   },
   {
@@ -284,29 +334,39 @@
     "href": "charm.html#repository-structure",
     "title": "CHARM",
     "section": "Repository structure",
-    "text": "Repository structure\ncharm/\n├── config/\n│   ├── config.yml          # Runtime settings\n│   └── requirements.txt    # Python dependencies\n├── deploy_job.sh           # Build, push, and deploy Cloud Run jobs\n├── Dockerfile              # Container definition\n├── entrypoint.sh           # Job mode selector\n├── scripts/\n│   ├── control_charm.py            # Daily workflow controller\n│   ├── make_charm.py               # Daily CHARM processor\n│   ├── control_charm_monthly.py    # Monthly workflow controller\n│   ├── make_charm_monthly.py       # Monthly composite processor\n│   └── make_charm_anomaly.py       # Anomaly generation\n└── templates/\n    ├── charm_template.nc           # Daily NetCDF template\n    ├── charm_monthly_template.nc   # Monthly NetCDF template\n    └── charm_anomaly_template.nc   # Anomaly template",
+    "text": "Repository structure\ncharm/\n├── config/\n│   ├── config.yaml                 # Main runtime configuration\n│   ├── dineof/                     # Standard DINEOF configurations\n│   └── bf_dineof/                  # Backfill DINEOF configurations\n├── deploy_job.sh                   # Build, push, and deploy Cloud Run job\n├── Dockerfile                      # Container definition\n├── entrypoint.sh                   # Cloud Run entrypoint\n├── scripts/\n│   ├── control_charm_cron_v1.py    # Workflow controller\n│   └── make_charm_cloud_v1.py      # Main CHARM processor\n├── src/python/\n│   ├── charm_data_process_functions.py\n│   ├── charm_dineof_functions.py\n│   ├── charm_helper_functions.py\n│   └── charm_model_functions.py\n└── templates/\n    ├── charm_3k_grid.nc\n    ├── charm2022_out_tmpl.cdf\n    ├── themask.nc\n    └── viirs_L3.cdl",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
     ]
   },
   {
-    "objectID": "charm.html#cloud-run-execution",
-    "href": "charm.html#cloud-run-execution",
-    "title": "CHARM Processing Workflow",
-    "section": "Cloud Run execution",
-    "text": "Cloud Run execution\nThe workflow is deployed as a Cloud Run Job using a shared container image.\nThe runtime flow is:\n\nCloud Scheduler triggers the job\nentrypoint.sh selects runtime behavior\ncontrol_charm_cron_v1.py orchestrates processing\nmake_charm_cloud_v1.py generates CHARM outputs\nFinal NetCDF products are written and uploaded to Google Cloud Storage\nERDDAP ingests the published outputs",
+    "objectID": "charm.html#cloud-run-jobs",
+    "href": "charm.html#cloud-run-jobs",
+    "title": "CHARM",
+    "section": "Cloud Run jobs",
+    "text": "Cloud Run jobs\nThe workflow runs as a Cloud Run job built from a shared container image and dispatched through entrypoint.sh.\n\n\n\n\n\n\n\nComponent\nPurpose\n\n\n\n\ncontrol_charm_cron_v1.py\nRuntime orchestration and scheduling logic\n\n\nmake_charm_cloud_v1.py\nMain CHARM product generation\n\n\nentrypoint.sh\nCloud Run startup and mode dispatch",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM Processing Workflow</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
     ]
   },
   {
-    "objectID": "charm.html#dineof-processing",
-    "href": "charm.html#dineof-processing",
-    "title": "CHARM Processing Workflow",
-    "section": "DINEOF processing",
-    "text": "DINEOF processing\nThe workflow includes both operational and backfill DINEOF configuration trees:\n\nconfig/dineof/ - operational processing\nconfig/bf_dineof/ - backfill processing\n\nEach contains parameter sets for:\n\nchlor_a\nRrs_489\nRrs_556\n\nThese .init files control DINEOF reconstruction behavior for each variable.",
+    "objectID": "charm.html#processing-pipeline",
+    "href": "charm.html#processing-pipeline",
+    "title": "CHARM",
+    "section": "Processing pipeline",
+    "text": "Processing pipeline\nEach run follows this sequence:\nCloud Scheduler → Cloud Run Job → Download VIIRS inputs → DINEOF gap-filling → CHARM model processing → Apply templates → Publish to GCS → ERDDAP ingestion\nThe controller script manages runtime configuration, date handling, input discovery, and execution of the CHARM processing workflow.",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM Processing Workflow</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
+    ]
+  },
+  {
+    "objectID": "charm.html#dineof-configuration-system",
+    "href": "charm.html#dineof-configuration-system",
+    "title": "CHARM",
+    "section": "DINEOF configuration system",
+    "text": "DINEOF configuration system\nThe workflow uses multiple DINEOF initialization files for forecast, nowcast, and backfill processing.\nConfiguration groups are organized by:\n\nchlorophyll-a\nRrs_489\nRrs_556\n\nSeparate configurations exist for:\n\noperational processing\nbackfill processing\nforecast generation\nnowcast generation",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
     ]
   },
   {
@@ -314,7 +374,7 @@
     "href": "charm.html#templates-and-static-assets",
     "title": "CHARM",
     "section": "Templates and static assets",
-    "text": "Templates and static assets\nThe workflow uses NetCDF templates and static reference assets to standardize output structure and metadata.\n\n\n\nFile\nPurpose\n\n\n\n\ncharm_template.nc\nDaily CHARM template\n\n\ncharm_monthly_template.nc\nMonthly composite template\n\n\ncharm_anomaly_template.nc\nAnomaly dataset template",
+    "text": "Templates and static assets\nThe workflow uses static NetCDF templates and mask/grid assets to standardize output structure and metadata.\n\n\n\nFile\nPurpose\n\n\n\n\ncharm_3k_grid.nc\nCHARM output grid definition\n\n\ncharm2022_out_tmpl.cdf\nCHARM NetCDF output template\n\n\nthemask.nc\nProcessing mask\n\n\nviirs_L3.cdl\nVIIRS Level-3 CDL template",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
     ]
@@ -324,19 +384,9 @@
     "href": "charm.html#codebase",
     "title": "CHARM",
     "section": "Codebase",
-    "text": "Codebase\n\n\n\nDeployment\nContainer and Cloud Run deployment configuration.\n\nDockerfile\nentrypoint.sh\ndeploy_job.sh\nconfig.yml\nrequirements.txt\n\n\n\n\nDaily processing\nDaily CHARM orchestration and product generation.\n\ncontrol_charm.py - daily workflow controller\nmake_charm.py - daily CHARM processor\n\n\n\n\nMonthly composites\nMonthly CHARM compositing workflows.\n\ncontrol_charm_monthly.py - monthly workflow controller\nmake_charm_monthly.py - monthly composite builder\n\n\n\n\nAnomaly processing\nDerived anomaly generation workflows.\n\nmake_charm_anomaly.py - anomaly generator\n\n\n\n\nTemplates and static assets\nReference NetCDF templates and static metadata assets.\n\ncharm_template.nc\ncharm_monthly_template.nc\ncharm_anomaly_template.nc",
+    "text": "Codebase\n\n\n\nDeployment\nContainer and Cloud Run deployment configuration.\n\nDockerfile\nentrypoint.sh\ndelpoy_job.sh\nconfig.yaml\nrequirements.txt\n\n\n\n\nWorkflow scripts\nMain CHARM orchestration and processing.\n\ncontrol_charm_cron_v1.py - workflow controller\nmake_charm_cloud_v1.py - primary CHARM processor\n\n\n\n\nModel and helper libraries\nSupporting processing, DINEOF, and model utilities.\n\ncharm_data_process_functions.py\ncharm_dineof_functions.py\ncharm_helper_functions.py\ncharm_model_functions.py\n\n\n\n\nDINEOF configuration\nForecast, nowcast, and backfill initialization files.\n\nfor_chlor_a_v4.init\nnow_chlor_a_v4.init\nfor_Rrs_489_v4.init\nnow_Rrs_489_v4.init\nfor_Rrs_556_v4.init\nnow_Rrs_556_v4.init\n\n\n\n\nBackfill DINEOF configuration\nBackfill forecast and nowcast initialization files.\n\nfor_bf_chlor_a_v4.init\nnow_bf_chlor_a_v4.init\nfor_bf_Rrs_489_v4.init\nnow_bf_Rrs_489_v4.init\nfor_bf_Rrs_556_v4.init\nnow_bf_Rrs_556_v4.init\n\n\n\n\nTemplates and static assets\nReference templates, masks, and static grid assets.\n\nviirs_L3.cdl\ncharm_3k_grid.nc\ncharm2022_out_tmpl.cdf\nthemask.nc",
     "crumbs": [
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
-    ]
-  },
-  {
-    "objectID": "charm.html#operational-notes",
-    "href": "charm.html#operational-notes",
-    "title": "CHARM Processing Workflow",
-    "section": "Operational notes",
-    "text": "Operational notes\nThe workflow is designed for operational execution in Google Cloud Run using ephemeral container storage. Runtime configuration and processing behavior are controlled through:\n\nconfig.yaml\nenvironment variables\nDINEOF .init configuration files\nCloud Run Job parameters\n\nGenerated outputs are written to Google Cloud Storage and staged for ERDDAP publication.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM Processing Workflow</span>"
     ]
   },
   {
@@ -865,106 +915,6 @@
     "crumbs": [
       "viirs-netpp",
       "<span class='chapter-number'>54</span>  <span class='chapter-title'>requirements.txt</span>"
-    ]
-  },
-  {
-    "objectID": "viirs-netpp.html#purpose",
-    "href": "viirs-netpp.html#purpose",
-    "title": "VIIRS Net Primary Productivity",
-    "section": "",
-    "text": "NOAA-20 VIIRS - daily and monthly productivity products\nSNPP VIIRS - daily and monthly productivity products",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
-    ]
-  },
-  {
-    "objectID": "viirs-netpp.html#cloud-run-jobs",
-    "href": "viirs-netpp.html#cloud-run-jobs",
-    "title": "VIIRS Net Primary Productivity",
-    "section": "Cloud Run jobs",
-    "text": "Cloud Run jobs\nThe workflow runs as separate Cloud Run jobs, all built from the same container image and dispatched by entrypoint.sh.\n\n\n\n\n\n\n\n\nJob mode\nScript\nDescription\n\n\n\n\ndaily\ncontrol_viirs_netpp.py\nDaily VIIRS productivity processing\n\n\nmonthly\ncontrol_viirs_netpp_monthly.py\nMonthly VIIRS productivity composites",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
-    ]
-  },
-  {
-    "objectID": "viirs-netpp.html#processing-pipeline",
-    "href": "viirs-netpp.html#processing-pipeline",
-    "title": "VIIRS Net Primary Productivity",
-    "section": "Processing pipeline",
-    "text": "Processing pipeline\nEach daily run follows this general sequence:\nCloud Scheduler → Cloud Run Job → Download inputs → Compute productivity → Apply template metadata → Publish to GCS → ERDDAP ingestion\nThe daily controller handles date selection, sensor configuration, input discovery, and calls the product generation script for each target date.",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
-    ]
-  },
-  {
-    "objectID": "viirs-netpp.html#monthly-composites",
-    "href": "viirs-netpp.html#monthly-composites",
-    "title": "VIIRS Net Primary Productivity",
-    "section": "Monthly composites",
-    "text": "Monthly composites\nMonthly processing is triggered through the monthly job mode.\nThe monthly workflow gathers the required daily productivity files, builds a monthly composite, applies the appropriate CDL template, and publishes the final NetCDF output for ERDDAP.",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
-    ]
-  },
-  {
-    "objectID": "viirs-netpp.html#templates-and-static-assets",
-    "href": "viirs-netpp.html#templates-and-static-assets",
-    "title": "VIIRS Net Primary Productivity",
-    "section": "Templates and static assets",
-    "text": "Templates and static assets\nThe workflow uses CDL templates to define the output NetCDF structure and metadata.\n\n\n\nFile\nPurpose\n\n\n\n\nnasa_noaa20_4km.cdl\nNOAA-20 daily NetCDF template\n\n\nnasa_noaa20_4km_month.cdl\nNOAA-20 monthly NetCDF template\n\n\nnasa_snpp_4km.cdl\nSNPP daily NetCDF template\n\n\nnasa_snpp_4km_month.cdl\nSNPP monthly NetCDF template",
-    "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>VIIRS Net Primary Productivity</span>"
-    ]
-  },
-  {
-    "objectID": "charm.html#purpose",
-    "href": "charm.html#purpose",
-    "title": "CHARM",
-    "section": "",
-    "text": "Daily CHARM bloom products\nDaily anomaly generation\nMonthly composite workflows\nERDDAP-ready NetCDF publication",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
-    ]
-  },
-  {
-    "objectID": "charm.html#cloud-run-jobs",
-    "href": "charm.html#cloud-run-jobs",
-    "title": "CHARM",
-    "section": "Cloud Run jobs",
-    "text": "Cloud Run jobs\nThe workflow runs as multiple Cloud Run jobs using a shared container image and dispatch logic from entrypoint.sh.\n\n\n\nJob mode\nScript\nDescription\n\n\n\n\ndaily\ncontrol_charm.py\nDaily CHARM workflow\n\n\nmonthly\ncontrol_charm_monthly.py\nMonthly CHARM composites\n\n\nanomaly\nmake_charm_anomaly.py\nDaily anomaly generation",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
-    ]
-  },
-  {
-    "objectID": "charm.html#processing-pipeline",
-    "href": "charm.html#processing-pipeline",
-    "title": "CHARM",
-    "section": "Processing pipeline",
-    "text": "Processing pipeline\nEach daily run follows this sequence:\nCloud Scheduler → Cloud Run Job → Download inputs → Generate CHARM product → Apply templates → Publish to GCS → ERDDAP ingestion\nThe controller script manages runtime configuration, date handling, input discovery, and calls the processing routines for each target date.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
-    ]
-  },
-  {
-    "objectID": "charm.html#monthly-composites",
-    "href": "charm.html#monthly-composites",
-    "title": "CHARM",
-    "section": "Monthly composites",
-    "text": "Monthly composites\nMonthly processing gathers daily CHARM outputs and generates monthly composite products for publication.\nThe workflow applies the monthly NetCDF templates and publishes finalized outputs to cloud storage for ERDDAP ingestion.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
-    ]
-  },
-  {
-    "objectID": "charm.html#anomaly-processing",
-    "href": "charm.html#anomaly-processing",
-    "title": "CHARM",
-    "section": "Anomaly processing",
-    "text": "Anomaly processing\nThe anomaly workflow computes departures from baseline or climatological conditions and publishes derived anomaly datasets.\nThese products are generated independently from the monthly compositing workflow and follow their own scheduled execution path.",
-    "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>CHARM</span>"
     ]
   }
 ]

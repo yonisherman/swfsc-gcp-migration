@@ -430,8 +430,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#repository-structure" id="toc-repository-structure" class="nav-link" data-scroll-target="#repository-structure">Repository structure</a></li>
   <li><a href="#cloud-run-jobs" id="toc-cloud-run-jobs" class="nav-link" data-scroll-target="#cloud-run-jobs">Cloud Run jobs</a></li>
   <li><a href="#processing-pipeline" id="toc-processing-pipeline" class="nav-link" data-scroll-target="#processing-pipeline">Processing pipeline</a></li>
-  <li><a href="#monthly-composites" id="toc-monthly-composites" class="nav-link" data-scroll-target="#monthly-composites">Monthly composites</a></li>
-  <li><a href="#anomaly-processing" id="toc-anomaly-processing" class="nav-link" data-scroll-target="#anomaly-processing">Anomaly processing</a></li>
+  <li><a href="#dineof-configuration-system" id="toc-dineof-configuration-system" class="nav-link" data-scroll-target="#dineof-configuration-system">DINEOF configuration system</a></li>
   <li><a href="#templates-and-static-assets" id="toc-templates-and-static-assets" class="nav-link" data-scroll-target="#templates-and-static-assets">Templates and static assets</a></li>
   <li><a href="#codebase" id="toc-codebase" class="nav-link" data-scroll-target="#codebase">Codebase</a></li>
   </ul>
@@ -459,87 +458,99 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This chapter documents the Cloud Run workflow for generating CHARM products and derived anomaly datasets.</p>
+<p>This chapter documents the Cloud Run workflow for generating CHARM products and derived habitat prediction datasets.</p>
 <section id="purpose" class="level2">
 <h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
-<p>The workflow ingests satellite and environmental inputs, generates CHARM bloom products, computes anomaly layers, and publishes NetCDF outputs for ERDDAP distribution.</p>
-<p>The system supports:</p>
+<p>The workflow ingests VIIRS ocean color inputs, applies DINEOF gap-filling and CHARM model logic, and generates gridded bloom prediction products for ERDDAP publication.</p>
+<p>The system includes:</p>
 <ul>
-<li>Daily CHARM bloom products</li>
-<li>Daily anomaly generation</li>
-<li>Monthly composite workflows</li>
-<li>ERDDAP-ready NetCDF publication</li>
+<li>Cloud Run orchestration</li>
+<li>DINEOF configuration management</li>
+<li>CHARM model processing</li>
+<li>NetCDF template generation</li>
+<li>ERDDAP-ready publication</li>
 </ul>
 </section>
 <section id="repository-structure" class="level2">
 <h2 class="anchored" data-anchor-id="repository-structure">Repository structure</h2>
 <pre class="text"><code>charm/
 ├── config/
-│   ├── config.yml          # Runtime settings
-│   └── requirements.txt    # Python dependencies
-├── deploy_job.sh           # Build, push, and deploy Cloud Run jobs
-├── Dockerfile              # Container definition
-├── entrypoint.sh           # Job mode selector
+│   ├── config.yaml                 # Main runtime configuration
+│   ├── dineof/                     # Standard DINEOF configurations
+│   └── bf_dineof/                  # Backfill DINEOF configurations
+├── deploy_job.sh                   # Build, push, and deploy Cloud Run job
+├── Dockerfile                      # Container definition
+├── entrypoint.sh                   # Cloud Run entrypoint
 ├── scripts/
-│   ├── control_charm.py            # Daily workflow controller
-│   ├── make_charm.py               # Daily CHARM processor
-│   ├── control_charm_monthly.py    # Monthly workflow controller
-│   ├── make_charm_monthly.py       # Monthly composite processor
-│   └── make_charm_anomaly.py       # Anomaly generation
+│   ├── control_charm_cron_v1.py    # Workflow controller
+│   └── make_charm_cloud_v1.py      # Main CHARM processor
+├── src/python/
+│   ├── charm_data_process_functions.py
+│   ├── charm_dineof_functions.py
+│   ├── charm_helper_functions.py
+│   └── charm_model_functions.py
 └── templates/
-    ├── charm_template.nc           # Daily NetCDF template
-    ├── charm_monthly_template.nc   # Monthly NetCDF template
-    └── charm_anomaly_template.nc   # Anomaly template</code></pre>
+    ├── charm_3k_grid.nc
+    ├── charm2022_out_tmpl.cdf
+    ├── themask.nc
+    └── viirs_L3.cdl</code></pre>
 </section>
 <section id="cloud-run-jobs" class="level2">
 <h2 class="anchored" data-anchor-id="cloud-run-jobs">Cloud Run jobs</h2>
-<p>The workflow runs as multiple Cloud Run jobs using a shared container image and dispatch logic from <code>entrypoint.sh</code>.</p>
+<p>The workflow runs as a Cloud Run job built from a shared container image and dispatched through <code>entrypoint.sh</code>.</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>Job mode</th>
-<th>Script</th>
-<th>Description</th>
+<th>Component</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>daily</code></td>
-<td><code>control_charm.py</code></td>
-<td>Daily CHARM workflow</td>
+<td><code>control_charm_cron_v1.py</code></td>
+<td>Runtime orchestration and scheduling logic</td>
 </tr>
 <tr class="even">
-<td><code>monthly</code></td>
-<td><code>control_charm_monthly.py</code></td>
-<td>Monthly CHARM composites</td>
+<td><code>make_charm_cloud_v1.py</code></td>
+<td>Main CHARM product generation</td>
 </tr>
 <tr class="odd">
-<td><code>anomaly</code></td>
-<td><code>make_charm_anomaly.py</code></td>
-<td>Daily anomaly generation</td>
+<td><code>entrypoint.sh</code></td>
+<td>Cloud Run startup and mode dispatch</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="processing-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="processing-pipeline">Processing pipeline</h2>
-<p>Each daily run follows this sequence:</p>
-<pre class="text"><code>Cloud Scheduler → Cloud Run Job → Download inputs → Generate CHARM product → Apply templates → Publish to GCS → ERDDAP ingestion</code></pre>
-<p>The controller script manages runtime configuration, date handling, input discovery, and calls the processing routines for each target date.</p>
+<p>Each run follows this sequence:</p>
+<pre class="text"><code>Cloud Scheduler → Cloud Run Job → Download VIIRS inputs → DINEOF gap-filling → CHARM model processing → Apply templates → Publish to GCS → ERDDAP ingestion</code></pre>
+<p>The controller script manages runtime configuration, date handling, input discovery, and execution of the CHARM processing workflow.</p>
 </section>
-<section id="monthly-composites" class="level2">
-<h2 class="anchored" data-anchor-id="monthly-composites">Monthly composites</h2>
-<p>Monthly processing gathers daily CHARM outputs and generates monthly composite products for publication.</p>
-<p>The workflow applies the monthly NetCDF templates and publishes finalized outputs to cloud storage for ERDDAP ingestion.</p>
-</section>
-<section id="anomaly-processing" class="level2">
-<h2 class="anchored" data-anchor-id="anomaly-processing">Anomaly processing</h2>
-<p>The anomaly workflow computes departures from baseline or climatological conditions and publishes derived anomaly datasets.</p>
-<p>These products are generated independently from the monthly compositing workflow and follow their own scheduled execution path.</p>
+<section id="dineof-configuration-system" class="level2">
+<h2 class="anchored" data-anchor-id="dineof-configuration-system">DINEOF configuration system</h2>
+<p>The workflow uses multiple DINEOF initialization files for forecast, nowcast, and backfill processing.</p>
+<p>Configuration groups are organized by:</p>
+<ul>
+<li>chlorophyll-a</li>
+<li>Rrs_489</li>
+<li>Rrs_556</li>
+</ul>
+<p>Separate configurations exist for:</p>
+<ul>
+<li>operational processing</li>
+<li>backfill processing</li>
+<li>forecast generation</li>
+<li>nowcast generation</li>
+</ul>
 </section>
 <section id="templates-and-static-assets" class="level2">
 <h2 class="anchored" data-anchor-id="templates-and-static-assets">Templates and static assets</h2>
-<p>The workflow uses NetCDF templates and static reference assets to standardize output structure and metadata.</p>
+<p>The workflow uses static NetCDF templates and mask/grid assets to standardize output structure and metadata.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -549,16 +560,20 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>charm_template.nc</code></td>
-<td>Daily CHARM template</td>
+<td><code>charm_3k_grid.nc</code></td>
+<td>CHARM output grid definition</td>
 </tr>
 <tr class="even">
-<td><code>charm_monthly_template.nc</code></td>
-<td>Monthly composite template</td>
+<td><code>charm2022_out_tmpl.cdf</code></td>
+<td>CHARM NetCDF output template</td>
 </tr>
 <tr class="odd">
-<td><code>charm_anomaly_template.nc</code></td>
-<td>Anomaly dataset template</td>
+<td><code>themask.nc</code></td>
+<td>Processing mask</td>
+</tr>
+<tr class="even">
+<td><code>viirs_L3.cdl</code></td>
+<td>VIIRS Level-3 CDL template</td>
 </tr>
 </tbody>
 </table>
@@ -573,45 +588,66 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><a href="code-pages/charm/dockerfile.html">Dockerfile</a></li>
 <li><a href="code-pages/charm/entrypoint.html">entrypoint.sh</a></li>
-<li><a href="code-pages/charm/deploy_job.html">deploy_job.sh</a></li>
-<li><a href="code-pages/charm/config.html">config.yml</a></li>
+<li><a href="code-pages/charm/delpoy_job.html">delpoy_job.sh</a></li>
+<li><a href="code-pages/charm/config.html">config.yaml</a></li>
 <li><a href="code-pages/charm/requirements.html">requirements.txt</a></li>
 </ul>
 </div>
 
 <div class="file-card">
-<h3 class="anchored">Daily processing</h3>
-<p>Daily CHARM orchestration and product generation.</p>
+<h3 class="anchored">Workflow scripts</h3>
+<p>Main CHARM orchestration and processing.</p>
 <ul>
-<li><a href="code-pages/charm/control_charm.html">control_charm.py</a> - daily workflow controller</li>
-<li><a href="code-pages/charm/make_charm.html">make_charm.py</a> - daily CHARM processor</li>
+<li><a href="code-pages/charm/control_charm_cron_v1.html">control_charm_cron_v1.py</a> - workflow controller</li>
+<li><a href="code-pages/charm/make_charm_cloud_v1.html">make_charm_cloud_v1.py</a> - primary CHARM processor</li>
 </ul>
 </div>
 
 <div class="file-card">
-<h3 class="anchored">Monthly composites</h3>
-<p>Monthly CHARM compositing workflows.</p>
+<h3 class="anchored">Model and helper libraries</h3>
+<p>Supporting processing, DINEOF, and model utilities.</p>
 <ul>
-<li><a href="code-pages/charm/control_charm_monthly.html">control_charm_monthly.py</a> - monthly workflow controller</li>
-<li><a href="code-pages/charm/make_charm_monthly.html">make_charm_monthly.py</a> - monthly composite builder</li>
+<li><a href="code-pages/charm/charm_data_process_functions.html">charm_data_process_functions.py</a></li>
+<li><a href="code-pages/charm/charm_dineof_functions.html">charm_dineof_functions.py</a></li>
+<li><a href="code-pages/charm/charm_helper_functions.html">charm_helper_functions.py</a></li>
+<li><a href="code-pages/charm/charm_model_functions.html">charm_model_functions.py</a></li>
 </ul>
 </div>
 
 <div class="file-card">
-<h3 class="anchored">Anomaly processing</h3>
-<p>Derived anomaly generation workflows.</p>
+<h3 class="anchored">DINEOF configuration</h3>
+<p>Forecast, nowcast, and backfill initialization files.</p>
 <ul>
-<li><a href="code-pages/charm/make_charm_anomaly.html">make_charm_anomaly.py</a> - anomaly generator</li>
+<li><a href="code-pages/charm/for_chlor_a_v4.html">for_chlor_a_v4.init</a></li>
+<li><a href="code-pages/charm/now_chlor_a_v4.html">now_chlor_a_v4.init</a></li>
+<li><a href="code-pages/charm/for_Rrs_489_v4.html">for_Rrs_489_v4.init</a></li>
+<li><a href="code-pages/charm/now_Rrs_489_v4.html">now_Rrs_489_v4.init</a></li>
+<li><a href="code-pages/charm/for_Rrs_556_v4.html">for_Rrs_556_v4.init</a></li>
+<li><a href="code-pages/charm/now_Rrs_556_v4.html">now_Rrs_556_v4.init</a></li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3 class="anchored">Backfill DINEOF configuration</h3>
+<p>Backfill forecast and nowcast initialization files.</p>
+<ul>
+<li><a href="code-pages/charm/for_bf_chlor_a_v4.html">for_bf_chlor_a_v4.init</a></li>
+<li><a href="code-pages/charm/now_bf_chlor_a_v4.html">now_bf_chlor_a_v4.init</a></li>
+<li><a href="code-pages/charm/for_bf_Rrs_489_v4.html">for_bf_Rrs_489_v4.init</a></li>
+<li><a href="code-pages/charm/now_bf_Rrs_489_v4.html">now_bf_Rrs_489_v4.init</a></li>
+<li><a href="code-pages/charm/for_bf_Rrs_556_v4.html">for_bf_Rrs_556_v4.init</a></li>
+<li><a href="code-pages/charm/now_bf_Rrs_556_v4.html">now_bf_Rrs_556_v4.init</a></li>
 </ul>
 </div>
 
 <div class="file-card">
 <h3 class="anchored">Templates and static assets</h3>
-<p>Reference NetCDF templates and static metadata assets.</p>
+<p>Reference templates, masks, and static grid assets.</p>
 <ul>
-<li>charm_template.nc</li>
-<li>charm_monthly_template.nc</li>
-<li>charm_anomaly_template.nc</li>
+<li><a href="code-pages/charm/viirs_L3.html">viirs_L3.cdl</a></li>
+<li>charm_3k_grid.nc</li>
+<li>charm2022_out_tmpl.cdf</li>
+<li>themask.nc</li>
 </ul>
 </div>
 
