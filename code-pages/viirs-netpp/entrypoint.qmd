@@ -1,0 +1,19 @@
+---
+title: "entrypoint.sh"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../viirs-netpp.html)
+
+Job mode selector entrypoint script.
+
+::: {.code-shell}
+
+
+```{.bash}
+{{< include ../../workflows/viirs-netpp/entrypoint.sh >}}
+```
+
+:::

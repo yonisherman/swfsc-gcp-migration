@@ -1,5 +1,5 @@
 ---
-title: "Dockerfile"
+title: "deploy_job.sh"
 toc: false
 page-layout: full
 number-sections: false
@@ -11,8 +11,8 @@ Container environment for the VIIRS NetPP Cloud Run workflow.
 
 ::: {.code-shell}
 
-```{.dockerfile}
-{{< include ../../workflows/viirs-netpp/Dockerfile >}}
+```{.bash}
+{{< include ../../workflows/viirs-netpp/deploy_job.sh >}}
 ```
 
 :::

@@ -43,8 +43,8 @@ deployment, processing, and product generation.
 <h3>config/</h3>
 <p>Runtime configuration and Python environment.</p>
 <ul>
-<li><a href="workflows/viirs-netpp/config/config.yml">config.yml</a> — sensor, GCS, API, and processing settings</li>
-<li><a href="workflows/viirs-netpp/config/requirements.txt">requirements.txt</a> — Python dependencies</li>
+<li><a href="code-pages/viirs-netpp/config.html">config.yml</a> — sensor, GCS, API, and processing settings</li>
+<li><a href="code-pages/viirs-netpp/requirements.html">requirements.txt</a> — Python dependencies</li>
 </ul>
 </div>
 
@@ -52,9 +52,9 @@ deployment, processing, and product generation.
 <h3>deployment files</h3>
 <p>Top-level files used to build and run the Cloud Run jobs.</p>
 <ul>
-<a href="code-pages/viirs-netpp/dockerfile.html">Dockerfile</a>
-<li><a href="workflows/viirs-netpp/entrypoint.sh">entrypoint.sh</a> — job mode selector</li>
-<li><a href="workflows/viirs-netpp/deploy_job.sh">deploy_job.sh</a> — build, deploy, and schedule jobs</li>
+<li><a href="code-pages/viirs-netpp/dockerfile.html">Dockerfile</a></li>
+<li><a href="code-pages/viirs-netpp/entrypoint.html">entrypoint.sh</a></li>
+<li><a href="code-pages/viirs-netpp/deploy_job.html">deploy_job.sh</a> — build, deploy, and schedule jobs</li>
 </ul>
 </div>
 
@@ -64,14 +64,14 @@ deployment, processing, and product generation.
 
 <h4>Daily products</h4>
 <ul>
-<li><a href="workflows/viirs-netpp/scripts/control_viirs_netpp.py">control_viirs_netpp.py</a> — daily run orchestrator</li>
-<li><a href="workflows/viirs-netpp/scripts/make_viirs_netpp.py">make_viirs_netpp.py</a> — daily productivity generator</li>
+<li><a href="code-pages/viirs-netpp/control_viirs_netpp.html">control_viirs_netpp.py</a></li>
+<li><a href="code-pages/viirs-netpp/make_viirs_netpp.html">make_viirs_netpp.py</a></li>
 </ul>
 
 <h4>Monthly composites</h4>
 <ul>
-<li><a href="workflows/viirs-netpp/scripts/control_viirs_netpp_monthly.py">control_viirs_netpp_monthly.py</a> — monthly run orchestrator</li>
-<li><a href="workflows/viirs-netpp/scripts/make_viirs_netpp_monthly.py">make_viirs_netpp_monthly.py</a> — monthly composite builder</li>
+<li><a href="code-pages/viirs-netpp/control_viirs_netpp_monthly.html">control_viirs_netpp_monthly.py</a> — monthly run orchestrator</li>
+<li><a href="code-pages/viirs-netpp/make_viirs_netpp_monthly.html">make_viirs_netpp_monthly.py</a> — monthly composite builder</li>
 </ul>
 </div>
 

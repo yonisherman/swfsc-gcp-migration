@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./viirs-netpp.html" rel="next">
+<link href="./erddap-vm-setup.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -39,10 +39,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-065a5179aebd64318d7ea99d77b64a9e.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-25a4e8620ae17d49cd0c3861fdf92567.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -84,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SWFSC Cloud Migration</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-title">SWFSC Cloud Migration</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -115,16 +115,80 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">SWFSC Cloud Migration</span></span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">SWFSC Cloud Migration</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./viirs-netpp.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></span></a>
+  <a href="./erddap-vm-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ERDDAP Server &amp; Dataproc VM Setup</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-templates.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GCP Data Processing Template Repos</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viirs-netpp.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">viirs-netpp</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/config.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">config.yml</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/control_viirs_netpp.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">control_viirs_netpp.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/control_viirs_netpp_monthly.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">control_viirs_netpp_monthly.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/deploy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">deploy_job.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/dockerfile.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Dockerfile</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/entrypoint.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">entrypoint.sh</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/make_viirs_netpp.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">make_viirs_netpp.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/make_viirs_netpp_monthly.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">make_viirs_netpp_monthly.py</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/viirs-netpp/requirements.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">requirements.txt</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -135,10 +199,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#swfsc-cloud-migration" id="toc-swfsc-cloud-migration" class="nav-link active" data-scroll-target="#swfsc-cloud-migration"><span class="header-section-number">1</span> SWFSC Cloud Migration</a>
+  <li><a href="#swfsc-cloud-migration" id="toc-swfsc-cloud-migration" class="nav-link active" data-scroll-target="#swfsc-cloud-migration">SWFSC Cloud Migration</a>
   <ul class="collapse">
-  <li><a href="#what-youll-find-here" id="toc-what-youll-find-here" class="nav-link" data-scroll-target="#what-youll-find-here"><span class="header-section-number">1.1</span> What you’ll find here</a></li>
-  <li><a href="#not-sure-where-to-start" id="toc-not-sure-where-to-start" class="nav-link" data-scroll-target="#not-sure-where-to-start"><span class="header-section-number">1.2</span> Not sure where to start?</a></li>
+  <li><a href="#what-youll-find-here" id="toc-what-youll-find-here" class="nav-link" data-scroll-target="#what-youll-find-here">What you’ll find here</a></li>
+  <li><a href="#not-sure-where-to-start" id="toc-not-sure-where-to-start" class="nav-link" data-scroll-target="#not-sure-where-to-start">Not sure where to start?</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -171,24 +235,25 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="swfsc-cloud-migration" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> SWFSC Cloud Migration</h1>
+<section id="swfsc-cloud-migration" class="level1">
+<h1>SWFSC Cloud Migration</h1>
 <p>This site documents cloud-based satellite data workflows developed for the NOAA CoastWatch West Coast Node / SWFSC ERDDAP migration.</p>
-<section id="what-youll-find-here" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="what-youll-find-here"><span class="header-section-number">1.1</span> What you’ll find here</h2>
+<section id="what-youll-find-here" class="level2">
+<h2 class="anchored" data-anchor-id="what-youll-find-here">What you’ll find here</h2>
 <ul>
 <li>Cloud Run data pipelines for satellite processing</li>
 <li>End-to-end reproducible workflows</li>
 <li>Examples of operational ocean data systems</li>
 </ul>
 </section>
-<section id="not-sure-where-to-start" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="not-sure-where-to-start"><span class="header-section-number">1.2</span> Not sure where to start?</h2>
+<section id="not-sure-where-to-start" class="level2">
+<h2 class="anchored" data-anchor-id="not-sure-where-to-start">Not sure where to start?</h2>
 <ul>
 <li>Explore the VIIRS NetPP workflow</li>
 <li>Review architecture and deployment patterns</li>
 <li>Browse code examples and templates</li>
 </ul>
+<p>chapters: - index.qmd - erddap-vm-setup.qmd - viirs-netpp.qmd</p>
 
 
 </section>
@@ -601,8 +666,8 @@ ul.task-list li input[type="checkbox"] {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./viirs-netpp.html" class="pagination-link" aria-label="VIIRS Net Primary Productivity Cloud Run Workflow">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">VIIRS Net Primary Productivity Cloud Run Workflow</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./erddap-vm-setup.html" class="pagination-link" aria-label="ERDDAP Server &amp; Dataproc VM Setup">
+        <span class="nav-page-text"><span class="chapter-title">ERDDAP Server &amp; Dataproc VM Setup</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

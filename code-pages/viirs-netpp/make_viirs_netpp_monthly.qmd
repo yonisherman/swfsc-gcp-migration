@@ -1,0 +1,20 @@
+---
+title: "make_viirs_netpp_monthly.py"
+toc: false
+page-layout: full
+number-sections: false
+
+
+---
+
+[← Back to workflow](../../viirs-netpp.html)
+
+Monthly productivity generator.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/viirs-netpp/scripts/make_viirs_netpp_monthly.py >}}
+```
+
+:::

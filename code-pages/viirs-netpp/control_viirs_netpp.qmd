@@ -1,0 +1,18 @@
+---
+title: "control_viirs_netpp.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../viirs-netpp.html)
+
+Daily run orchestrator.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/viirs-netpp/scripts/control_viirs_netpp.py >}}
+```
+
+:::

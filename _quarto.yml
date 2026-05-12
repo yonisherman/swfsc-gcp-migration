@@ -1,30 +1,39 @@
-project:
-  type: book
-  output-dir: docs
-  render:
-    - "*.qmd"
-    - "code-pages/**/*.qmd"
-  resources:
-    - code-wide.css
-    - workflows/**
-
 book:
-  title: "SWFSC Cloud Migration Workflows"
-  author: "Jonathan Sherman"
+  author: Jonathan Sherman
+  chapters:
+  - index.qmd
+  - erddap-vm-setup.qmd
+  - gcp-templates.qmd
+  - viirs-netpp.qmd
+  - part: viirs-netpp
+    chapters:
+    - code-pages/viirs-netpp/config.qmd
+    - code-pages/viirs-netpp/control_viirs_netpp.qmd
+    - code-pages/viirs-netpp/control_viirs_netpp_monthly.qmd
+    - code-pages/viirs-netpp/deploy_job.qmd
+    - code-pages/viirs-netpp/dockerfile.qmd
+    - code-pages/viirs-netpp/entrypoint.qmd
+    - code-pages/viirs-netpp/make_viirs_netpp.qmd
+    - code-pages/viirs-netpp/make_viirs_netpp_monthly.qmd
+    - code-pages/viirs-netpp/requirements.qmd
   sidebar:
     logo: assets/logo.png
-    title: ""
-  chapters:
-    - index.qmd
-    - viirs-netpp.qmd
-  
-
+    title: ''
+  title: SWFSC Cloud Migration Workflows
 format:
   html:
-    theme: cosmo
     css: styles.css
+    highlight-style: github
     link-external-icon: true
-    toc: true
+    number-sections: false
     sidebar:
       collapse-level: 2
-      style: "docked"
+      style: docked
+    theme: cosmo
+    toc: true
+project:
+  output-dir: docs
+  pre-render: python build-chapters.py
+  resources:
+  - workflows/**
+  type: book

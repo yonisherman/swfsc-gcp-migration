@@ -1,0 +1,19 @@
+---
+title: "requirements.txt"
+toc: false
+page-layout: full
+number-sections: false
+
+---
+
+[← Back to workflow](../../viirs-netpp.html)
+
+Python dependencies for the VIIRS NetPP workflow.
+
+::: {.code-shell}
+
+```{.text}
+{{< include ../../workflows/viirs-netpp/config/requirements.txt >}}
+```
+
+:::

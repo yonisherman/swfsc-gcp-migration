@@ -186,3 +186,8 @@ pre {
 .code-shell pre code {
   white-space: pre;
 }
+
+/* Hide code-pages from sidebar */
+.sidebar-item-section {
+  display: none;
+}

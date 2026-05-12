@@ -16,5 +16,41 @@
   },
   "code-pages/viirs-netpp/dockerfile.qmd": {
     "dockerfile.html": "d913f1d7"
+  },
+  "code-pages/viirs-netpp/entrypoint.qmd": {
+    "entrypoint.html": "80bb4cc4"
+  },
+  "code-pages/viirs-netpp/control-viirs-netpp.qmd": {
+    "control-viirs-netpp.html": "2ab9a4e5"
+  },
+  "code-pages/viirs-netpp/make-viirs-netpp.qmd": {
+    "make-viirs-netpp.html": "f71202ea"
+  },
+  "code-pages/viirs-netpp/deploy_job.qmd": {
+    "deploy_job.html": "e369a4dc"
+  },
+  "code-pages/viirs-netpp/control_viirs_netpp.qmd": {
+    "control_viirs_netpp.html": "1f03a8b4"
+  },
+  "code-pages/viirs-netpp/make_viirs_netpp.qmd": {
+    "make_viirs_netpp.html": "33f19676"
+  },
+  "code-pages/viirs-netpp/control_viirs_netpp_monthly.qmd": {
+    "control_viirs_netpp_monthly.html": "ca332aac"
+  },
+  "code-pages/viirs-netpp/make_viirs_netpp_monthly.qmd": {
+    "make_viirs_netpp_monthly.html": "95d11947"
+  },
+  "code-pages/viirs-netpp/config.qmd": {
+    "config.html": "82b00da5"
+  },
+  "code-pages/viirs-netpp/requirements.qmd": {
+    "requirements.html": "e16edbf0"
+  },
+  "erddap-vm-setup.qmd": {
+    "erddap-vm-setup.html": "795375ad"
+  },
+  "gcp-templates.qmd": {
+    "gcp-templates.html": "38c3a4a5"
   }
 }

@@ -1,0 +1,252 @@
+---
+title: "ERDDAP Server & Dataproc VM Setup"
+---
+
+**Target:** Maintain and/or upgrade the C4-Series architecture (GVNIC, Hyperdisk Balanced) using a "Standardized Image" and "Decoupled Data" model.
+
+## Overview
+
+Moving from E2 (4th Gen) to C4 (5th Gen) requires a "Destroy and Recreate" strategy because C4 requires GVNIC networking and Hyperdisk Balanced storage. We use snapshots to preserve user environments, but instances are now deployed cleanly via Terraform.
+
+## Step 1: Accessing the Infrastructure Code
+
+Before modifying the environment, access the centralized configuration in Google Cloud Source Repositories.
+
+1. Log into the Google Cloud Console.
+2. Start Cloud Shell: Click the terminal icon (`>_`) in the top right header.
+3. Clone the repository — ensure you have read access to the project.
+
+```{.bash}
+git clone YOUR_TERRAFORM_REPO_URL
+cd YOUR_TERRAFORM_REPO
+```
+
+## Step 2: Data Preservation (Manual Snapshot)
+
+::: {.callout-note}
+Required only if an existing VM needs to be "cloned" rather than built from a fresh image.
+:::
+
+- Stop services to ensure data consistency (e.g. `sudo systemctl stop tomcat`).
+- In Cloud Shell or terminal run:
+
+```{.bash}
+gcloud compute disks snapshot [INSTANCE_NAME] \
+    --project=YOUR_PROJECT_ID \
+    --zone=YOUR_ZONE \
+    --snapshot-names=[INSTANCE_NAME]-migration-backup
+```
+
+## Step 3: Infrastructure Deployment (Terraform)
+
+Ensure `instance.tf` in the Cloud Source repo defines the C4 architecture (GVNIC, Hyperdisk, machine type). Once the code is ready, initialize the hardware:
+
+```{.bash}
+terraform plan   # Review changes
+terraform apply  # Build the hardware — sometimes needs to run twice
+```
+
+## Step 4: OS Environment & Group Setup
+
+Before mounting the data disks, ensure the security group and user permissions are established.
+
+```{.bash}
+# 1. Create the cwatch group if it doesn't exist
+sudo groupadd cwatch
+
+# 2. Add your user and the erd user to the group
+sudo usermod -aG cwatch $USER
+sudo usermod -aG cwatch erd
+
+# 3. Refresh group membership (or log out and back in)
+newgrp cwatch
+```
+
+## Step 5: Storage Initialization
+
+Setup the 4 TB data disk. Check for existing data first — **do not format if the disk was reattached from a previous instance.**
+
+```{.bash}
+# 1) Check for existing filesystem
+sudo blkid /dev/disk/by-id/google-dataproc-data
+
+# 2) Format only if blank
+sudo mkfs.ext4 -m 0 -E \
+    lazy_itable_init=0,lazy_journal_init=0,discard \
+    /dev/disk/by-id/google-dataproc-data
+
+# 3) Mount and set permissions
+sudo mkdir -p /mnt/disks/dataproc-data
+sudo mount -o discard,defaults /dev/disk/by-id/google-dataproc-data /mnt/disks/dataproc-data
+
+# Set ownership to the new group
+sudo chown -R root:cwatch /mnt/disks/dataproc-data
+sudo chmod -R 2775 /mnt/disks/dataproc-data
+
+# 4) Standard symlink
+sudo ln -s /mnt/disks/dataproc-data /data
+```
+
+## Step 6: GCS Connectivity (ERDDAP VM Only) {#sec-rclone}
+
+Rclone provides a Virtual File System (VFS) that uses the 4 TB NVMe disk to cache data from the GCS bucket. This is optimized for ERDDAP's "range request" behavior, using a local cache to provide near-instant access to frequently used data.
+
+### 1. Rclone Installation
+
+```{.bash}
+sudo curl https://rclone.org/install.sh | sudo bash
+```
+
+### 2. Create Shared Configuration
+
+```{.bash}
+sudo mkdir -p /home/erd/rclone/
+
+sudo tee /home/erd/rclone/rclone.conf > /dev/null <<EOF
+[gcs-remote]
+type = google cloud storage
+env_auth = true
+project_number = YOUR_PROJECT_ID
+location = YOUR_REGION
+EOF
+
+sudo chown -R root:cwatch /home/erd/rclone/
+```
+
+### 3. Create Cache and Mount Point Directories
+
+```{.bash}
+sudo mkdir -p /mnt/disks/erddap-data/rclone-cache
+sudo chown -R root:cwatch /mnt/disks/erddap-data/rclone-cache
+sudo chmod -R 2775 /mnt/disks/erddap-data/rclone-cache
+
+sudo mkdir -p /mnt/gcs/erd
+sudo chown -R root:cwatch /mnt/gcs/erd
+sudo chmod -R 2775 /mnt/gcs/erd
+```
+
+### 4. Create the Systemd Persistence Service
+
+This configuration allocates 2 TB for data caching and is tuned for scientific data integrity.
+
+- `--read-only` hard-locks the mount to prevent accidental GCS data modification.
+- `--vfs-read-ahead` pre-fetches data into the NVMe for smoother ERDDAP streaming.
+- We omit `--no-modtime` and set `--attr-timeout 1m` so rclone detects when NRT files are replaced by Science-quality versions in GCS.
+
+```{.bash}
+sudo tee /etc/systemd/system/rclone-mount.service > /dev/null <<EOF
+[Unit]
+Description=Rclone High-Performance GCS Mount
+After=network-online.target mnt-disks-dataproc\\x2ddata.mount
+Wants=network-online.target
+
+[Service]
+Type=notify
+User=root
+
+ExecStart=/usr/bin/rclone mount gcs-remote:YOUR_GCS_BUCKET /mnt/gcs/erd \\
+    --config /home/erd/rclone/rclone.conf \\
+    --allow-other \\
+    --read-only \\
+    --dir-cache-time 1h \\
+    --attr-timeout 1m \\
+    --vfs-cache-mode full \\
+    --vfs-cache-max-age 48h \\
+    --vfs-cache-max-size 2000G \\
+    --vfs-cache-poll-interval 1m \\
+    --cache-dir /mnt/disks/erddap-data/rclone-cache \\
+    --buffer-size 128M \\
+    --vfs-read-ahead 256M \\
+    --vfs-read-chunk-size 64M \\
+    --vfs-read-chunk-size-limit 2G \\
+    --dir-perms 0775 \\
+    --file-perms 0775 \\
+    --gid $(getent group cwatch | cut -d: -f3) \\
+    --umask 002 \\
+    --rc \\
+    --rc-no-auth
+
+ExecStop=/usr/bin/fusermount -u /mnt/gcs/erd
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+### 5. Enable and Start Service
+
+```{.bash}
+sudo systemctl daemon-reload
+sudo systemctl enable rclone-mount.service
+sudo systemctl start rclone-mount.service
+```
+
+### 6. Performance Verification
+
+```{.bash}
+# Check for data visibility
+ls -l /mnt/gcs/erd
+
+# Monitor cache usage and read-ahead status
+rclone rc vfs/stats
+```
+
+::: {.callout-tip}
+**Storage Capacity:** The 2 TB cache is a "managed ceiling." Rclone will automatically purge the oldest data if it hits this limit, ensuring the 4 TB disk never fills up.
+
+**NRT Updates:** By checking attributes once per minute, the system will automatically fetch the updated Science-quality version of a file even if the name hasn't changed.
+:::
+
+## Step 7: ERDDAP Installation (ERDDAP VM Only)
+
+This installs ERDDAP using the CoastWatch setup script.
+Source: [erddap_setup.sh](https://github.com/erd-coastwatch/cloud-erddap-setup/blob/main/setup_scripts/erddap_setup.sh)
+
+```{.bash}
+# Download install script
+wget https://raw.githubusercontent.com/erd-coastwatch/cloud-erddap-setup/main/setup_scripts/erddap_setup.sh
+
+# Make executable
+chmod +x erddap_setup.sh
+
+# Run installation
+./erddap_setup.sh
+
+# Re-run if needed (remove existing Tomcat first)
+sudo rm -rf /usr/local/apache-tomcat-10.1.44/
+./erddap_setup.sh
+
+# Configure Tomcat
+sudo su -s /bin/bash tomcat
+cd /usr/local/tomcat_erddap/conf
+vi server.xml
+
+# Configure ERDDAP
+cd /usr/local/tomcat_erddap/content/erddap
+vi setup.xml
+
+# Start / Stop ERDDAP
+sudo su -s /bin/bash tomcat
+cd /usr/local/tomcat_erddap/bin
+./startup.sh
+./shutdown.sh
+
+# Verify installation
+curl http://localhost:8080
+
+# Install required dependencies
+sudo apt install -y fontconfig
+sudo apt install -y lynx
+```
+
+## Step 8: Resource Cleanup
+
+::: {.callout-note}
+Required only if an existing VM was cloned from a snapshot. Delete migration snapshots after 24 hours of stable operation.
+:::
+
+```{.bash}
+gcloud compute snapshots delete [INSTANCE_NAME]-migration-backup --quiet
+```
