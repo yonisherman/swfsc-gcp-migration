@@ -1,14 +1,17 @@
 book:
-  author: Jonathan Sherman
+  title: SWFSC ERDDAP Cloud Migration
+  sidebar:
+    logo: assets/logo.png
+    title: ''
   chapters:
   - index.qmd
   - erddap-vm-setup.qmd
-  - erddap-cloud-migration-presentations.qmd
   - gcp-templates.qmd
   - mh1-processor.qmd
   - viirs-netpp.qmd
   - mur-sst.qmd
   - charm.qmd
+  - erddap-cloud-migration-presentations.qmd
   - part: charm
     chapters:
     - code-pages/charm/charm_data_process_functions.qmd
@@ -79,10 +82,6 @@ book:
     - code-pages/viirs-netpp/make_viirs_netpp.qmd
     - code-pages/viirs-netpp/make_viirs_netpp_monthly.qmd
     - code-pages/viirs-netpp/requirements.qmd
-  sidebar:
-    logo: assets/logo.png
-    title: ''
-  title: SWFSC Cloud Migration Workflows
 format:
   html:
     css: styles.css
