@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-title">Project Overview</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-title">SWFSC ERDDAP Cloud Migration</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -114,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Project Overview</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">SWFSC ERDDAP Cloud Migration</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -549,16 +549,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#project-overview" id="toc-project-overview" class="nav-link active" data-scroll-target="#project-overview">Project Overview</a>
+  <li><a href="#swfsc-erddap-cloud-migration" id="toc-swfsc-erddap-cloud-migration" class="nav-link active" data-scroll-target="#swfsc-erddap-cloud-migration">SWFSC ERDDAP Cloud Migration</a>
   <ul class="collapse">
   <li><a href="#project-goals" id="toc-project-goals" class="nav-link" data-scroll-target="#project-goals">Project goals</a></li>
   <li><a href="#cloud-architecture" id="toc-cloud-architecture" class="nav-link" data-scroll-target="#cloud-architecture">Cloud architecture</a></li>
   <li><a href="#workflow-modernization" id="toc-workflow-modernization" class="nav-link" data-scroll-target="#workflow-modernization">Workflow modernization</a></li>
   <li><a href="#project-sections" id="toc-project-sections" class="nav-link" data-scroll-target="#project-sections">Project sections</a>
   <ul class="collapse">
-  <li><a href="#infrastructure-and-deployment-documentation" id="toc-infrastructure-and-deployment-documentation" class="nav-link" data-scroll-target="#infrastructure-and-deployment-documentation">Infrastructure and deployment documentation</a></li>
-  <li><a href="#operational-workflow-examples" id="toc-operational-workflow-examples" class="nav-link" data-scroll-target="#operational-workflow-examples">Operational workflow examples</a></li>
-  <li><a href="#presentations-and-project-updates" id="toc-presentations-and-project-updates" class="nav-link" data-scroll-target="#presentations-and-project-updates">Presentations and project updates</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#workflows" id="toc-workflows" class="nav-link" data-scroll-target="#workflows">Workflows</a></li>
+  <li><a href="#presentations" id="toc-presentations" class="nav-link" data-scroll-target="#presentations">Presentations</a></li>
   </ul></li>
   <li><a href="#status" id="toc-status" class="nav-link" data-scroll-target="#status">Status</a></li>
   </ul></li>
@@ -587,67 +587,67 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="project-overview" class="level1">
-<h1>Project Overview</h1>
-<p>This site documents ongoing work to migrate NOAA CoastWatch West Coast Node / SWFSC ERDDAP services and associated data processing workflows into Google Cloud Platform (GCP), while preserving existing operational data products and access patterns.</p>
-<p>The project is part of a broader NOAA/NMFS effort to move data systems to the cloud before the end of on-premises server support. The goal is not just to “lift and shift” existing workflows, but to make them more reproducible, maintainable, and easier to operate over time.</p>
+<section id="swfsc-erddap-cloud-migration" class="level1">
+<h1>SWFSC ERDDAP Cloud Migration</h1>
+<p>This book documents the migration of NOAA CoastWatch West Coast Node / SWFSC ERDDAP services and associated data processing workflows to Google Cloud Platform (GCP). The documentation is intended to serve as a practical technical record of the cloud architecture, serving environment, reusable deployment patterns, and operational workflows developed during the migration.</p>
+<p>The project is part of a broader NOAA/NMFS effort to move data systems away from legacy on-premises infrastructure and into cloud-based environments. The goal is not only to preserve existing ERDDAP services and operational data products, but also to make the supporting workflows more reproducible, maintainable, and easier to operate over time.</p>
 <section id="project-goals" class="level2">
 <h2 class="anchored" data-anchor-id="project-goals">Project goals</h2>
-<p>This documentation tracks the design, migration, and modernization of data processing systems used to support operational ocean data access.</p>
+<p>This documentation tracks the design, migration, and modernization of data systems used to support operational ocean data access.</p>
 <p>The main goals are to:</p>
 <ul>
 <li>migrate ERDDAP-supporting workflows from legacy servers to GCP</li>
-<li>preserve scientific continuity with existing products</li>
+<li>preserve scientific continuity with existing data products and access patterns</li>
 <li>standardize workflow structure across projects</li>
-<li>move toward config-driven code instead of hard-coded paths and hidden system assumptions</li>
-<li>use reproducible infrastructure and containerized processing</li>
-<li>document enough detail for handoff, review, and future maintenance</li>
+<li>reduce hard-coded paths, credentials, and hidden system assumptions</li>
+<li>support reproducible infrastructure and containerized processing</li>
+<li>document enough operational detail for review, handoff, maintenance, and future workflow development</li>
 </ul>
 </section>
 <section id="cloud-architecture" class="level2">
 <h2 class="anchored" data-anchor-id="cloud-architecture">Cloud architecture</h2>
-<p>The migration uses a mix of long-lived infrastructure and event-driven processing resources in GCP.</p>
-<p>At the center of the system is a dedicated <strong>ERDDAP VM</strong>, backed by high-performance disk storage for ERDDAP cache and working directories. Cloud-hosted datasets are exposed to ERDDAP through <strong>rclone-mounted Google Cloud Storage buckets</strong>, allowing ERDDAP to serve data from GCS while still using familiar filesystem paths.</p>
-<p>Data processing is handled through a combination of <strong>data processing VMs</strong> for interactive development and heavier operational tasks, and <strong>Cloud Run Jobs</strong> for containerized workflows that can run on a schedule. <strong>Cloud Scheduler</strong> is used to trigger recurring jobs, while <strong>Artifact Registry</strong> stores the workflow containers.</p>
-<p>Across the system, <strong>Terraform</strong> is used to define core infrastructure, and <strong>Secret Manager</strong> is used to manage credentials and runtime secrets without storing them directly in code.</p>
+<p>The migration uses a combination of long-lived serving infrastructure, processing environments, and scheduled cloud-native jobs.</p>
+<p>At the center of the system is a dedicated <strong>ERDDAP VM</strong> configured for high-performance data serving. The ERDDAP environment uses persistent storage for caches and working directories, rclone-mounted Google Cloud Storage buckets for dataset access, and a Tomcat-hosted ERDDAP instance for data distribution.</p>
+<p>Operational processing is handled through two main patterns. <strong>Processing VMs</strong> support interactive development, testing, validation, reprocessing, and heavier data-generation tasks. <strong>Cloud Run Jobs</strong> support containerized workflows that run on a schedule or on demand. Cloud Scheduler triggers recurring jobs, Artifact Registry stores workflow container images, and Secret Manager provides credentials and runtime secrets without storing them directly in code.</p>
+<p>Across the system, reusable templates and consistent repository structures are used to make workflows easier to deploy, compare, and maintain.</p>
 </section>
 <section id="workflow-modernization" class="level2">
 <h2 class="anchored" data-anchor-id="workflow-modernization">Workflow modernization</h2>
-<p>Many of the workflows documented here began as long-running operational scripts developed over many years. As part of the migration, the code has been reorganized into more standardized, reproducible, and containerized workflows suitable for cloud-based operational processing.</p>
-<p>This includes reducing hard-coded assumptions, separating configuration from runtime logic, standardizing deployment patterns, and improving maintainability without changing the underlying science.</p>
-<p>For examples of the common workflow structure and deployment patterns used throughout this project, see the <a href="./gcp-templates.html">GCP Data Processing Templates</a> section.</p>
+<p>Many of the workflows documented here began as long-running operational scripts developed over many years. As part of the migration, these workflows have been reorganized into more standardized, reproducible, and cloud-ready systems.</p>
+<p>This modernization includes separating configuration from runtime logic, reducing machine-specific assumptions, containerizing processing code, standardizing deployment scripts, and documenting input/output paths, scheduling behavior, and ERDDAP integration. The intent is to preserve the underlying science and operational products while improving maintainability and transparency.</p>
+<p>For the shared project structures and deployment patterns used across workflows, see the <a href="./gcp-templates.html">GCP Data Processing Templates</a> chapter.</p>
 </section>
 <section id="project-sections" class="level2">
 <h2 class="anchored" data-anchor-id="project-sections">Project sections</h2>
-<p>This site includes both shared infrastructure documentation and example operational cloud workflows.</p>
-<section id="infrastructure-and-deployment-documentation" class="level3">
-<h3 class="anchored" data-anchor-id="infrastructure-and-deployment-documentation">Infrastructure and deployment documentation</h3>
-<p>These sections document the core infrastructure, deployment patterns, and architectural decisions used throughout the migration effort:</p>
+<p>This book is organized into three main sections.</p>
+<section id="setup" class="level3">
+<h3 class="anchored" data-anchor-id="setup">Setup</h3>
+<p>The setup chapters document the shared cloud infrastructure and reusable deployment patterns used across the migration.</p>
 <ul>
-<li><a href="./gcp-setup.html">GCP Environment Setup</a></li>
-<li><a href="./gcp-templates.html">GCP Templates</a></li>
+<li><a href="./gcp-setup.html">GCP Environment Setup</a> describes VM access, ERDDAP serving environment setup, processing VM setup, storage configuration, rclone-mounted GCS access, user permissions, and migration/recovery steps.</li>
+<li><a href="./gcp-templates.html">GCP Data Processing Templates</a> describes the Cloud Run and processing VM template repositories used to standardize workflow structure across projects.</li>
 </ul>
-<p>These pages cover Terraform-based infrastructure, ERDDAP and Dataproc VM setup, storage and mounting strategies, container organization, deployment conventions, and other shared operational patterns used across workflows.</p>
 </section>
-<section id="operational-workflow-examples" class="level3">
-<h3 class="anchored" data-anchor-id="operational-workflow-examples">Operational workflow examples</h3>
-<p>These sections document end-to-end satellite processing pipelines deployed using Cloud Run Jobs and related GCP services:</p>
+<section id="workflows" class="level3">
+<h3 class="anchored" data-anchor-id="workflows">Workflows</h3>
+<p>The workflow chapters document individual operational pipelines migrated or adapted for cloud-based processing.</p>
 <ul>
-<li><strong>VIIRS Net Primary Productivity</strong></li>
-<li><strong>MUR SST processing</strong></li>
-<li><strong>CHARM processing</strong></li>
+<li><a href="./mh1-processor.html">MH1 / MPOC / MPIC Processor</a> documents the Cloud Run workflow for retrieving and distributing MODIS-Aqua ocean color, SST, particulate organic carbon, and particulate inorganic carbon products.</li>
+<li><a href="./viirs-netpp.html">VIIRS Net Primary Productivity</a> documents the Cloud Run workflow for generating daily and monthly VIIRS productivity products.</li>
+<li><a href="./mur-sst.html">MUR SST</a> documents the MUR SST workflow, including download logic, NRT-to-final upgrade handling, anomaly generation, frontal edge detection, and monthly composites.</li>
+<li><a href="./charm.html">CHARM</a> documents the CHARM workflow, including VIIRS input handling, DINEOF gap-filling, model processing, template use, and ERDDAP-ready output generation.</li>
 </ul>
-<p>Each workflow page includes processing overviews, deployment structure, scheduling logic, and rendered documentation for operational scripts, configuration files, templates, and containers.</p>
+<p>Each workflow chapter includes a processing overview, repository structure, cloud deployment pattern, operational logic, and links to rendered code pages for scripts, configuration files, Dockerfiles, templates, and deployment assets.</p>
 </section>
-<section id="presentations-and-project-updates" class="level3">
-<h3 class="anchored" data-anchor-id="presentations-and-project-updates">Presentations and project updates</h3>
-<p>The site also includes slides and supporting material used for project presentations, architecture reviews, and migration status updates shared with collaborating groups and NOAA programs.</p>
+<section id="presentations" class="level3">
+<h3 class="anchored" data-anchor-id="presentations">Presentations</h3>
+<p>The <a href="./erddap-cloud-migration-presentations.html">ERDDAP Cloud Migration Presentations</a> chapter collects slide materials used for project updates, architecture discussions, and stakeholder briefings.</p>
 </section>
 </section>
 <section id="status" class="level2">
 <h2 class="anchored" data-anchor-id="status">Status</h2>
-<p>This is a working technical record of an active migration. Some sections are polished documentation, while others are closer to implementation notes. The intent is to capture lessons learned as the system evolves, including both successful patterns and operational gotchas.</p>
-<p>The broader objective is a cloud-based ERDDAP ecosystem that is reproducible, easier to maintain, and ready for long-term operational use.</p>
+<p>This book is a working technical record of an active migration. Some sections are polished operational documentation, while others capture implementation details and lessons learned as the system evolves.</p>
+<p>The broader objective is a cloud-based ERDDAP ecosystem that preserves existing services while making the underlying infrastructure and workflows more reproducible, transparent, and maintainable.</p>
 
 
 </section>

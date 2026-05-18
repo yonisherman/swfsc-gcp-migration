@@ -1,70 +1,68 @@
-# Project Overview
+# SWFSC ERDDAP Cloud Migration
 
-This site documents ongoing work to migrate NOAA CoastWatch West Coast Node / SWFSC ERDDAP services and associated data processing workflows into Google Cloud Platform (GCP), while preserving existing operational data products and access patterns.
+This book documents the migration of NOAA CoastWatch West Coast Node / SWFSC ERDDAP services and associated data processing workflows to Google Cloud Platform (GCP). The documentation is intended to serve as a practical technical record of the cloud architecture, serving environment, reusable deployment patterns, and operational workflows developed during the migration.
 
-The project is part of a broader NOAA/NMFS effort to move data systems to the cloud before the end of on-premises server support. The goal is not just to “lift and shift” existing workflows, but to make them more reproducible, maintainable, and easier to operate over time.
+The project is part of a broader NOAA/NMFS effort to move data systems away from legacy on-premises infrastructure and into cloud-based environments. The goal is not only to preserve existing ERDDAP services and operational data products, but also to make the supporting workflows more reproducible, maintainable, and easier to operate over time.
 
 ## Project goals
 
-This documentation tracks the design, migration, and modernization of data processing systems used to support operational ocean data access.
+This documentation tracks the design, migration, and modernization of data systems used to support operational ocean data access.
 
 The main goals are to:
 
 - migrate ERDDAP-supporting workflows from legacy servers to GCP
-- preserve scientific continuity with existing products
+- preserve scientific continuity with existing data products and access patterns
 - standardize workflow structure across projects
-- move toward config-driven code instead of hard-coded paths and hidden system assumptions
-- use reproducible infrastructure and containerized processing
-- document enough detail for handoff, review, and future maintenance
+- reduce hard-coded paths, credentials, and hidden system assumptions
+- support reproducible infrastructure and containerized processing
+- document enough operational detail for review, handoff, maintenance, and future workflow development
 
 ## Cloud architecture
 
-The migration uses a mix of long-lived infrastructure and event-driven processing resources in GCP.
+The migration uses a combination of long-lived serving infrastructure, processing environments, and scheduled cloud-native jobs.
 
-At the center of the system is a dedicated **ERDDAP VM**, backed by high-performance disk storage for ERDDAP cache and working directories. Cloud-hosted datasets are exposed to ERDDAP through **rclone-mounted Google Cloud Storage buckets**, allowing ERDDAP to serve data from GCS while still using familiar filesystem paths.
+At the center of the system is a dedicated **ERDDAP VM** configured for high-performance data serving. The ERDDAP environment uses persistent storage for caches and working directories, rclone-mounted Google Cloud Storage buckets for dataset access, and a Tomcat-hosted ERDDAP instance for data distribution.
 
-Data processing is handled through a combination of **data processing VMs** for interactive development and heavier operational tasks, and **Cloud Run Jobs** for containerized workflows that can run on a schedule. **Cloud Scheduler** is used to trigger recurring jobs, while **Artifact Registry** stores the workflow containers.
+Operational processing is handled through two main patterns. **Processing VMs** support interactive development, testing, validation, reprocessing, and heavier data-generation tasks. **Cloud Run Jobs** support containerized workflows that run on a schedule or on demand. Cloud Scheduler triggers recurring jobs, Artifact Registry stores workflow container images, and Secret Manager provides credentials and runtime secrets without storing them directly in code.
 
-Across the system, **Terraform** is used to define core infrastructure, and **Secret Manager** is used to manage credentials and runtime secrets without storing them directly in code.
+Across the system, reusable templates and consistent repository structures are used to make workflows easier to deploy, compare, and maintain.
 
 ## Workflow modernization
 
-Many of the workflows documented here began as long-running operational scripts developed over many years. As part of the migration, the code has been reorganized into more standardized, reproducible, and containerized workflows suitable for cloud-based operational processing.
+Many of the workflows documented here began as long-running operational scripts developed over many years. As part of the migration, these workflows have been reorganized into more standardized, reproducible, and cloud-ready systems.
 
-This includes reducing hard-coded assumptions, separating configuration from runtime logic, standardizing deployment patterns, and improving maintainability without changing the underlying science.
+This modernization includes separating configuration from runtime logic, reducing machine-specific assumptions, containerizing processing code, standardizing deployment scripts, and documenting input/output paths, scheduling behavior, and ERDDAP integration. The intent is to preserve the underlying science and operational products while improving maintainability and transparency.
 
-For examples of the common workflow structure and deployment patterns used throughout this project, see the [GCP Data Processing Templates](gcp-templates.qmd) section.
+For the shared project structures and deployment patterns used across workflows, see the [GCP Data Processing Templates](gcp-templates.qmd) chapter.
 
 ## Project sections
 
-This site includes both shared infrastructure documentation and example operational cloud workflows.
+This book is organized into three main sections.
 
-### Infrastructure and deployment documentation
+### Setup
 
-These sections document the core infrastructure, deployment patterns, and architectural decisions used throughout the migration effort:
+The setup chapters document the shared cloud infrastructure and reusable deployment patterns used across the migration.
 
-- [GCP Environment Setup](gcp-setup.qmd)
-- [GCP Templates](gcp-templates.qmd)
+- [GCP Environment Setup](gcp-setup.qmd) describes VM access, ERDDAP serving environment setup, processing VM setup, storage configuration, rclone-mounted GCS access, user permissions, and migration/recovery steps.
+- [GCP Data Processing Templates](gcp-templates.qmd) describes the Cloud Run and processing VM template repositories used to standardize workflow structure across projects.
 
-These pages cover Terraform-based infrastructure, ERDDAP and Dataproc VM setup, storage and mounting strategies, container organization, deployment conventions, and other shared operational patterns used across workflows.
+### Workflows
 
-### Operational workflow examples
+The workflow chapters document individual operational pipelines migrated or adapted for cloud-based processing.
 
-These sections document end-to-end satellite processing pipelines deployed using Cloud Run Jobs and related GCP services:
+- [MH1 / MPOC / MPIC Processor](mh1-processor.qmd) documents the Cloud Run workflow for retrieving and distributing MODIS-Aqua ocean color, SST, particulate organic carbon, and particulate inorganic carbon products.
+- [VIIRS Net Primary Productivity](viirs-netpp.qmd) documents the Cloud Run workflow for generating daily and monthly VIIRS productivity products.
+- [MUR SST](mur-sst.qmd) documents the MUR SST workflow, including download logic, NRT-to-final upgrade handling, anomaly generation, frontal edge detection, and monthly composites.
+- [CHARM](charm.qmd) documents the CHARM workflow, including VIIRS input handling, DINEOF gap-filling, model processing, template use, and ERDDAP-ready output generation.
 
-- **VIIRS Net Primary Productivity**
-- **MUR SST processing**
-- **CHARM processing**
+Each workflow chapter includes a processing overview, repository structure, cloud deployment pattern, operational logic, and links to rendered code pages for scripts, configuration files, Dockerfiles, templates, and deployment assets.
 
-Each workflow page includes processing overviews, deployment structure, scheduling logic, and rendered documentation for operational scripts, configuration files, templates, and containers.
+### Presentations
 
-### Presentations and project updates
-
-The site also includes slides and supporting material used for project presentations, architecture reviews, and migration status updates shared with collaborating groups and NOAA programs.
-
+The [ERDDAP Cloud Migration Presentations](erddap-cloud-migration-presentations.qmd) chapter collects slide materials used for project updates, architecture discussions, and stakeholder briefings.
 
 ## Status
 
-This is a working technical record of an active migration. Some sections are polished documentation, while others are closer to implementation notes. The intent is to capture lessons learned as the system evolves, including both successful patterns and operational gotchas.
+This book is a working technical record of an active migration. Some sections are polished operational documentation, while others capture implementation details and lessons learned as the system evolves.
 
-The broader objective is a cloud-based ERDDAP ecosystem that is reproducible, easier to maintain, and ready for long-term operational use.
+The broader objective is a cloud-based ERDDAP ecosystem that preserves existing services while making the underlying infrastructure and workflows more reproducible, transparent, and maintainable.
