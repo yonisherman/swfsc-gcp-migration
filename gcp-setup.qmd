@@ -1,0 +1,696 @@
+---
+title: "GCP Environment Setup"
+---
+
+This chapter describes the deployment and configuration of the Google Cloud Platform (GCP) infrastructure used to support the SWFSC CoastWatch West Coast Node cloud environment.
+
+The environment includes Terraform-managed infrastructure, ERDDAP serving systems, processing VMs, cloud storage resources, and supporting workflow components used for operational data ingest, processing, storage, and distribution. The overall architecture follows a "standardized image" and "decoupled data" model — infrastructure resources are deployed and managed through Terraform, while operational datasets remain independent from the VM itself.
+
+## Cloud Infrastructure Setup
+
+This section covers the Terraform-managed infrastructure layer: virtual machines, storage buckets, networking, service accounts, IAM permissions, and supporting cloud services.
+
+### 1. Access the Infrastructure Configuration
+
+Before creating or modifying any VM environment, access the Terraform infrastructure repository used to manage the deployment configuration. In this setup, the Terraform configuration is stored in a centralized source control repository managed within Google Cloud.
+
+1. Log into the [Google Cloud Console](https://console.cloud.google.com).
+2. Start Cloud Shell by clicking the terminal icon (`>_`) in the top-right corner.
+3. Clone the infrastructure repository:
+
+```{.bash}
+git clone https://source.developers.google.com/p/YOUR_GCP_PROJECT_ID/r/YOUR_TERRAFORM_REPO
+# Replace with the appropriate infrastructure repository for your environment
+cd YOUR_TERRAFORM_REPO
+```
+
+The repository contains the Terraform configuration files used to define VM infrastructure, storage resources, networking, and related cloud resources.
+
+### 2. Review and Deploy Infrastructure with Terraform
+
+The Terraform configuration is organized across three main files.
+
+**`main.tf`** defines the Terraform backend, required provider, and shared project-wide variables including GCP project ID, region, zone, NOAA metadata labels, and environment name. These shared variables are referenced throughout `bucket.tf` and `instance.tf` to avoid hard-coding configuration values across multiple files.
+
+```{.python}
+# PROJECT STANDARDS & PROVIDER CONFIGURATION
+# Replace backend bucket, project variables, bucket names, and service accounts
+# with the appropriate values for your deployment.
+
+terraform {
+  backend "gcs" {
+    bucket = "tf-local-swfsc-prod"   # Terraform remote state backend bucket
+    prefix = "terraform/state"
+  }
+  required_providers { google = { source = "hashicorp/google" } }
+}
+
+# GLOBAL VARIABLES
+variable "project-id"      { default = "YOUR_GCP_PROJECT_ID" }
+variable "system-id"       { default = "YOUR_SYSTEM_ID" }
+variable "lineoffice"      { default = "YOUR_LINE_OFFICE" }
+variable "taskorder"       { default = "YOUR_TASK_ORDER" }
+variable "billing-id"      { default = "YOUR_BILLING_ID" }
+variable "application-id"  { default = "YOUR_APPLICATION_ID" }
+variable "stakeholder"     { default = "YOUR_STAKEHOLDER" }
+variable "environment"     { default = "dev" }
+variable "region1"         { default = "us-east4" }
+variable "zone1"           { default = "us-east4-a" }
+```
+
+**`bucket.tf`** defines the GCS buckets used by the environment and assigns IAM permissions to the service accounts that need access. In many deployments the required buckets may already exist — review the bucket names, IAM bindings, and service accounts to confirm they match the environment. Copy and edit the block below when creating a new bucket:
+
+```{.python}
+resource "google_storage_bucket" "erddap_bucket" {
+  name                        = "YOUR_ERDDAP_BUCKET_NAME"
+  project                     = var.project-id
+  location                    = var.region1
+  force_destroy               = true   # Common in dev/testing; prefer false in production
+  uniform_bucket_level_access = true
+
+  labels = {
+    environment        = var.environment
+    noaa_fismaid       = var.system-id
+    noaa_lineoffice    = var.lineoffice
+    noaa_taskorder     = var.taskorder
+    noaa_environment   = var.environment
+    noaa_applicationid = var.application-id
+    noaa_project_id    = var.project-id
+  }
+
+  hierarchical_namespace { enabled = true }
+
+  lifecycle_rule {
+    condition { num_newer_versions = 5 }
+    action    { type = "Delete" }
+  }
+}
+
+locals {
+  buckets = [
+    "YOUR_PROCESSING_OR_DATA_BUCKET_NAME",
+    "YOUR_ERDDAP_BUCKET_NAME",
+  ]
+}
+
+resource "google_storage_bucket_iam_member" "vm_service_account_object_admins" {
+  for_each = toset(local.buckets)
+  bucket   = each.value
+  role     = "roles/storage.objectAdmin"
+  member   = "serviceAccount:YOUR_VM_SERVICE_ACCOUNT_EMAIL"
+}
+
+resource "google_storage_bucket_iam_member" "cloud_run_service_account_object_admins" {
+  for_each = toset(local.buckets)
+  bucket   = each.value
+  role     = "roles/storage.objectAdmin"
+  member   = "serviceAccount:YOUR_CLOUD_RUN_SERVICE_ACCOUNT_EMAIL"
+}
+```
+
+If you add a new bucket and IAM is applied through `locals.buckets`, add the new bucket name to that list as well.
+
+**`instance.tf`** defines all VMs in the project, including persistent data disks, machine type, boot disk, networking, service account, metadata, labels, and snapshot policy attachments. Copy and edit the blocks below when deploying a new ERDDAP VM. For additional machine type options, refer to the [Google Cloud Compute Engine machine type documentation](https://cloud.google.com/compute/docs/machine-resource).
+
+```{.python}
+# ERDDAP data disk
+resource "google_compute_disk" "erddap_data_disk" {
+  name    = "YOUR_ERDDAP_DATA_DISK_NAME"   # Example: erddap-data-disk
+  project = var.project-id
+  zone    = var.zone1
+  type    = "hyperdisk-balanced"            # Recommended for high I/O NetCDF workloads
+  size    = 4096                            # Disk size in GB (4 TB)
+}
+
+# ERDDAP VM
+resource "google_compute_instance" "erddap_vm" {
+  name                  = "YOUR_ERDDAP_VM_NAME"   # Example: erd-erddap
+  project               = var.project-id
+  zone                  = var.zone1
+  machine_type          = "c4-highmem-16"          # High-memory C4 instance for ERDDAP
+  allow_stopping_for_update = true
+
+  metadata = {
+    block-project-ssh-keys = true
+    enable-osconfig        = true
+  }
+
+  labels = {
+    environment        = var.environment
+    noaa_fismaid       = var.system-id
+    noaa_lineoffice    = var.lineoffice
+    noaa_taskorder     = var.taskorder
+    noaa_environment   = var.environment
+    noaa_applicationid = var.application-id
+    noaa_project_id    = var.project-id
+    role               = "erddap-server"
+  }
+
+  boot_disk {
+    device_name = "YOUR_ERDDAP_BOOT_DISK_NAME"
+    initialize_params {
+      image = "YOUR_BOOT_IMAGE"
+      size  = "360"
+      type  = "hyperdisk-balanced"
+    }
+  }
+
+  attached_disk {
+    source      = google_compute_disk.erddap_data_disk.id
+    device_name = "erddap-data"
+  }
+
+  network_interface {
+    subnetwork = "YOUR_SUBNETWORK_SELF_LINK"
+    nic_type   = "GVNIC"   # Required for C4-series instances
+  }
+
+  service_account {
+    email  = "YOUR_VM_SERVICE_ACCOUNT_EMAIL"
+    scopes = ["cloud-platform"]
+  }
+
+  lifecycle {
+    ignore_changes = [boot_disk]
+  }
+}
+
+# BACKUP & RECOVERY: Snapshot Policy Attachments
+resource "google_compute_disk_resource_policy_attachment" "erddap_boot_snap" {
+  name    = "snap-policy"
+  disk    = google_compute_instance.erddap_vm.name
+  project = var.project-id
+  zone    = var.zone1
+}
+
+resource "google_compute_disk_resource_policy_attachment" "erddap_data_snap" {
+  name    = "snap-policy"
+  disk    = google_compute_disk.erddap_data_disk.name
+  project = var.project-id
+  zone    = var.zone1
+}
+```
+
+Key configuration notes:
+
+- `c4-highmem-*` instances are recommended for ERDDAP workloads — ERDDAP benefits from additional memory for dataset caching and large NetCDF access.
+- `hyperdisk-balanced` storage is used for high-throughput NetCDF access and rclone VFS caching.
+- GVNIC networking is required for C4-series instances.
+- The attached data disk is separated from the boot disk to simplify upgrades, rebuilds, and recovery.
+- Snapshot policies are recommended for automated backup and recovery.
+
+### 3. Deploy Infrastructure
+
+After reviewing and editing the Terraform configuration, preview the proposed changes:
+
+```{.bash}
+terraform plan    # Review resources that will be created, modified, or destroyed
+```
+
+Carefully review the output before applying, especially in existing environments where resources may already be in use. Once the plan looks correct, apply:
+
+```{.bash}
+terraform apply   # Create or update VMs, disks, buckets, IAM permissions, and related resources
+```
+
+In some environments, `terraform apply` may need to be run more than once if dependent resources are still initializing.
+
+---
+
+---
+
+## Accessing VMs
+
+Once infrastructure is deployed, you can connect to any VM using either the `gcloud` CLI or the GCP Console browser-based SSH. Both methods use [Identity-Aware Proxy (IAP)](https://cloud.google.com/iap/docs/concepts-overview) tunneling, so no public IP address or open firewall ports are required.
+
+### Prerequisites
+
+Before connecting to a VM for the first time, complete the following setup steps.
+
+#### 1. Install the Google Cloud SDK
+
+Download and install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) for your operating system. The SDK provides the `gcloud` command-line tool used throughout this documentation.
+
+After installation, initialize the SDK:
+
+```{.bash}
+gcloud init
+```
+
+This walks you through selecting a Google account and default project.
+
+#### 2. Authenticate
+
+Log in with your Google account:
+
+```{.bash}
+gcloud auth login
+```
+
+This opens a browser window to complete authentication. Once done, confirm the active account and project:
+
+```{.bash}
+gcloud config list
+```
+
+#### 3. Confirm IAP Access
+
+Connecting to VMs through the CLI requires the `IAP-secured Tunnel User` (`roles/iap.tunnelResourceAccessor`) IAM role on the project. In this setup, that role is managed by IT through a centralized `roles.tf` Terraform configuration — you will need to request access from whoever administers that if you don't have it yet.
+
+Once access has been granted, confirm the role is assigned to your account:
+
+```{.bash}
+gcloud projects get-iam-policy YOUR_GCP_PROJECT_ID \
+    --flatten="bindings[].members" \
+    --filter="bindings.members:YOUR_EMAIL@noaa.gov" \
+    --format="table(bindings.role)"
+```
+
+`roles/iap.tunnelResourceAccessor` should appear in the output. If it does not, follow up with your IT team or project admin.
+
+
+### Via the gcloud CLI
+
+The general pattern for connecting to a VM is:
+
+```{.bash}
+gcloud compute ssh YOUR_VM_NAME \
+    --project=YOUR_GCP_PROJECT_ID \
+    --zone=YOUR_GCP_ZONE \
+    --tunnel-through-iap
+```
+
+Port forwarding is added via `--ssh-flag` to make local services on the VM accessible in your browser. The `-4` flag forces IPv4, which avoids common IAP tunneling issues.
+
+**ERDDAP VM** — forwards both the ERDDAP web interface (port 8080) and JupyterLab (port 8888):
+
+```{.bash}
+gcloud compute ssh YOUR_ERDDAP_VM_NAME \
+    --project=YOUR_GCP_PROJECT_ID \
+    --zone=YOUR_GCP_ZONE \
+    --tunnel-through-iap \
+    --ssh-flag="-4 -L 8080:localhost:8080 -L 8888:localhost:8888"
+```
+
+Once connected, the ERDDAP interface is accessible at `http://localhost:8080/erddap` in your local browser (ERDDAP runs continuously via Tomcat). To use JupyterLab, start it on the VM first:
+
+```{.bash}
+jupyter lab --no-browser --port=8888
+```
+
+Jupyter will print a URL with a token to the terminal — copy and paste the `http://localhost:8888/lab?token=...` URL into your local browser.
+
+**Dataproc / processing VM** — forwards JupyterLab (port 8081 to avoid conflicts if the ERDDAP VM tunnel is already open):
+
+```{.bash}
+gcloud compute ssh YOUR_DATAPROC_VM_NAME \
+    --project=YOUR_GCP_PROJECT_ID \
+    --zone=YOUR_GCP_ZONE \
+    --tunnel-through-iap \
+    --ssh-flag="-4 -L 8081:localhost:8081"
+```
+
+Once connected, start JupyterLab on the VM:
+
+```{.bash}
+jupyter lab --no-browser --port=8081
+```
+
+Jupyter will print a URL with a token to the terminal — copy and paste the `http://localhost:8081/lab?token=...` URL into your local browser.
+
+### Via the GCP Console
+
+For quick access without the CLI:
+
+1. Go to the [Compute Engine VM instances](https://console.cloud.google.com/compute/instances) page in the GCP Console.
+2. Find your VM in the list.
+3. Click the **SSH** button in the Connect column.
+
+The console opens a browser-based terminal connected to the VM through IAP. This is convenient for quick checks but does not support port forwarding or persistent sessions.
+
+
+## ERDDAP VM Setup
+
+This section describes the initialization and configuration of the dedicated ERDDAP serving environment after infrastructure has been deployed. The ERDDAP VM uses C4 high-memory instances (for example, `c4-highmem-16`) together with Hyperdisk Balanced storage, rclone-mounted GCS buckets for dataset access, and Tomcat-hosted ERDDAP for data distribution.
+
+### 1. Configure the Operating System Environment
+
+#### 1.1 Configure Shared User Group Permissions
+
+Create a shared group for operational data access and add the required users:
+
+```{.bash}
+sudo groupadd cwatch                              # Create the cwatch group if it does not already exist
+sudo usermod -aG cwatch $USER                     # Add your current user
+sudo usermod -aG cwatch YOUR_OPERATIONAL_USERNAME # Add the operational/service account (e.g. erd)
+newgrp cwatch                                     # Refresh group membership (or log out and back in)
+```
+
+#### 1.2 Initialize and Mount the Persistent Data Disk
+
+Before formatting or mounting the persistent data disk, determine whether the disk is new or reattached from an existing deployment. **If the disk was attached from a previous VM, do not reformat it.**
+
+```{.bash}
+# Identify the attached disk
+ls -l /dev/disk/by-id/
+
+# Check whether the disk already contains a filesystem
+sudo blkid /dev/disk/by-id/google-erddap-data
+
+# If no filesystem exists, create one
+sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard \
+    /dev/disk/by-id/google-erddap-data
+
+# Create mount point and mount the disk
+sudo mkdir -p /mnt/disks/erddap-data
+sudo mount -o discard,defaults \
+    /dev/disk/by-id/google-erddap-data \
+    /mnt/disks/erddap-data
+
+# Set permissions for the shared cwatch group
+sudo chown -R root:cwatch /mnt/disks/erddap-data
+sudo chmod -R 2775 /mnt/disks/erddap-data
+
+# Optional: standard symlink used by operational workflows
+sudo ln -s /mnt/disks/erddap-data /data
+```
+
+#### 1.3 Configure GCS Connectivity with Rclone {#sec-rclone}
+
+Rclone is used to mount GCS buckets directly into the ERDDAP VM filesystem using a Virtual File System (VFS) mount. The persistent high-speed data disk acts as a local VFS cache to improve ERDDAP performance when serving large NetCDF datasets from cloud storage.
+
+Install rclone:
+
+```{.bash}
+sudo curl https://rclone.org/install.sh | sudo bash
+```
+
+Create a shared rclone configuration:
+
+```{.bash}
+sudo mkdir -p /home/YOUR_OPERATIONAL_USERNAME/rclone/
+
+sudo tee /home/YOUR_OPERATIONAL_USERNAME/rclone/rclone.conf > /dev/null <<EOF
+[gcs-remote]
+type = google cloud storage
+env_auth = true
+project_number = YOUR_GCP_PROJECT_NUMBER
+location = YOUR_GCP_REGION
+EOF
+
+sudo chown -R root:cwatch /home/YOUR_OPERATIONAL_USERNAME/rclone/
+```
+
+Create the local cache and mount directories, then create the systemd persistence service:
+
+```{.bash}
+sudo tee /etc/systemd/system/rclone-mount.service > /dev/null <<EOF
+[Unit]
+Description=Rclone High-Performance GCS Mount
+After=network-online.target mnt-disks-erddap\x2ddata.mount
+Wants=network-online.target
+
+[Service]
+Type=notify
+User=root
+
+ExecStart=/usr/bin/rclone mount gcs-remote:YOUR_ERDDAP_BUCKET_NAME /mnt/gcs/erd \
+    --config /home/YOUR_OPERATIONAL_USERNAME/rclone/rclone.conf \
+    --allow-other \
+    --read-only \
+    --dir-cache-time 1h \
+    --attr-timeout 1m \
+    --vfs-cache-mode full \
+    --vfs-cache-max-age 48h \
+    --vfs-cache-max-size 2000G \
+    --vfs-cache-poll-interval 1m \
+    --cache-dir /mnt/disks/erddap-data/rclone-cache \
+    --buffer-size 128M \
+    --vfs-read-ahead 256M \
+    --vfs-read-chunk-size 64M \
+    --vfs-read-chunk-size-limit 2G \
+    --dir-perms 0775 \
+    --file-perms 0775 \
+    --gid $(getent group cwatch | cut -d: -f3) \
+    --umask 002 \
+    --rc \
+    --rc-no-auth
+
+ExecStop=/usr/bin/fusermount -u /mnt/gcs/erd
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+Key rclone mount notes:
+
+- `--read-only` prevents accidental modification of cloud-hosted datasets.
+- `--vfs-cache-mode full` enables local caching on the persistent disk.
+- `--vfs-read-ahead` improves sequential read performance for ERDDAP requests.
+- `--attr-timeout 1m` helps rclone detect when NRT files are replaced by science-quality versions in GCS.
+
+Enable and start the service:
+
+```{.bash}
+sudo systemctl daemon-reload
+sudo systemctl enable rclone-mount.service
+sudo systemctl start rclone-mount.service
+```
+
+Verify the mount and cache status:
+
+```{.bash}
+ls -l /mnt/gcs/erd       # Confirm GCS bucket contents are visible
+rclone rc vfs/stats       # Monitor cache usage and read-ahead status
+```
+
+::: {.callout-tip}
+**Storage capacity:** The 2 TB cache is a managed ceiling — rclone will automatically purge the oldest data if it hits this limit, ensuring the disk never fills up.
+
+**NRT updates:** By checking attributes once per minute, the system will automatically fetch the updated science-quality version of a file even if the filename has not changed.
+:::
+
+### 2. Install and Configure ERDDAP
+
+#### 2.1 Run the CoastWatch ERDDAP Installation Script
+
+This setup uses the [CoastWatch ERDDAP installation script](https://github.com/erd-coastwatch/cloud-erddap-setup/blob/main/setup_scripts/erddap_setup.sh) to install Tomcat, ERDDAP, Java dependencies, and supporting system configuration.
+
+```{.bash}
+wget https://raw.githubusercontent.com/erd-coastwatch/cloud-erddap-setup/main/setup_scripts/erddap_setup.sh
+chmod +x erddap_setup.sh
+./erddap_setup.sh
+
+# If reinstalling, remove the previous Tomcat installation first
+sudo rm -rf /usr/local/apache-tomcat-10.1.44/
+./erddap_setup.sh
+```
+
+#### 2.2 Configure Tomcat and ERDDAP
+
+```{.bash}
+sudo su -s /bin/bash tomcat
+cd /usr/local/tomcat_erddap/conf
+vi server.xml
+
+cd /usr/local/tomcat_erddap/content/erddap
+vi setup.xml
+```
+
+#### 2.3 Start and Verify ERDDAP
+
+```{.bash}
+# Start ERDDAP
+sudo su -s /bin/bash tomcat
+cd /usr/local/tomcat_erddap/bin
+./startup.sh
+
+# Stop ERDDAP
+./shutdown.sh
+
+# Verify installation
+curl http://localhost:8080
+
+# Install additional dependencies
+sudo apt install -y fontconfig
+sudo apt install -y lynx
+```
+
+---
+
+## Dataproc VM Setup
+
+This section describes the initialization and configuration of processing environments used for operational workflows, testing, reprocessing, and data generation. Unlike the ERDDAP VM, which is optimized for data serving, processing VMs are intended for workflow execution, algorithm development, backfills, and validation tasks.
+
+Processing environments typically use C4 standard instances (for example, `c4-standard-16`) together with Hyperdisk Balanced storage, prioritizing compute performance over the additional memory used by ERDDAP serving environments.
+
+### 1. Configure the Operating System Environment
+
+#### 1.1 Configure Shared User Group Permissions
+
+```{.bash}
+sudo groupadd cwatch                              # Create the cwatch group if it does not already exist
+sudo usermod -aG cwatch $USER                     # Add your current user
+sudo usermod -aG cwatch YOUR_OPERATIONAL_USERNAME # Add the operational/service account (e.g. erd)
+newgrp cwatch                                     # Refresh group membership (or log out and back in)
+```
+
+#### 1.2 Initialize and Mount Persistent Storage
+
+```{.bash}
+ls -l /dev/disk/by-id/
+sudo blkid /dev/disk/by-id/google-processing-data
+
+sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard \
+    /dev/disk/by-id/google-processing-data
+
+sudo mkdir -p /mnt/disks/processing-data
+sudo mount -o discard,defaults \
+    /dev/disk/by-id/google-processing-data \
+    /mnt/disks/processing-data
+
+sudo chown -R root:cwatch /mnt/disks/processing-data
+sudo chmod -R 2775 /mnt/disks/processing-data
+sudo ln -s /mnt/disks/processing-data /data
+```
+
+### 2. Configure the Data Processing Environment
+
+#### 2.1 Install Conda Package Manager
+
+```{.bash}
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+conda config --add channels conda-forge
+
+# Create and activate a project environment
+conda create --name ENV_NAME
+conda activate ENV_NAME
+
+# Install common scientific and workflow dependencies
+conda install numpy pandas netCDF4 python-dateutil
+conda install -c conda-forge nco
+conda install -c conda-forge podaac-data-subscriber
+
+# Clean up
+rm Miniconda3-latest-Linux-x86_64.sh
+```
+
+#### 2.2 Configure NASA Earthdata Authentication
+
+Many satellite workflows require NASA Earthdata authentication. Create a `.netrc` file in the user home directory:
+
+```{.bash}
+echo "machine urs.earthdata.nasa.gov login YOUR_EARTHDATA_USERNAME password YOUR_EARTHDATA_PASSWORD" >> ~/.netrc
+chmod 600 ~/.netrc
+```
+
+::: {.callout-warning}
+Do not commit `.netrc`, cookies, passwords, or credentials to Git repositories.
+:::
+
+#### 2.3 Test External Data Access
+
+This example uses MUR4.2 as a test dataset — the files are small and the workflow validates NASA authentication, external data access, local storage, and the processing environment.
+
+```{.bash}
+mkdir -p /data/podaac/data
+
+podaac-data-downloader \
+    -c MUR25-JPL-L4-GLOB-v04.2 \
+    -d /data/podaac/data \
+    --start-date 2025-08-01T21:00:00Z \
+    --end-date 2025-08-10T21:00:00Z
+```
+
+#### 2.4 Install External Processing Software
+
+Some workflows require additional compiled tools. Two common examples:
+
+**DINEOF** — for gap-filling satellite data:
+
+```{.bash}
+sudo apt-get update
+sudo apt-get install -y gfortran make libarpack2-dev libnetcdf-dev libnetcdff-dev git
+
+git clone https://github.com/Aida-Alvera/DINEOF
+cd DINEOF/
+cp config.mk.template config.mk
+make
+```
+
+**CoastWatch Utilities (cwutils)** — download the appropriate Linux package from the [CoastWatch Utilities distribution site](https://coastwatch.noaa.gov/cwn/tools.html) and transfer it to the processing VM:
+
+```{.bash}
+# Transfer from local machine
+gcloud compute scp \
+    /path/to/cwutils-4_1_0_397-linux-x86_64.tar.gz \
+    YOUR_USERNAME@YOUR_PROCESSING_VM_NAME:~/
+
+# Unpack on the VM
+tar -zxf cwutils-4_1_0_397-linux-x86_64.tar.gz
+rm cwutils-4_1_0_397-linux-x86_64.tar.gz
+```
+
+### 3. Configure Project Workspace
+
+Processing VMs maintain one directory per workflow or project using a standardized template that provides a consistent structure across workflows. See the [GCP Data Processing Templates](gcp-templates.html) page for the full template reference.
+
+Project template repository: [erd-coastwatch/vm-dataproc-template](https://github.com/erd-coastwatch/vm-dataproc-template)
+
+```{.bash}
+cd ~
+git clone https://github.com/erd-coastwatch/vm-dataproc-template.git
+cp -R vm-dataproc-template YOUR_PROJECT_NAME   # Example: viirs_netpp
+cd YOUR_PROJECT_NAME
+```
+
+Create a persistent storage directory for the project and replace the template data directory with a symlink:
+
+```{.bash}
+mkdir -p /data/projects/YOUR_PROJECT_NAME
+rm -rf data
+ln -s /data/projects/YOUR_PROJECT_NAME data
+```
+
+This keeps large datasets, temporary products, downloads, and workflow outputs separated from the VM boot disk while maintaining a lightweight project workspace. Code, configuration, notebooks, templates, and documentation remain in the user workspace; the `data/` directory points to persistent external storage on the mounted Hyperdisk.
+
+---
+
+## Migration, Upgrade, and Recovery
+
+### Optional: Data Preservation Snapshot
+
+::: {.callout-note}
+Required only when rebuilding, migrating, or cloning an existing VM rather than deploying from a fresh image — for example, during machine family changes or environment rebuilds where the existing data and configuration need to be preserved.
+:::
+
+Before creating a snapshot, stop any active services writing to the disk to ensure filesystem consistency:
+
+```{.bash}
+sudo systemctl stop tomcat
+```
+
+Create a persistent disk snapshot from Cloud Shell or another authenticated terminal:
+
+```{.bash}
+gcloud compute disks snapshot YOUR_INSTANCE_NAME \
+    --project=YOUR_GCP_PROJECT_ID \
+    --zone=YOUR_GCP_ZONE \
+    --snapshot-names=YOUR_INSTANCE_NAME-migration-backup
+```
+
+### Optional: Migration Snapshot Cleanup
+
+::: {.callout-note}
+Required only when rebuilding or migrating an existing VM using temporary manual snapshots. In many environments, temporary migration snapshots are retained for at least 24 hours before cleanup.
+:::
+
+After the new environment has been validated and operating normally, delete the migration snapshot:
+
+```{.bash}
+gcloud compute snapshots delete YOUR_INSTANCE_NAME-migration-backup --quiet
+```

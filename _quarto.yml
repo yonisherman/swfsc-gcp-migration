@@ -5,7 +5,7 @@ book:
     title: ''
   chapters:
   - index.qmd
-  - erddap-vm-setup.qmd
+  - gcp-setup.qmd
   - gcp-templates.qmd
   - mh1-processor.qmd
   - viirs-netpp.qmd

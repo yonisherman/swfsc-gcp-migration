@@ -43,10 +43,10 @@ This site includes both shared infrastructure documentation and example operatio
 
 These sections document the core infrastructure, deployment patterns, and architectural decisions used throughout the migration effort:
 
-- [ERDDAP VM Setup](erddap-vm-setup.qmd)
+- [GCP Environment Setup](gcp-setup.qmd)
 - [GCP Templates](gcp-templates.qmd)
 
-These pages cover ERDDAP architecture, storage and mounting strategies, Terraform-based infrastructure, container organization, deployment conventions, and other shared operational patterns used across workflows.
+These pages cover Terraform-based infrastructure, ERDDAP and Dataproc VM setup, storage and mounting strategies, container organization, deployment conventions, and other shared operational patterns used across workflows.
 
 ### Operational workflow examples
 

@@ -223,5 +223,8 @@
   },
   "mh1-processor.qmd": {
     "mh1-processor.html": "e56b486e"
+  },
+  "gcp-setup.qmd": {
+    "gcp-setup.html": "ebf64de2"
   }
 }

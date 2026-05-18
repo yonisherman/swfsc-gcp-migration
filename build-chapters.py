@@ -20,7 +20,7 @@ for folder, files in groupby(sorted(code_pages), key=key):
         "chapters": list(files)
     })
 
-new_chapters = ["index.qmd", "erddap-vm-setup.qmd", "gcp-templates.qmd", "mh1-processor.qmd", 
+new_chapters = ["index.qmd", "gcp-setup.qmd", "gcp-templates.qmd", "mh1-processor.qmd",
                 "viirs-netpp.qmd", "mur-sst.qmd", "charm.qmd", "erddap-cloud-migration-presentations.qmd"] + parts
 
 # Load current _quarto.yml
@@ -44,7 +44,7 @@ if config["book"]["chapters"] != new_chapters:
     except ImportError:
         # fallback to pyyaml if ruamel not available
         with open("_quarto.yml", "w") as f:
-            yaml.dump(config, f, default_flow_style=False, 
+            yaml.dump(config, f, default_flow_style=False,
                      allow_unicode=True, sort_keys=False)
 
     print(f"Updated _quarto.yml with {len(code_pages)} code pages")

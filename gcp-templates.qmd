@@ -1,5 +1,5 @@
 ---
-title: "GCP Data Processing Template Repos"
+title: "GCP Data Processing Templates"
 ---
 
 To support consistent, reproducible workflows across projects, SWFSC CoastWatch maintains two GitHub template repositories. These templates provide a standardized starting point for new data processing projects deployed on Google Cloud Platform.
@@ -10,7 +10,7 @@ To support consistent, reproducible workflows across projects, SWFSC CoastWatch 
 
 **Repository:** [erd-coastwatch/cloud-run-template](https://github.com/erd-coastwatch/cloud-run-template)
 
-Use this template for containerized batch processing jobs deployed on **Google Cloud Run**. It follows the same structure used by the VIIRS NetPP workflow and is designed for jobs that run on a schedule or on demand, process data, and write results to GCS.
+Use this template for containerized batch processing jobs deployed on **Google Cloud Run**. It follows the same structure used by the VIIRS NetPP, MUR SST, and CHARM workflows and is designed for jobs that run on a schedule or on demand, process data, and write results to GCS.
 
 ```text
 cloud-run-template/
@@ -28,7 +28,7 @@ cloud-run-template/
 
 **Repository:** [erd-coastwatch/vm-dataproc-template](https://github.com/erd-coastwatch/vm-dataproc-template)
 
-Use this template for interactive or long-running workflows that run directly on a **Dataproc or ERDDAP VM**. It is structured for projects that combine notebooks, scripts, and reusable Python modules, with access to GCS-mounted data.
+Use this template for interactive or long-running workflows that run directly on a **Dataproc or processing VM**. It is structured for projects that combine notebooks, scripts, and reusable Python modules, with access to GCS-mounted data.
 
 ```text
 vm-dataproc-template/
@@ -39,7 +39,7 @@ vm-dataproc-template/
 ├── notebooks/              # Jupyter notebooks for exploration and analysis
 ├── scripts/                # Shell and Python workflow scripts
 ├── src/                    # Reusable Python modules and helpers
-├── data/                   # Intermediate or in-process data
+├── data/                   # Symlink to persistent storage on the mounted processing disk
 ├── templates/              # CDL or CSV template files
 ├── resources/              # Misc reference files used during processing
 ├── logs/                   # Runtime logs
@@ -50,9 +50,13 @@ vm-dataproc-template/
 GCS mount points follow the convention:
 
 ```text
-/mnt/gcs/data/<project>/          # Large input data
+/mnt/gcs/data/<project>/           # Large input data
 /mnt/gcs/erddap_data_pw/<project>/ # ERDDAP-served output data
 ```
+
+The `data/` directory in the template is a symlink to project-specific persistent storage on the mounted Hyperdisk, keeping large datasets and workflow outputs separated from the VM boot disk. See the [GCP Environment Setup](gcp-setup.html#configure-project-workspace) page for the full workspace initialization steps.
+
+Periodically review the template repository for updates to the standard project structure.
 
 ## How to Use a Template
 
@@ -65,10 +69,10 @@ git clone https://github.com/erd-coastwatch/YOUR_NEW_REPO.git
 cd YOUR_NEW_REPO
 ```
 
-4. **Fill in `config.yml`** with your project-specific settings - sensor names, GCS bucket paths, date ranges, and any API parameters.
+4. **Fill in `config.yml`** with your project-specific settings — sensor names, GCS bucket paths, date ranges, and any API parameters.
 5. **Add your scripts and notebooks** to the appropriate directories.
 6. For Cloud Run projects, **build and deploy** using `deploy_job.sh` once your Dockerfile and scripts are ready.
 
 ::: {.callout-note}
-These templates are intentionally minimal - they provide structure, not implementation. Each project will fill in the logic specific to its data source and processing requirements.
+These templates are intentionally minimal — they provide structure, not implementation. Each project fills in the logic specific to its data source and processing requirements.
 :::
