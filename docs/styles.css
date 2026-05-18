@@ -187,10 +187,6 @@ pre {
   white-space: pre;
 }
 
-/* Hide code-pages from sidebar */
-.sidebar-item-section {
-  display: none;
-}
 /* ======================
    Presentation Slideshow
 ====================== */
@@ -259,4 +255,12 @@ pre {
   margin-top: 0.85rem;
   color: #555;
   font-size: 0.95rem;
+}
+
+#quarto-sidebar li:has(a[href*="code-pages/"]) {
+  display: none;
+}
+
+#quarto-sidebar li:has(a[href*="Code: "]) {
+  display: none;
 }

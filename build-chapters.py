@@ -1,52 +1,92 @@
 import os
 import yaml
-from itertools import groupby
 from pathlib import Path
+from itertools import groupby
 
-# Auto-discover all code-page qmds
+top_chapters = [
+    "index.qmd",
+    {"part": "Setup", "chapters": ["gcp-setup.qmd", "gcp-templates.qmd"]},
+    {"part": "Workflows", "chapters": ["mh1-processor.qmd", "viirs-netpp.qmd", "mur-sst.qmd", "charm.qmd"]},
+    {"part": "Presentations", "chapters": ["erddap-cloud-migration-presentations.qmd"]},
+]
+
 code_pages = []
 for root, dirs, files in os.walk("code-pages"):
     for f in sorted(files):
         if f.endswith(".qmd"):
-            path = os.path.join(root, f).replace("\\", "/")
-            code_pages.append(path)
+            code_pages.append(os.path.join(root, f).replace("\\", "/"))
 
-# Group by workflow (subfolder name)
-parts = []
-key = lambda p: Path(p).parent.name
-for folder, files in groupby(sorted(code_pages), key=key):
-    parts.append({
-        "part": folder,
+code_parts = []
+for folder, files in groupby(sorted(code_pages), key=lambda p: Path(p).parent.name):
+    code_parts.append({
+        "part": f"Code: {folder}",
         "chapters": list(files)
     })
 
-new_chapters = ["index.qmd", "gcp-setup.qmd", "gcp-templates.qmd", "mh1-processor.qmd",
-                "viirs-netpp.qmd", "mur-sst.qmd", "charm.qmd", "erddap-cloud-migration-presentations.qmd"] + parts
+new_chapters = top_chapters + code_parts
 
-# Load current _quarto.yml
 with open("_quarto.yml") as f:
     config = yaml.safe_load(f)
 
-# Only write if chapters have changed
-if config["book"]["chapters"] != new_chapters:
+if config["book"].get("chapters") != new_chapters:
     config["book"]["chapters"] = new_chapters
+    config["book"].pop("render", None)
 
-    # Use ruamel.yaml to preserve key order and formatting
-    try:
-        from ruamel.yaml import YAML
-        ryaml = YAML()
-        ryaml.preserve_quotes = True
-        with open("_quarto.yml") as f:
-            doc = ryaml.load(f)
-        doc["book"]["chapters"] = new_chapters
-        with open("_quarto.yml", "w") as f:
-            ryaml.dump(doc, f)
-    except ImportError:
-        # fallback to pyyaml if ruamel not available
-        with open("_quarto.yml", "w") as f:
-            yaml.dump(config, f, default_flow_style=False,
-                     allow_unicode=True, sort_keys=False)
+    with open("_quarto.yml", "w") as f:
+        yaml.dump(config, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
 
-    print(f"Updated _quarto.yml with {len(code_pages)} code pages")
+    print(f"Updated _quarto.yml: {len(code_pages)} code pages added to chapters")
 else:
     print("No changes to _quarto.yml")
+# import os
+# import yaml
+# from itertools import groupby
+# from pathlib import Path
+
+# # Auto-discover all code-page qmds
+# code_pages = []
+# for root, dirs, files in os.walk("code-pages"):
+#     for f in sorted(files):
+#         if f.endswith(".qmd"):
+#             path = os.path.join(root, f).replace("\\", "/")
+#             code_pages.append(path)
+
+# # Group by workflow (subfolder name)
+# parts = []
+# key = lambda p: Path(p).parent.name
+# for folder, files in groupby(sorted(code_pages), key=key):
+#     parts.append({
+#         "part": folder,
+#         "chapters": list(files)
+#     })
+
+# new_chapters = ["index.qmd", "gcp-setup.qmd", "gcp-templates.qmd", "mh1-processor.qmd",
+#                 "viirs-netpp.qmd", "mur-sst.qmd", "charm.qmd", "erddap-cloud-migration-presentations.qmd"] + parts
+
+# # Load current _quarto.yml
+# with open("_quarto.yml") as f:
+#     config = yaml.safe_load(f)
+
+# # Only write if chapters have changed
+# if config["book"]["chapters"] != new_chapters:
+#     config["book"]["chapters"] = new_chapters
+
+#     # Use ruamel.yaml to preserve key order and formatting
+#     try:
+#         from ruamel.yaml import YAML
+#         ryaml = YAML()
+#         ryaml.preserve_quotes = True
+#         with open("_quarto.yml") as f:
+#             doc = ryaml.load(f)
+#         doc["book"]["chapters"] = new_chapters
+#         with open("_quarto.yml", "w") as f:
+#             ryaml.dump(doc, f)
+#     except ImportError:
+#         # fallback to pyyaml if ruamel not available
+#         with open("_quarto.yml", "w") as f:
+#             yaml.dump(config, f, default_flow_style=False,
+#                      allow_unicode=True, sort_keys=False)
+
+#     print(f"Updated _quarto.yml with {len(code_pages)} code pages")
+# else:
+#     print("No changes to _quarto.yml")
