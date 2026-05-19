@@ -1,39 +1,45 @@
 """
-Overview
---------
-This script automates the retrieval and distribution of Level-3 near-real-time (NRT) 
-MODIS-Aqua Particulate Organic Carbon (POC) products for 1-day, 8-day, and monthly 
-periods. It queries the NASA OceanColor file search API for available POC products 
-in the current year, checks which files are already staged in the production GCS 
-bucket under ``ERDprod/satellite/MPOC_NRT/<period>``, and downloads only those 
-that are missing. Each new file is then uploaded to the production bucket using 
-``send_to_servers`` and removed locally.
+Retrieve and publish near-real-time MODIS-Aqua particulate organic carbon.
+
+This script queries the NASA OceanColor file search API for MODIS-Aqua
+Level-3 mapped near-real-time (NRT) particulate organic carbon (POC) products,
+compares the returned filenames against files already staged in the production
+Google Cloud Storage (GCS) bucket, downloads only missing files to the Cloud
+Run container, publishes them with send_to_servers(), and removes local
+temporary files.
+
+Product
+-------
+- prod_id: poc
+- dataset family: MPOC_NRT
+
+Periods
+-------
+- DAY -> 1day
+- 8D  -> 8day
+- MO  -> mday
+
+NASA query settings
+-------------------
+- sensor_id: 7 (MODIS-Aqua)
+- dtid: 1055
+- resolution_id: 4km
+- stream: near-real-time
+
+Output
+------
+Files are published under the MPOC_NRT GCS path family, with period-specific
+subdirectories.
+
+Runtime requirements
+--------------------
+- ROYLIB_CONFIG points to the runtime config.yml file.
+- Earthdata .netrc and URS cookies are available under /tmp.
+- The Cloud Run service account can read and write the configured GCS bucket.
 
 Usage
 -----
-::
-    python getMPOC_NRT.py
-
-- No command-line arguments required.
-- Must be run from a system with valid Earthdata Login and GCS access.
-
-Description
------------
-1. **Configuration and Date Setup**
-   - Validates presence of required configuration keys.
-   - Defines start date (Jan 1 of the current year) and end date (today).
-
-2. **Check for Existing Files in GCS**
-   - Iterates through periods (1day, 8day, mday) and retrieves staged file list.
-
-3. **Query NASA OceanColor API**
-   - Constructs POST requests to the OceanColor API using dtid=1055 and prod_id=poc.
-
-4. **Download Missing Files**
-   - Uses ``wget`` with Earthdata credentials to download missing files to writable /tmp.
-
-5. **Upload to Production Bucket**
-   - Publishes each file to ``satellite/MPOC_NRT/<period>/<filename>``.
+python getMPOC_NRT.py
 """
 
 if __name__ == "__main__":

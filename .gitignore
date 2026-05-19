@@ -1,2 +1,9 @@
 /.quarto/
 **/*.quarto_ipynb
+
+# Credentials / auth files
+.netrc
+.urs_cookies
+*_netrc*
+*cookie*
+*cookies*

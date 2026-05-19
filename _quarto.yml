@@ -155,6 +155,7 @@ book:
     - code-pages/mur-sst/mur_v41_downloader_dailyproc.qmd
     - code-pages/mur-sst/mur_v42_downloader.qmd
     - code-pages/mur-sst/requirements.qmd
+    - code-pages/mur-sst/roylib.qmd
   - part: 'Code: viirs-netpp'
     chapters:
     - code-pages/viirs-netpp/config.qmd

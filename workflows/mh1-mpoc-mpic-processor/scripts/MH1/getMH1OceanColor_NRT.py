@@ -1,25 +1,47 @@
 """
-Overview
+Retrieve and publish near-real-time MODIS-Aqua ocean color products.
+
+This script queries the NASA OceanColor file search API for MODIS-Aqua
+Level-3 mapped near-real-time (NRT) ocean color products, compares the
+returned filenames against files already staged in the production Google
+Cloud Storage (GCS) bucket, downloads only missing files to the Cloud Run
+container, publishes them with send_to_servers(), and removes local
+temporary files.
+
+Products
 --------
-This script automates the retrieval and distribution of Level 3 near-real-time (NRT) MODIS-Aqua 
-satellite products (Chla, nFLH, PAR, Kd490) for multiple time periods (1-day, 8-day, monthly). 
-It queries the NASA OceanColor file search API, checks for existing files in GCS, 
-and downloads only missing products.
+- chlor_a -> chla
+- nflh    -> nflh
+- par     -> par
+- Kd_490  -> kd490
+
+Periods
+-------
+- DAY -> 1day
+- 8D  -> 8day
+- MO  -> mday
+
+NASA query settings
+-------------------
+- sensor_id: 7 (MODIS-Aqua)
+- dtid: 1055
+- resolution_id: 4km
+- stream: near-real-time
+
+Output
+------
+Files are published under the MH1_NRT GCS path family, with product- and
+period-specific subdirectories.
+
+Runtime requirements
+--------------------
+- ROYLIB_CONFIG points to the runtime config.yml file.
+- Earthdata .netrc and URS cookies are available under /tmp.
+- The Cloud Run service account can read and write the configured GCS bucket.
 
 Usage
 -----
-::
-    python getMH1OceanColor_NRT.py
-
-Description
------------
-1. **Configuration and Iteration**
-   - Iterates over products: 'chlor_a', 'nflh', 'par', 'kd490'.
-   - Iterates over periods: 'DAY' (1day), '8D' (8day), 'MO' (mday).
-2. **NASA API Query**
-   - Uses dtid=1055 for NRT products.
-3. **Cloud-Ready Pathing**
-   - Uses CFG['HOME_DIR'] (set to /tmp) for all writable operations to avoid read-only errors.
+python getMH1OceanColor_NRT.py
 """
 
 if __name__ == "__main__":

@@ -1,15 +1,15 @@
 # --- Stage 1: Base Environment ---
-# FROM python:3.11-slim
+# Python 3.10 is used to preserve compatibility with the legacy scientific
+# Python stack required by the fronts and monthly-composite scripts.
 FROM python:3.10-slim
 
 
-### test ####
+# Limit threaded math libraries so parallelism stays predictable in Cloud Run.
 ENV OMP_NUM_THREADS=1 \
     OPENBLAS_NUM_THREADS=1 \
     MKL_NUM_THREADS=1 \
     NUMEXPR_NUM_THREADS=1 \
     VECLIB_MAXIMUM_THREADS=1
-###################
 
 
 # Install system dependencies
@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
 RUN wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && \
     chmod +x /usr/bin/yq
 
-# --- REPAIRED: Install Google Cloud SDK (Modern Method) ---
+# Install Google Cloud SDK for gcloud storage operations.
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
     tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \

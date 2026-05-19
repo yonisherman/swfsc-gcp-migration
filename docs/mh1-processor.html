@@ -115,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Project Overview</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">SWFSC ERDDAP Cloud Migration</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -482,6 +482,11 @@ ul.task-list li input[type="checkbox"] {
   <a href="./code-pages/mur-sst/requirements.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">requirements.txt</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/roylib.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">roylib.py</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -552,11 +557,13 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#purpose" id="toc-purpose" class="nav-link active" data-scroll-target="#purpose">Purpose</a></li>
   <li><a href="#repository-structure" id="toc-repository-structure" class="nav-link" data-scroll-target="#repository-structure">Repository structure</a></li>
+  <li><a href="#relationship-to-the-workflow-repository" id="toc-relationship-to-the-workflow-repository" class="nav-link" data-scroll-target="#relationship-to-the-workflow-repository">Relationship to the workflow repository</a></li>
   <li><a href="#cloud-run-job" id="toc-cloud-run-job" class="nav-link" data-scroll-target="#cloud-run-job">Cloud Run job</a></li>
   <li><a href="#processing-pipeline" id="toc-processing-pipeline" class="nav-link" data-scroll-target="#processing-pipeline">Processing pipeline</a></li>
-  <li><a href="#sst-masking" id="toc-sst-masking" class="nav-link" data-scroll-target="#sst-masking">SST masking</a></li>
+  <li><a href="#runtime-configuration" id="toc-runtime-configuration" class="nav-link" data-scroll-target="#runtime-configuration">Runtime configuration</a></li>
   <li><a href="#nasa-api-dataset-ids" id="toc-nasa-api-dataset-ids" class="nav-link" data-scroll-target="#nasa-api-dataset-ids">NASA API dataset IDs</a></li>
   <li><a href="#gcs-path-conventions" id="toc-gcs-path-conventions" class="nav-link" data-scroll-target="#gcs-path-conventions">GCS path conventions</a></li>
+  <li><a href="#sst-masking" id="toc-sst-masking" class="nav-link" data-scroll-target="#sst-masking">SST masking</a></li>
   <li><a href="#credentials-and-secrets" id="toc-credentials-and-secrets" class="nav-link" data-scroll-target="#credentials-and-secrets">Credentials and secrets</a></li>
   <li><a href="#codebase" id="toc-codebase" class="nav-link" data-scroll-target="#codebase">Codebase</a></li>
   </ul>
@@ -584,46 +591,53 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This chapter documents the Cloud Run workflow for retrieving and distributing MODIS-Aqua Level-3 satellite products — ocean color, SST, particulate organic carbon (POC), and particulate inorganic carbon (PIC) — for both near-real-time (NRT) and science quality (delayed) streams.</p>
+<p>This chapter documents the Cloud Run workflow used to retrieve and publish MODIS-Aqua Level-3 satellite products for the MH1, MPOC, and MPIC datsets served on ERDDAP. The workflow handles both near-real-time (NRT) and science-quality streams for ocean color, sea surface temperature, particulate organic carbon, and particulate inorganic carbon products.</p>
+<p>The workflow replaces legacy server-based retrieval scripts with a containerized cloud workflow. It queries the NASA OceanColor file search API, compares available files against products already staged in Google Cloud Storage (GCS), downloads only missing files, publishes final products to ERDDAP-facing storage paths, and removes temporary files from the Cloud Run runtime.</p>
 <section id="purpose" class="level2">
 <h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
-<p>The workflow queries the NASA OceanColor file search API, compares results against what is already staged in the production GCS bucket, and downloads only the missing files. Each file is then published to GCS via <code>send_to_servers()</code> and removed from local disk.</p>
-<p>Products retrieved and published:</p>
+<p>The processor manages three related MODIS-Aqua product families:</p>
 <ul>
-<li><strong>MH1 Ocean Color</strong> (NRT + Science) — chlorophyll-a, nFLH, PAR, Kd490</li>
-<li><strong>MH1 SST</strong> (NRT + Science) — sea surface temperature; also generates a masked variant (<code>sstMasked</code>) where <code>qual_sst &gt;= 0</code></li>
-<li><strong>MPOC</strong> (NRT + Science) — particulate organic carbon</li>
-<li><strong>MPIC</strong> (NRT + Science) — particulate inorganic carbon</li>
+<li><strong>MH1 Ocean Color</strong> — chlorophyll-a, nFLH, PAR, and Kd490</li>
+<li><strong>MH1 SST</strong> — raw sea surface temperature plus a masked SST variant that retains pixels where <code>qual_sst &gt;= 0</code></li>
+<li><strong>MPOC</strong> — particulate organic carbon</li>
+<li><strong>MPIC</strong> — particulate inorganic carbon</li>
 </ul>
-<p>All products are produced for three temporal composites: 1-day, 8-day, and monthly.</p>
+<p>Each product stream supports 1-day, 8-day, and monthly composites where available. NRT and science-quality products are handled separately so that ERDDAP can expose both recent operational products and delayed higher-quality products.</p>
 </section>
 <section id="repository-structure" class="level2">
 <h2 class="anchored" data-anchor-id="repository-structure">Repository structure</h2>
 <pre class="text"><code>mh1-mpoc-mpic-processor/
-├── config.yml              # Runtime settings (GCS paths, NASA endpoints)
-├── requirements.txt        # Python dependencies
-├── deploy_job.sh           # Build, push, and deploy the Cloud Run job
-├── Dockerfile              # Container definition
-├── entrypoint.sh           # Job entrypoint; runs all NRT then all Science suites
+├── README.md                   # Operational overview and deployment notes
+├── config/
+│   ├── config.yml              # Runtime settings, GCS targets, NASA endpoints
+│   └── requirements.txt        # Python dependencies
+├── deploy_job.sh               # Build, push, deploy, and schedule the Cloud Run job
+├── Dockerfile                  # Container definition
+├── entrypoint.sh               # Runs all NRT suites first, then all science-quality suites
 ├── scripts/
 │   ├── MH1/
 │   │   ├── getMH1OceanColor_NRT.py   # Ocean color NRT retrieval
-│   │   ├── getMH1OceanColor_Sci.py   # Ocean color science quality retrieval
-│   │   ├── getMH1SST_NRT.py          # SST NRT retrieval + masking
-│   │   └── getMH1SST_Sci.py          # SST science quality retrieval + masking
+│   │   ├── getMH1OceanColor_Sci.py   # Ocean color science-quality retrieval
+│   │   ├── getMH1SST_NRT.py          # SST NRT retrieval and masking
+│   │   └── getMH1SST_Sci.py          # SST science-quality retrieval and masking
 │   ├── MPIC/
 │   │   ├── getMPIC_NRT.py            # PIC NRT retrieval
-│   │   └── getMPIC_Sci.py            # PIC science quality retrieval
+│   │   └── getMPIC_Sci.py            # PIC science-quality retrieval
 │   └── MPOC/
 │       ├── getMPOC_NRT.py            # POC NRT retrieval
-│       └── getMPOC_Sci.py            # POC science quality retrieval
+│       └── getMPOC_Sci.py            # POC science-quality retrieval
 └── src/
     ├── __init__.py
-    └── roylib.py                     # Shared GCS and processing utilities</code></pre>
+    └── roylib.py                     # Shared configuration, GCS, NASA, and publishing utilities</code></pre>
+</section>
+<section id="relationship-to-the-workflow-repository" class="level2">
+<h2 class="anchored" data-anchor-id="relationship-to-the-workflow-repository">Relationship to the workflow repository</h2>
+<p>The source workflow repository includes a <code>README.md</code> with the operational overview, local development notes, deployment requirements, and runtime expectations. This Quarto chapter provides the public-facing documentation view of the same workflow.</p>
+<p>The copy shown in this book is a sanitized documentation snapshot. Before rendering, real bucket names, project IDs, internal hostnames, local filesystem paths, email addresses, credential files, and deployment-specific values are removed or replaced with generic placeholders.</p>
 </section>
 <section id="cloud-run-job" class="level2">
 <h2 class="anchored" data-anchor-id="cloud-run-job">Cloud Run job</h2>
-<p>The workflow runs as a single Cloud Run job scheduled daily. <code>entrypoint.sh</code> drives the full suite in sequence: NRT suites first, then science quality suites.</p>
+<p>The workflow runs as a scheduled Cloud Run job. The job entrypoint prepares writable runtime directories under <code>/tmp</code>, copies Earthdata credential files from Secret Manager mounts, and then runs the retrieval suites in sequence: NRT products first, followed by science-quality products.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -641,93 +655,147 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>MH1 NRT</td>
 <td><code>getMH1OceanColor_NRT.py</code>, <code>getMH1SST_NRT.py</code></td>
-<td>Ocean color + SST near-real-time</td>
+<td>Ocean color and SST near-real-time retrieval</td>
 </tr>
 <tr class="even">
 <td>MH1 Science</td>
 <td><code>getMH1OceanColor_Sci.py</code>, <code>getMH1SST_Sci.py</code></td>
-<td>Ocean color + SST science quality</td>
+<td>Ocean color and SST science-quality retrieval</td>
 </tr>
 <tr class="odd">
 <td>MPIC NRT</td>
 <td><code>getMPIC_NRT.py</code></td>
-<td>PIC near-real-time</td>
+<td>PIC near-real-time retrieval</td>
 </tr>
 <tr class="even">
 <td>MPIC Science</td>
 <td><code>getMPIC_Sci.py</code></td>
-<td>PIC science quality</td>
+<td>PIC science-quality retrieval</td>
 </tr>
 <tr class="odd">
 <td>MPOC NRT</td>
 <td><code>getMPOC_NRT.py</code></td>
-<td>POC near-real-time</td>
+<td>POC near-real-time retrieval</td>
 </tr>
 <tr class="even">
 <td>MPOC Science</td>
 <td><code>getMPOC_Sci.py</code></td>
-<td>POC science quality</td>
+<td>POC science-quality retrieval</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="processing-pipeline" class="level2">
 <h2 class="anchored" data-anchor-id="processing-pipeline">Processing pipeline</h2>
-<p>Each suite follows the same pattern:</p>
-<pre class="text"><code>Cloud Scheduler → Cloud Run Job → Query NASA API → Check GCS → Download missing files → Upload to GCS → Cleanup</code></pre>
-<p>The NASA OceanColor <code>file_search</code> API is queried with a date range spanning the current calendar year. The resulting filename list is compared against the production bucket inventory from <code>list_bucket_content()</code>. Only files absent from GCS are downloaded via <code>wget</code> using Earthdata credentials injected at runtime from Secret Manager.</p>
+<p>Each retrieval suite follows the same operational pattern:</p>
+<pre class="text"><code>Cloud Scheduler
+  → Cloud Run Job
+  → Query NASA OceanColor file search API
+  → Compare available NASA files against existing GCS objects
+  → Download missing files to /tmp
+  → Publish outputs to configured GCS destinations
+  → Remove local temporary files</code></pre>
+<p>The NASA OceanColor <code>file_search</code> API is queried for the current calendar year. Returned filenames are compared against the production bucket inventory from <code>list_bucket_content()</code>. Only files absent from GCS are downloaded using Earthdata credentials provided at runtime. This keeps the job incremental and avoids repeatedly downloading products that have already been staged.</p>
 </section>
-<section id="sst-masking" class="level2">
-<h2 class="anchored" data-anchor-id="sst-masking">SST masking</h2>
-<p>For both NRT and science SST products, the workflow generates a second masked variant alongside the raw download. The mask is applied by setting SST values to fill where <code>qual_sst &lt; 0</code>, creating a <code>sstMasked</code> variable. Both the raw and masked files are uploaded to separate GCS paths and removed from local disk.</p>
+<section id="runtime-configuration" class="level2">
+<h2 class="anchored" data-anchor-id="runtime-configuration">Runtime configuration</h2>
+<p>Runtime settings are loaded from <code>config/config.yml</code> through <code>roylib.py</code>. In Cloud Run, the config file is mounted from Secret Manager and the path is provided through the <code>ROYLIB_CONFIG</code> environment variable.</p>
+<p>The workflow distinguishes between two major GCS destinations:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Setting</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ERDPROD_BUCKET</code></td>
+<td>Production bucket for final ERDDAP-facing NetCDF products</td>
+</tr>
+<tr class="even">
+<td><code>ERDWORK_BUCKET</code></td>
+<td>Work/staging bucket for intermediate, mirrored, or operational support files</td>
+</tr>
+</tbody>
+</table>
+<p>The standard publishing logic is implemented in <code>send_to_servers()</code>:</p>
+<ol type="1">
+<li>Every output is uploaded to the production bucket.</li>
+<li>Selected 1-day MB/MW outputs are also copied to the work bucket using the legacy regional layout.</li>
+</ol>
+<p>Example destination patterns:</p>
+<pre class="text"><code>gs://&lt;prod_bucket&gt;/&lt;prod_root&gt;/&lt;dst_dir&gt;/&lt;interval&gt;day/&lt;filename&gt;
+gs://&lt;work_bucket&gt;/&lt;work_root&gt;/&lt;region&gt;/1day/&lt;filename&gt;</code></pre>
+<p>Bucket values in <code>config.yml</code> are plain bucket names, not <code>gs://</code> URIs.</p>
+<p>The configuration also provides:</p>
+<ul>
+<li>NASA OceanColor API endpoints</li>
+<li>ERDDAP-facing publish destinations</li>
+<li>local runtime paths used inside the container</li>
+<li>Earthdata credential file locations</li>
+<li>product-specific destination mappings</li>
+</ul>
+<p>Some configuration files may contain settings shared with other CoastWatch workflows. The MH1 processor uses the subset related to MODIS-Aqua MH1, MPOC, MPIC, NASA file search, and GCS publishing.</p>
 </section>
 <section id="nasa-api-dataset-ids" class="level2">
 <h2 class="anchored" data-anchor-id="nasa-api-dataset-ids">NASA API dataset IDs</h2>
+<p>The scripts query NASA OceanColor using dataset identifiers (<code>dtid</code>) for MODIS-Aqua Level-3 mapped products. The configured queries use <code>sensor_id=7</code>, corresponding to MODIS-Aqua.</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 40%">
+<col style="width: 30%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Dataset</th>
-<th>dtid</th>
+<th style="text-align: right;">dtid</th>
 <th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>MH1 Ocean Color NRT</td>
-<td>1055</td>
-<td>MODIS-Aqua L3m NRT</td>
+<td style="text-align: right;">1055</td>
+<td>MODIS-Aqua Level-3 mapped NRT ocean color products</td>
 </tr>
 <tr class="even">
 <td>MH1 Ocean Color Science</td>
-<td>1043</td>
-<td>MODIS-Aqua L3m Standard Science</td>
+<td style="text-align: right;">1043</td>
+<td>MODIS-Aqua Level-3 mapped science-quality ocean color products</td>
 </tr>
 <tr class="odd">
 <td>MH1 SST NRT</td>
-<td>1061</td>
-<td>MODIS-Aqua SST L3m NRT</td>
+<td style="text-align: right;">1061</td>
+<td>MODIS-Aqua Level-3 mapped NRT SST products</td>
 </tr>
 <tr class="even">
 <td>MH1 SST Science</td>
-<td>1049</td>
-<td>MODIS-Aqua SST L3m Standard Science</td>
+<td style="text-align: right;">1049</td>
+<td>MODIS-Aqua Level-3 mapped science-quality SST products</td>
 </tr>
 <tr class="odd">
 <td>MPOC / MPIC NRT</td>
-<td>1055</td>
-<td>Shared with ocean color NRT stream</td>
+<td style="text-align: right;">1055</td>
+<td>MODIS-Aqua Level-3 mapped NRT ocean color stream used for carbon products</td>
 </tr>
 <tr class="even">
 <td>MPOC / MPIC Science</td>
-<td>1102</td>
-<td>Standard Science Quality</td>
+<td style="text-align: right;">1102</td>
+<td>MODIS-Aqua Level-3 mapped science-quality carbon products</td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="gcs-path-conventions" class="level2">
 <h2 class="anchored" data-anchor-id="gcs-path-conventions">GCS path conventions</h2>
-<p>NRT products are published under <code>satellite/&lt;DATASET&gt;_NRT/&lt;product&gt;/&lt;period&gt;/</code> and science quality products under <code>satellite/&lt;DATASET&gt;/&lt;product&gt;/&lt;period&gt;/</code>. For example:</p>
+<p>NRT products are published under <code>satellite/&lt;DATASET&gt;_NRT/...</code> paths, while science-quality products are published under <code>satellite/&lt;DATASET&gt;/...</code> paths. The exact product and period subdirectories vary by stream, but follow the same naming pattern used by the legacy ERDDAP-facing archive.</p>
+<p>Example object prefixes:</p>
 <pre class="text"><code>satellite/MH1_NRT/chla/1day/
 satellite/MH1/chla/1day/
 satellite/MH1_NRT/sst/mday/
@@ -735,17 +803,27 @@ satellite/MH1/sstMask/8day/
 satellite/MPOC_NRT/1day/
 satellite/MPIC/mday/</code></pre>
 </section>
+<section id="sst-masking" class="level2">
+<h2 class="anchored" data-anchor-id="sst-masking">SST masking</h2>
+<p>For both NRT and science-quality SST products, the workflow generates a masked SST file alongside the raw NASA download. The masking step reads the raw <code>sst</code> variable and the <code>qual_sst</code> quality variable, then sets SST values to fill where <code>qual_sst &lt; 0</code>.</p>
+<p>Pixels where <code>qual_sst &gt;= 0</code> are retained and written to an output variable named <code>sstMasked</code>. Raw SST files and masked SST files are published to separate configured GCS paths so ERDDAP can expose both the original NASA SST product and the CoastWatch masked variant.</p>
+</section>
 <section id="credentials-and-secrets" class="level2">
 <h2 class="anchored" data-anchor-id="credentials-and-secrets">Credentials and secrets</h2>
-<p>Earthdata Login credentials (<code>netrc</code> and <code>urs_cookies</code>) are injected at runtime via Google Secret Manager and copied to writable <code>/tmp</code> paths. The config file is also mounted from Secret Manager and its path is exported as <code>ROYLIB_CONFIG</code>, which <code>roylib.py</code> uses to load all runtime settings.</p>
+<p>Earthdata Login credentials are provided to the Cloud Run job through Google Secret Manager. The job expects <code>.netrc</code> and URS cookie files to be available from Secret Manager mounts at runtime. The entrypoint copies these files into writable <code>/tmp</code> locations before the Python retrieval scripts run.</p>
+<p>Expected runtime credential paths include:</p>
+<pre class="text"><code>/tmp/.netrc
+/tmp/.urs_cookies</code></pre>
+<p>These files are runtime credentials only. They should not be committed to the source repository or included in the public Quarto documentation copy.</p>
 </section>
 <section id="codebase" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="codebase">Codebase</h2>
+<p>The files linked below provide a view of the workflow code used by this processor. Deployment-specific values such as bucket names, project IDs, and credential paths are shown with generic placeholders.</p>
 <div class="file-grid">
 
 <div class="file-card">
 <h3 class="anchored">Deployment</h3>
-<p>Container and job configuration.</p>
+<p>Container, runtime configuration, and Cloud Run deployment files.</p>
 <ul>
 <li><a href="code-pages/mh1-processor/dockerfile.html">Dockerfile</a></li>
 <li><a href="code-pages/mh1-processor/entrypoint.html">entrypoint.sh</a></li>
@@ -757,43 +835,43 @@ satellite/MPIC/mday/</code></pre>
 
 <div class="file-card">
 <h3 class="anchored">MH1 Ocean Color</h3>
-<p>Chlorophyll-a, nFLH, PAR, and Kd490 retrieval.</p>
+<p>MODIS-Aqua chlorophyll-a, nFLH, PAR, and Kd490 retrieval.</p>
 <ul>
 <li><a href="code-pages/mh1-processor/getMH1OceanColor_NRT.html">getMH1OceanColor_NRT.py</a> — NRT retrieval</li>
-<li><a href="code-pages/mh1-processor/getMH1OceanColor_Sci.html">getMH1OceanColor_Sci.py</a> — science quality retrieval</li>
+<li><a href="code-pages/mh1-processor/getMH1OceanColor_Sci.html">getMH1OceanColor_Sci.py</a> — science-quality retrieval</li>
 </ul>
 </div>
 
 <div class="file-card">
 <h3 class="anchored">MH1 SST</h3>
-<p>Sea surface temperature retrieval and qual_sst masking.</p>
+<p>MODIS-Aqua sea surface temperature retrieval and qual_sst-based masking.</p>
 <ul>
-<li><a href="code-pages/mh1-processor/getMH1SST_NRT.html">getMH1SST_NRT.py</a> — NRT retrieval + masking</li>
-<li><a href="code-pages/mh1-processor/getMH1SST_Sci.html">getMH1SST_Sci.py</a> — science quality retrieval + masking</li>
+<li><a href="code-pages/mh1-processor/getMH1SST_NRT.html">getMH1SST_NRT.py</a> — NRT retrieval and masking</li>
+<li><a href="code-pages/mh1-processor/getMH1SST_Sci.html">getMH1SST_Sci.py</a> — science-quality retrieval and masking</li>
 </ul>
 </div>
 
 <div class="file-card">
 <h3 class="anchored">MPIC</h3>
-<p>Particulate inorganic carbon retrieval.</p>
+<p>MODIS-Aqua particulate inorganic carbon retrieval.</p>
 <ul>
 <li><a href="code-pages/mh1-processor/getMPIC_NRT.html">getMPIC_NRT.py</a> — NRT retrieval</li>
-<li><a href="code-pages/mh1-processor/getMPIC_Sci.html">getMPIC_Sci.py</a> — science quality retrieval</li>
+<li><a href="code-pages/mh1-processor/getMPIC_Sci.html">getMPIC_Sci.py</a> — science-quality retrieval</li>
 </ul>
 </div>
 
 <div class="file-card">
 <h3 class="anchored">MPOC</h3>
-<p>Particulate organic carbon retrieval.</p>
+<p>MODIS-Aqua particulate organic carbon retrieval.</p>
 <ul>
 <li><a href="code-pages/mh1-processor/getMPOC_NRT.html">getMPOC_NRT.py</a> — NRT retrieval</li>
-<li><a href="code-pages/mh1-processor/getMPOC_Sci.html">getMPOC_Sci.py</a> — science quality retrieval</li>
+<li><a href="code-pages/mh1-processor/getMPOC_Sci.html">getMPOC_Sci.py</a> — science-quality retrieval</li>
 </ul>
 </div>
 
 <div class="file-card">
 <h3 class="anchored">Shared utilities</h3>
-<p>GCS helpers, NASA API queries, and processing functions.</p>
+<p>Configuration loading, GCS helpers, NASA API queries, downloads, uploads, and publishing logic.</p>
 <ul>
 <li><a href="code-pages/mh1-processor/roylib.html">roylib.py</a> — shared utility library</li>
 </ul>

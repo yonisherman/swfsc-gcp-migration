@@ -150,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Project Overview</span></a>
+  <a href="../../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">SWFSC ERDDAP Cloud Migration</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -517,6 +517,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <a href="../../code-pages/mur-sst/requirements.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">requirements.txt</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../code-pages/mur-sst/roylib.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">roylib.py</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -607,68 +612,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Cloud Run entrypoint and job mode selector.</p>
 <div class="code-shell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /app</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Preparing writable environment in /tmp..."</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">HOME</span><span class="op">=</span>/tmp</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Cloud Run entrypoint for the MUR daily workflows.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepares writable /tmp runtime paths, stages Earthdata credentials from</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Secret Manager mounts, selects the workflow from JOB_MODE, and runs the</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># matching daily or monthly processing driver.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /tmp/data /tmp/resources /tmp/logs</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /app</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Setting up credentials from Secret Manager mounts..."</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">NETRC</span><span class="op">=</span><span class="st">"</span><span class="va">${NETRC</span><span class="op">:-</span>/tmp/.netrc<span class="va">}</span><span class="st">"</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">URS_COOKIES</span><span class="op">=</span><span class="st">"</span><span class="va">${URS_COOKIES</span><span class="op">:-</span>/tmp/.urs_cookies<span class="va">}</span><span class="st">"</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">ROYLIB_CONFIG</span><span class="op">=</span><span class="st">"/app/config/config.yml"</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">-f</span> /secrets/netrc/file <span class="kw">]];</span> <span class="cf">then</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cp</span> /secrets/netrc/file <span class="st">"</span><span class="va">$NETRC</span><span class="st">"</span></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">chmod</span> 600 <span class="st">"</span><span class="va">$NETRC</span><span class="st">"</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"ERROR: /secrets/netrc/file not found (netrc-secret mount missing?)"</span></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">-f</span> /secrets/cookies/file <span class="kw">]];</span> <span class="cf">then</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cp</span> /secrets/cookies/file <span class="st">"</span><span class="va">$URS_COOKIES</span><span class="st">"</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="bu">:</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$URS_COOKIES</span><span class="st">"</span></span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 600 <span class="st">"</span><span class="va">$URS_COOKIES</span><span class="st">"</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Credentials and config configured successfully."</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"NETRC=</span><span class="va">$NETRC</span><span class="st">"</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"URS_COOKIES=</span><span class="va">$URS_COOKIES</span><span class="st">"</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"ROYLIB_CONFIG=</span><span class="va">$ROYLIB_CONFIG</span><span class="st">"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Preparing writable environment in /tmp..."</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">HOME</span><span class="op">=</span>/tmp</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /tmp/data /tmp/resources /tmp/logs</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Setting up credentials from Secret Manager mounts..."</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">NETRC</span><span class="op">=</span><span class="st">"</span><span class="va">${NETRC</span><span class="op">:-</span>/tmp/.netrc<span class="va">}</span><span class="st">"</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">URS_COOKIES</span><span class="op">=</span><span class="st">"</span><span class="va">${URS_COOKIES</span><span class="op">:-</span>/tmp/.urs_cookies<span class="va">}</span><span class="st">"</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">ROYLIB_CONFIG</span><span class="op">=</span><span class="st">"/app/config/config.yml"</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">-f</span> /secrets/netrc/file <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cp</span> /secrets/netrc/file <span class="st">"</span><span class="va">$NETRC</span><span class="st">"</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">chmod</span> 600 <span class="st">"</span><span class="va">$NETRC</span><span class="st">"</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"ERROR: /secrets/netrc/file not found (netrc-secret mount missing?)"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">-f</span> /secrets/cookies/file <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cp</span> /secrets/cookies/file <span class="st">"</span><span class="va">$URS_COOKIES</span><span class="st">"</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="bu">:</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$URS_COOKIES</span><span class="st">"</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 600 <span class="st">"</span><span class="va">$URS_COOKIES</span><span class="st">"</span></span>
 <span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Run workflow (mur41 or mur42)</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="va">MODE</span><span class="op">=</span><span class="st">"</span><span class="va">${JOB_MODE</span><span class="op">:-</span>mur41<span class="va">}</span><span class="st">"</span></span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-----------------------------------------------------"</span></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Starting workflow: </span><span class="va">${MODE}</span><span class="st">"</span></span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-----------------------------------------------------"</span></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="st">"</span><span class="va">$MODE</span><span class="st">"</span> <span class="kw">in</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>  <span class="ss">mur41</span><span class="kw">)</span>         <span class="va">SCRIPT</span><span class="op">=</span><span class="st">"/app/scripts/mur_v41_downloader_dailyproc.sh"</span> <span class="cf">;;</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>  <span class="ss">mur42</span><span class="kw">)</span>         <span class="va">SCRIPT</span><span class="op">=</span><span class="st">"/app/scripts/mur_v42_downloader.sh"</span> <span class="cf">;;</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="ss">mur41_monthly</span><span class="kw">)</span> <span class="va">SCRIPT</span><span class="op">=</span><span class="st">"/app/scripts/MonthlyProc/MUR41_MonProc.sh"</span> <span class="cf">;;</span></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  <span class="pp">*</span><span class="kw">)</span>             <span class="bu">echo</span> <span class="st">"ERROR: Unknown JOB_MODE=</span><span class="va">${MODE}</span><span class="st"> (use mur41, mur42, mur41_monthly)"</span><span class="kw">;</span> <span class="bu">exit</span> 2 <span class="cf">;;</span></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="cf">esac</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$SCRIPT</span><span class="st">"</span> <span class="kw">]];</span> <span class="cf">then</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"ERROR: Script not found in image: </span><span class="va">$SCRIPT</span><span class="st">"</span></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"       Check Dockerfile COPY and script path."</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x <span class="st">"</span><span class="va">$SCRIPT</span><span class="st">"</span> <span class="kw">||</span> <span class="fu">true</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="st">"</span><span class="va">$SCRIPT</span><span class="st">"</span></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-----------------------------------------------------"</span></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Workflow </span><span class="va">${MODE}</span><span class="st"> completed successfully."</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-----------------------------------------------------"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Credentials and config configured successfully."</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"NETRC=</span><span class="va">$NETRC</span><span class="st">"</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"URS_COOKIES=</span><span class="va">$URS_COOKIES</span><span class="st">"</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"ROYLIB_CONFIG=</span><span class="va">$ROYLIB_CONFIG</span><span class="st">"</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Run workflow (mur41 or mur42)</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="va">MODE</span><span class="op">=</span><span class="st">"</span><span class="va">${JOB_MODE</span><span class="op">:-</span>mur41<span class="va">}</span><span class="st">"</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-----------------------------------------------------"</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Starting workflow: </span><span class="va">${MODE}</span><span class="st">"</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-----------------------------------------------------"</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="cf">case</span> <span class="st">"</span><span class="va">$MODE</span><span class="st">"</span> <span class="kw">in</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>  <span class="ss">mur41</span><span class="kw">)</span>         <span class="va">SCRIPT</span><span class="op">=</span><span class="st">"/app/scripts/mur_v41_downloader_dailyproc.sh"</span> <span class="cf">;;</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>  <span class="ss">mur42</span><span class="kw">)</span>         <span class="va">SCRIPT</span><span class="op">=</span><span class="st">"/app/scripts/mur_v42_downloader.sh"</span> <span class="cf">;;</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>  <span class="ss">mur41_monthly</span><span class="kw">)</span> <span class="va">SCRIPT</span><span class="op">=</span><span class="st">"/app/scripts/MonthlyProc/MUR41_MonProc.sh"</span> <span class="cf">;;</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>  <span class="pp">*</span><span class="kw">)</span>             <span class="bu">echo</span> <span class="st">"ERROR: Unknown JOB_MODE=</span><span class="va">${MODE}</span><span class="st"> (use mur41, mur42, mur41_monthly)"</span><span class="kw">;</span> <span class="bu">exit</span> 2 <span class="cf">;;</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="cf">esac</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="ot">!</span> <span class="ot">-f</span> <span class="st">"</span><span class="va">$SCRIPT</span><span class="st">"</span> <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"ERROR: Script not found in image: </span><span class="va">$SCRIPT</span><span class="st">"</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">"       Check Dockerfile COPY and script path."</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>  <span class="bu">exit</span> 1</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x <span class="st">"</span><span class="va">$SCRIPT</span><span class="st">"</span> <span class="kw">||</span> <span class="fu">true</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="st">"</span><span class="va">$SCRIPT</span><span class="st">"</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-----------------------------------------------------"</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Workflow </span><span class="va">${MODE}</span><span class="st"> completed successfully."</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"-----------------------------------------------------"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 

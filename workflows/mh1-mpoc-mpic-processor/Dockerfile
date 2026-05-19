@@ -15,8 +15,14 @@ RUN pip install --no-cache-dir -r config/requirements.txt
 # --- Stage 3: Source Code ---
 # This copies everything EXCEPT what's in your .dockerignore
 COPY . .
+COPY config/config.yml /app/config/config.yml
 
-# Set Environment Variables
+# Fail build if workflow config is missing
+RUN echo "Checking /app/config after COPY..." && \
+    ls -lah /app/config && \
+    test -f /app/config/config.yml
+
+    # Set Environment Variables
 ENV PYTHONPATH="/app:/app/src" \
     ROYLIB_CONFIG="/app/config/config.yml" \
     PYTHONUNBUFFERED=1

@@ -123,6 +123,12 @@ pages = [
      "Python dependencies.",
      "workflows/mur-daily-workflows/config/requirements.txt"),
 
+    ("code-pages/mur-sst/roylib.qmd",
+     "roylib.py",
+     "python",
+     "Workflow-specific configuration and GCS publishing utilities for the MUR SST workflow.",
+     "workflows/mur-daily-workflows/src/roylib.py"),
+
     ("code-pages/mur-sst/mur_v41_downloader_dailyproc.qmd",
      "mur_v41_downloader_dailyproc.sh",
      "bash",

@@ -1,33 +1,45 @@
 """
-Overview
---------
-This script automates the retrieval and distribution of Level 3 near-real-time (NRT) MODIS-Aqua
-SST satellite products for multiple time periods (1-day, 8-day, monthly).
+Retrieve, mask, and publish near-real-time MODIS-Aqua SST products.
 
-For each downloaded file it also computes a masked variant (qual_sst >= 0 only) and uploads
-both the raw and masked files to GCS via send_to_servers().
+This script queries the NASA OceanColor file search API for MODIS-Aqua
+Level-3 mapped near-real-time (NRT) sea surface temperature (SST) products,
+compares the returned filenames against files already staged in the production
+Google Cloud Storage (GCS) bucket, downloads only missing files to the Cloud
+Run container, publishes the raw SST files, creates masked SST files,
+publishes the masked files, and removes local temporary files.
 
-It is the Cloud Run / GCS equivalent of the legacy getMHSST*_NRT_sftp.py scripts.
-Key differences from legacy:
-  - Staging checks use list_bucket_content() (GCS) instead of pysftp.
-  - All writes go to /tmp (the only writable path in Cloud Run).
-  - Masked NetCDF is created with netCDF4 directly; no ncgen CDL required.
-  - send_to_servers() handles all GCS uploads.
+For each downloaded SST file, the script creates a masked variant in which
+pixels with qual_sst < 0 are written as fill values. Pixels with qual_sst >= 0
+are retained in the output variable sstMasked.
+
+Periods
+-------
+- DAY -> 1day
+- 8D  -> 8day
+- MO  -> mday
+
+NASA query settings
+-------------------
+- sensor_id: 7 (MODIS-Aqua)
+- dtid: 1061
+- resolution_id: 4km
+- stream: near-real-time
+
+Output
+------
+Raw SST files are published under the MH1_NRT SST path family. Masked SST
+files are published under the corresponding MH1_NRT sstMask path family.
+
+Runtime requirements
+--------------------
+- ROYLIB_CONFIG points to the runtime config.yml file.
+- Earthdata .netrc and URS cookies are available under /tmp.
+- The Cloud Run service account can read and write the configured GCS bucket.
+- netCDF4 and numpy are available in the container.
 
 Usage
 -----
-::
-    python getMH1SST_NRT.py
-
-Description
------------
-1. Iterates over periods: DAY (1day), 8D (8day), MO (mday).
-2. Queries NASA OceanColor file_search API using dtid=1061 (MODIS-Aqua SST NRT L3m).
-3. Checks GCS for existing files; downloads only missing ones.
-4. For each downloaded file:
-   a. Uploads raw SST file to GCS via send_to_servers().
-   b. Applies qual_sst >= 0 mask, writes a new NetCDF, uploads masked file.
-   c. Removes local copies.
+python getMH1SST_NRT.py
 """
 
 if __name__ == "__main__":
@@ -70,8 +82,24 @@ if __name__ == "__main__":
     # -----------------------------------------------------------------------
     def _make_masked_nc(src_path: Path, period_flag: str) -> Path | None:
         """
-        Read src_path, mask SST where qual_sst < 0, write a new NetCDF to /tmp.
-        Returns the path of the masked file, or None if creation failed.
+        Create a masked SST NetCDF file from a raw MODIS-Aqua SST file.
+
+        The raw SST variable is read from src_path. Pixels where qual_sst < 0
+        are masked and written as fill values. Pixels where qual_sst >= 0 are
+        retained in the output variable sstMasked.
+
+        Parameters
+        ----------
+        src_path : pathlib.Path
+            Path to the raw SST NetCDF file.
+        period_flag : str
+            Product period flag used by send_to_servers(); expected values are
+            "1", "8", or "m".
+
+        Returns
+        -------
+        pathlib.Path | None
+            Path to the masked NetCDF file if creation succeeds; otherwise None.
         """
         try:
             with Dataset(str(src_path), "r") as ds:

@@ -115,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Project Overview</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">SWFSC ERDDAP Cloud Migration</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -482,6 +482,11 @@ ul.task-list li input[type="checkbox"] {
   <a href="./code-pages/mur-sst/requirements.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">requirements.txt</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./code-pages/mur-sst/roylib.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">roylib.py</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -553,9 +558,14 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#purpose" id="toc-purpose" class="nav-link active" data-scroll-target="#purpose">Purpose</a></li>
   <li><a href="#repository-structure" id="toc-repository-structure" class="nav-link" data-scroll-target="#repository-structure">Repository structure</a></li>
   <li><a href="#cloud-run-jobs" id="toc-cloud-run-jobs" class="nav-link" data-scroll-target="#cloud-run-jobs">Cloud Run jobs</a></li>
-  <li><a href="#processing-pipeline-mur-v4.1-daily" id="toc-processing-pipeline-mur-v4.1-daily" class="nav-link" data-scroll-target="#processing-pipeline-mur-v4.1-daily">Processing pipeline (MUR v4.1 daily)</a></li>
-  <li><a href="#fronts-detection" id="toc-fronts-detection" class="nav-link" data-scroll-target="#fronts-detection">Fronts detection</a></li>
+  <li><a href="#processing-pipeline" id="toc-processing-pipeline" class="nav-link" data-scroll-target="#processing-pipeline">Processing pipeline</a></li>
+  <li><a href="#quality-aware-synchronization" id="toc-quality-aware-synchronization" class="nav-link" data-scroll-target="#quality-aware-synchronization">Quality-aware synchronization</a></li>
+  <li><a href="#runtime-configuration" id="toc-runtime-configuration" class="nav-link" data-scroll-target="#runtime-configuration">Runtime configuration</a></li>
+  <li><a href="#mur-v4.1-daily-products" id="toc-mur-v4.1-daily-products" class="nav-link" data-scroll-target="#mur-v4.1-daily-products">MUR v4.1 daily products</a></li>
+  <li><a href="#frontal-edge-products" id="toc-frontal-edge-products" class="nav-link" data-scroll-target="#frontal-edge-products">Frontal edge products</a></li>
   <li><a href="#monthly-composites" id="toc-monthly-composites" class="nav-link" data-scroll-target="#monthly-composites">Monthly composites</a></li>
+  <li><a href="#publishing-model" id="toc-publishing-model" class="nav-link" data-scroll-target="#publishing-model">Publishing model</a></li>
+  <li><a href="#credentials-and-runtime-files" id="toc-credentials-and-runtime-files" class="nav-link" data-scroll-target="#credentials-and-runtime-files">Credentials and runtime files</a></li>
   <li><a href="#codebase" id="toc-codebase" class="nav-link" data-scroll-target="#codebase">Codebase</a></li>
   </ul>
 </nav>
@@ -582,48 +592,51 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>This chapter documents the Cloud Run workflow for generating daily and monthly MUR Sea Surface Temperature products from NASA’s Multi-scale Ultra-high Resolution (MUR) SST analysis.</p>
+<p>This chapter documents the Cloud Run workflow used to retrieve, process, and publish Multi-scale Ultra-high Resolution (MUR) Sea Surface Temperature (SST) products for ERDDAP-facing datasets.</p>
+<p>The workflow replaces legacy server-based processing with a containerized cloud workflow. It stages MUR data from NASA PO.DAAC, detects when available products have been updated from near-real-time to final quality, generates derived MUR v4.1 products, and publishes outputs to configured Google Cloud Storage (GCS) paths used by ERDDAP.</p>
 <section id="purpose" class="level2">
 <h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
-<p>The workflow ingests MUR SST data from NASA PO.DAAC, computes daily anomalies and frontal edge detections, and generates monthly composites. It handles the full NRT → Final upgrade cycle automatically, detecting when NASA has promoted a near-real-time granule to science quality and re-downloading accordingly.</p>
-<p>Two MUR versions are supported:</p>
+<p>The MUR SST workflow supports two related product streams:</p>
 <ul>
-<li><strong>MUR v4.1</strong> - full processing: download, anomaly computation, fronts detection, and monthly composites</li>
-<li><strong>MUR v4.2</strong> - download only (smart sync with NRT → Final upgrade detection)</li>
+<li><strong>MUR v4.1</strong> — daily SST retrieval, daily anomaly generation, frontal edge detection, monthly SST composites, and monthly anomaly composites</li>
+<li><strong>MUR v4.2</strong> — daily SST retrieval and smart synchronization</li>
 </ul>
+<p>MUR v4.1 is the primary processing stream for derived products. MUR v4.2 is handled as a daily synchronization stream so the archive can track availability and quality upgrades.</p>
 </section>
 <section id="repository-structure" class="level2">
 <h2 class="anchored" data-anchor-id="repository-structure">Repository structure</h2>
 <pre class="text"><code>mur-daily-workflows/
+├── README.md                       # Operational overview and deployment notes
 ├── config/
-│   ├── config.yml          # Runtime settings (GCS paths, collection names, intervals)
-│   └── requirements.txt    # Python dependencies
-├── deploy_job.sh           # Build, push, and deploy Cloud Run jobs
-├── Dockerfile              # Container definition
-├── entrypoint.sh           # Job mode selector
-├── src/
-│   └── roylib.py           # Shared internal utility library
+│   ├── config.yml                  # Runtime settings, GCS targets, PO.DAAC collections
+│   └── requirements.txt            # Python dependencies
+├── deploy_job.sh                   # Build, push, deploy, and schedule Cloud Run jobs
+├── Dockerfile                      # Container definition
+├── entrypoint.sh                   # Job mode selector
 ├── scripts/
-│   ├── MURanom1day.py                  # Daily anomaly computation (MUR v4.1)
-│   ├── mur_v41_downloader_dailyproc.sh # MUR v4.1 smart sync + processing
-│   ├── mur_v42_downloader.sh           # MUR v4.2 smart sync (download only)
+│   ├── MURanom1day.py              # Daily MUR v4.1 anomaly computation
+│   ├── mur_v41_downloader_dailyproc.sh
+│   │                               # MUR v4.1 daily retrieval, anomaly, and fronts driver
+│   ├── mur_v42_downloader.sh       # MUR v4.2 daily retrieval driver
 │   ├── fronts/
-│   │   ├── calc_mur_fronts.py          # Fronts runner (WC + ATL regions)
-│   │   ├── canny_lib.py                # Unified Canny edge detection library
-│   │   ├── Canny1.py                   # WC region Canny implementation
-│   │   └── Canny2.py                   # ATL region Canny implementation
+│   │   ├── calc_mur_fronts.py      # Regional fronts runner
+│   │   ├── canny_lib.py            # Front-detection utilities
+│   │   ├── Canny1.py               # West Coast Canny implementation
+│   │   └── Canny2.py               # Atlantic Canny implementation
 │   └── MonthlyProc/
-│       ├── MUR41_MonProc.sh            # Monthly processing runner
-│       ├── CompMURmon.py               # Monthly SST composite
-│       └── CompMurAnomMon.py           # Monthly anomaly composite
+│       ├── MUR41_MonProc.sh        # Monthly processing driver
+│       ├── CompMURmon.py           # Monthly SST composite generation
+│       └── CompMurAnomMon.py       # Monthly anomaly composite generation
+├── src/
+│   └── roylib.py                   # Workflow-specific config and GCS publishing utilities
 └── templates/
-    ├── murAnomTemplate.nc      # Template for daily anomaly output
-    ├── murSSTmday.nc           # Template for monthly SST composite
-    └── murSSTmdayAnom.nc       # Template for monthly anomaly composite</code></pre>
+    ├── murAnomTemplate.nc          # Template for daily anomaly output
+    ├── murSSTmday.nc               # Template for monthly SST composite
+    └── murSSTmdayAnom.nc           # Template for monthly anomaly composite</code></pre>
 </section>
 <section id="cloud-run-jobs" class="level2">
 <h2 class="anchored" data-anchor-id="cloud-run-jobs">Cloud Run jobs</h2>
-<p>The workflow runs as three separate Cloud Run jobs, all built from the same container image and dispatched via <code>JOB_MODE</code> in <code>entrypoint.sh</code>:</p>
+<p>The workflow uses a single container image with multiple Cloud Run job modes. The <code>entrypoint.sh</code> script dispatches to the appropriate processing script based on the <code>JOB_MODE</code> environment variable.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -641,66 +654,131 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td><code>mur41_daily</code></td>
 <td><code>mur_v41_downloader_dailyproc.sh</code></td>
-<td>MUR v4.1 download + anomaly + fronts</td>
+<td>MUR v4.1 daily retrieval, anomaly generation, and fronts processing</td>
 </tr>
 <tr class="even">
 <td><code>mur42_daily</code></td>
 <td><code>mur_v42_downloader.sh</code></td>
-<td>MUR v4.2 download only</td>
+<td>MUR v4.2 daily retrieval and quality-aware synchronization</td>
 </tr>
 <tr class="odd">
 <td><code>mur41_monthly</code></td>
 <td><code>MUR41_MonProc.sh</code></td>
-<td>Monthly SST and anomaly composites</td>
+<td>MUR v4.1 monthly SST and anomaly composites</td>
 </tr>
 </tbody>
 </table>
+<p>This separation allows daily and monthly products to run on different schedules while using the same container, configuration file, and deployment pattern.</p>
 </section>
-<section id="processing-pipeline-mur-v4.1-daily" class="level2">
-<h2 class="anchored" data-anchor-id="processing-pipeline-mur-v4.1-daily">Processing pipeline (MUR v4.1 daily)</h2>
-<p>Each day in the lookback window goes through the following stages:</p>
-<pre class="text"><code>GCS probe → NASA stage check → Download (PO.DAAC) → Anomaly → Fronts (WC + ATL) → Publish</code></pre>
-<p><strong>NRT → Final upgrade logic:</strong> The downloader checks both the GCS copy (via GDAL metadata) and the NASA CMR/OPeNDAP metadata to detect when a near-real-time file has been promoted to science quality. If GCS has NRT and NASA has Final, the file is re-downloaded and reprocessed automatically.</p>
+<section id="processing-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="processing-pipeline">Processing pipeline</h2>
+<p>The daily MUR v4.1 workflow follows this pattern:</p>
+<pre class="text"><code>Cloud Scheduler
+  → Cloud Run Job
+  → Check existing GCS product
+  → Check NASA PO.DAAC / CMR availability
+  → Download or refresh source file when needed
+  → Publish daily SST
+  → Generate and publish daily SST anomaly
+  → Generate and publish regional frontal products
+  → Remove local temporary files</code></pre>
+<p>The MUR v4.2 workflow follows the same synchronization pattern but does not generate anomaly or frontal products.</p>
 </section>
-<section id="fronts-detection" class="level2">
-<h2 class="anchored" data-anchor-id="fronts-detection">Fronts detection</h2>
-<p>Daily SST frontal edges are computed for two regional subsets using the Canny edge detection algorithm:</p>
+<section id="quality-aware-synchronization" class="level2">
+<h2 class="anchored" data-anchor-id="quality-aware-synchronization">Quality-aware synchronization</h2>
+<p>The daily download scripts check both the product already staged in GCS and the product currently available from NASA. This allows the workflow to detect when a near-real-time granule has been replaced or promoted to a final-quality product.</p>
+<p>If the existing GCS copy is still near-real-time and NASA now provides the final version, the workflow re-downloads the file and republishes the updated product. This keeps the ERDDAP-facing archive current without requiring full reprocessing of the entire record.</p>
+</section>
+<section id="runtime-configuration" class="level2">
+<h2 class="anchored" data-anchor-id="runtime-configuration">Runtime configuration</h2>
+<p>Runtime settings are loaded from <code>config/config.yml</code>. The configuration defines:</p>
+<ul>
+<li>PO.DAAC collection names</li>
+<li>production bucket and publish root</li>
+<li>MUR v4.1 and v4.2 destination directories</li>
+<li>daily and monthly interval conventions</li>
+<li>local scratch directories used inside the Cloud Run container</li>
+<li>the MUR climatology location used for anomaly processing</li>
+<li>optional ERDDAP reload or flag settings</li>
+</ul>
+<p>Bucket-name fields are plain bucket names, not <code>gs://</code> URIs. Full GCS URI settings are only used where the value represents a complete input location, such as a climatology prefix.</p>
+<p>Example destination pattern:</p>
+<pre class="text"><code>gs://&lt;prod_bucket&gt;/&lt;prod_root&gt;/&lt;prod_dst_dir&gt;/&lt;interval&gt;day/&lt;filename&gt;</code></pre>
+</section>
+<section id="mur-v4.1-daily-products" class="level2">
+<h2 class="anchored" data-anchor-id="mur-v4.1-daily-products">MUR v4.1 daily products</h2>
+<p>The MUR v4.1 daily job retrieves daily SST products and publishes them to the configured production path. After the SST product is staged, the workflow runs the daily anomaly script and the regional front-detection scripts.</p>
+<p>Daily MUR v4.1 outputs include:</p>
+<ul>
+<li>daily SST</li>
+<li>daily SST anomaly</li>
+<li>West Coast frontal edge product</li>
+<li>Atlantic frontal edge product</li>
+</ul>
+<p>The daily SST anomaly is computed relative to the configured MUR climatology. The anomaly output is written using the NetCDF template in <code>templates/murAnomTemplate.nc</code>.</p>
+</section>
+<section id="frontal-edge-products" class="level2">
+<h2 class="anchored" data-anchor-id="frontal-edge-products">Frontal edge products</h2>
+<p>Frontal products are generated from MUR v4.1 SST using Canny edge detection. The workflow currently processes two regional subsets:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
 <th>Region</th>
-<th>Coverage</th>
+<th>Code</th>
+<th>Approximate coverage</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>West Coast (WC)</td>
-<td>22°N-51°N, 135°W-105°W</td>
+<td>U.S. West Coast</td>
+<td><code>WC</code></td>
+<td>22°N–51°N, 135°W–105°W</td>
 </tr>
 <tr class="even">
-<td>East Coast (ATL)</td>
-<td>20°N-50°N, 90°W-60°W</td>
+<td>U.S. Atlantic Coast</td>
+<td><code>ATL</code></td>
+<td>20°N–50°N, 90°W–60°W</td>
 </tr>
 </tbody>
 </table>
-<p>The WC and ATL regions use slightly different Canny implementations (<code>Canny1</code> and <code>Canny2</code>) which are unified through <code>canny_lib.py</code>. Output includes frontal edges, x/y gradients, and gradient magnitude in NetCDF format.</p>
+<p>The front-detection output includes frontal edge masks, x/y gradients, and gradient magnitude fields. The workflow uses <code>calc_mur_fronts.py</code> as the regional runner and <code>canny_lib.py</code> as the shared front-processing utility layer.</p>
 </section>
 <section id="monthly-composites" class="level2">
 <h2 class="anchored" data-anchor-id="monthly-composites">Monthly composites</h2>
-<p>Monthly processing is triggered by <code>JOB_MODE=mur41_monthly</code> and runs two compositors in sequence:</p>
+<p>Monthly processing is triggered with <code>JOB_MODE=mur41_monthly</code>. The monthly driver runs two compositors:</p>
 <ol type="1">
-<li><strong><code>CompMURmon.py</code></strong> - averages all daily SST files for the target month into a single monthly mean, using parallel GCS downloads and chunked stripe accumulation to stay within container memory limits.</li>
-<li><strong><code>CompMurAnomMon.py</code></strong> - averages all daily anomaly files for the target month into a monthly anomaly composite using the same pattern.</li>
+<li><strong><code>CompMURmon.py</code></strong> — builds a monthly mean SST composite from daily MUR v4.1 SST files.</li>
+<li><strong><code>CompMurAnomMon.py</code></strong> — builds a monthly mean anomaly composite from daily anomaly files.</li>
 </ol>
-<p>The target month is controlled by the <code>MONTH_OFFSET</code> environment variable (default: 1 = last completed month).</p>
+<p>The target month is controlled by the <code>MONTH_OFFSET</code> environment variable. The default behavior is to process the last completed month.</p>
+<p>The monthly compositors download the relevant daily files from GCS, process them in parallel where appropriate, and write outputs using the monthly NetCDF templates in <code>templates/</code>.</p>
+</section>
+<section id="publishing-model" class="level2">
+<h2 class="anchored" data-anchor-id="publishing-model">Publishing model</h2>
+<p>Final products are uploaded to the configured production bucket under the configured root prefix. Product-specific destination directories and interval labels are defined in <code>config/config.yml</code>.</p>
+<p>Example output families include:</p>
+<pre class="text"><code>MUR41/ssta/1day/
+MUR41/anom/1day/
+MUR41/erdMurFront41USWest/1day/
+MUR41/erdMurFront41USAtlantic/1day/
+MUR41/ssta/mday/
+MUR41/anom/mday/
+MUR42/ssta/1day/</code></pre>
+<p>The simplified <code>src/roylib.py</code> used by this workflow provides the shared configuration loader and GCS publishing helper used by the monthly processing scripts.</p>
+</section>
+<section id="credentials-and-runtime-files" class="level2">
+<h2 class="anchored" data-anchor-id="credentials-and-runtime-files">Credentials and runtime files</h2>
+<p>NASA access and Google Cloud access are handled at runtime. The container uses Cloud Run service account permissions for GCS access, while NASA/Earthdata credentials are provided through the runtime environment.</p>
+<p>Credential files such as <code>.netrc</code> and URS cookie files are runtime-only files and are not part of the public documentation copy.</p>
 </section>
 <section id="codebase" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="codebase">Codebase</h2>
+<p>The files linked below provide a view of the workflow code used by this processor. Deployment-specific values such as bucket names, project IDs, internal URLs, and credential paths are shown with generic placeholders.</p>
 <div class="file-grid">
 
 <div class="file-card">
 <h3 class="anchored">Deployment</h3>
-<p>Container and job configuration.</p>
+<p>Container, runtime configuration, and Cloud Run deployment files.</p>
 <ul>
 <li><a href="code-pages/mur-sst/dockerfile.html">Dockerfile</a></li>
 <li><a href="code-pages/mur-sst/entrypoint.html">entrypoint.sh</a></li>
@@ -711,33 +789,41 @@ ul.task-list li input[type="checkbox"] {
 </div>
 
 <div class="file-card">
-<h3 class="anchored">Daily scripts</h3>
-<p>Download, anomaly, and fronts processing.</p>
+<h3 class="anchored">Daily retrieval</h3>
+<p>MUR v4.1 and v4.2 daily synchronization and publishing.</p>
 <ul>
-<li><a href="code-pages/mur-sst/mur_v41_downloader_dailyproc.html">mur_v41_downloader_dailyproc.sh</a> - MUR v4.1 smart sync + processing</li>
-<li><a href="code-pages/mur-sst/mur_v42_downloader.html">mur_v42_downloader.sh</a> - MUR v4.2 download only</li>
-<li><a href="code-pages/mur-sst/MURanom1day.html">MURanom1day.py</a> - daily anomaly computation</li>
+<li><a href="code-pages/mur-sst/mur_v41_downloader_dailyproc.html">mur_v41_downloader_dailyproc.sh</a> — MUR v4.1 daily retrieval, anomaly, and fronts driver</li>
+<li><a href="code-pages/mur-sst/mur_v42_downloader.html">mur_v42_downloader.sh</a> — MUR v4.2 daily retrieval driver</li>
 </ul>
 </div>
 
 <div class="file-card">
-<h3 class="anchored">Fronts</h3>
-<p>Canny edge detection for WC and ATL regions.</p>
+<h3 class="anchored">Daily derived products</h3>
+<p>Anomaly and frontal edge products generated from MUR v4.1 SST.</p>
 <ul>
-<li><a href="code-pages/mur-sst/calc_mur_fronts.html">calc_mur_fronts.py</a> - fronts runner</li>
-<li><a href="code-pages/mur-sst/canny_lib.html">canny_lib.py</a> - unified Canny library</li>
-<li><a href="code-pages/mur-sst/Canny1.html">Canny1.py</a> - WC implementation</li>
-<li><a href="code-pages/mur-sst/Canny2.html">Canny2.py</a> - ATL implementation</li>
+<li><a href="code-pages/mur-sst/MURanom1day.html">MURanom1day.py</a> — daily anomaly computation</li>
+<li><a href="code-pages/mur-sst/calc_mur_fronts.html">calc_mur_fronts.py</a> — regional fronts runner</li>
+<li><a href="code-pages/mur-sst/canny_lib.html">canny_lib.py</a> — front-detection utilities</li>
+<li><a href="code-pages/mur-sst/Canny1.html">Canny1.py</a> — West Coast Canny implementation</li>
+<li><a href="code-pages/mur-sst/Canny2.html">Canny2.py</a> — Atlantic Canny implementation</li>
 </ul>
 </div>
 
 <div class="file-card">
 <h3 class="anchored">Monthly composites</h3>
-<p>SST and anomaly monthly averaging.</p>
+<p>Monthly SST and anomaly composite generation.</p>
 <ul>
-<li><a href="code-pages/mur-sst/MUR41_MonProc.html">MUR41_MonProc.sh</a> - monthly runner</li>
-<li><a href="code-pages/mur-sst/CompMURmon.html">CompMURmon.py</a> - monthly SST composite</li>
-<li><a href="code-pages/mur-sst/CompMurAnomMon.html">CompMurAnomMon.py</a> - monthly anomaly composite</li>
+<li><a href="code-pages/mur-sst/MUR41_MonProc.html">MUR41_MonProc.sh</a> — monthly processing driver</li>
+<li><a href="code-pages/mur-sst/CompMURmon.html">CompMURmon.py</a> — monthly SST composite</li>
+<li><a href="code-pages/mur-sst/CompMurAnomMon.html">CompMurAnomMon.py</a> — monthly anomaly composite</li>
+</ul>
+</div>
+
+<div class="file-card">
+<h3 class="anchored">Shared utilities</h3>
+<p>Workflow-specific configuration loading and GCS publishing helpers.</p>
+<ul>
+<li><a href="code-pages/mur-sst/roylib.html">roylib.py</a> — shared utility library</li>
 </ul>
 </div>
 

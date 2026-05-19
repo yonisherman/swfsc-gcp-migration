@@ -1,11 +1,19 @@
 #!/usr/bin/env python3
 """
-updateMURanom1dayCron.py (Integrated Container Version)
+Compute and publish one daily MUR v4.1 SST anomaly file.
 
-Description:
-- Processes a SINGLE MUR SST file passed as sys.argv[1].
-- Computes anomaly: analysed_sst - daily climatology mean_sst.
-- Overwrites any existing anomaly in GCS (Standard for NRT -> Final updates).
+This script is called by the MUR v4.1 daily Cloud Run workflow after a daily
+MUR SST file has been downloaded locally. It computes the daily anomaly as the
+MUR `analysed_sst` variable minus the matching daily climatology `mean_sst`,
+writes the result into the configured anomaly NetCDF template, and uploads the
+output to the production GCS destination defined in config.yml.
+
+The script processes the data in latitude blocks to keep memory use bounded in
+Cloud Run. Leap-year day 366 is mapped to climatology day 365.
+
+Usage
+-----
+python MURanom1day.py /tmp/path/to/YYYYMMDD...MUR...nc
 """
 
 import os

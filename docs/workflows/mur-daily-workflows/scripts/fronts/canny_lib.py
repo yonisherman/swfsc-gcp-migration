@@ -1,15 +1,14 @@
 """
-Unified Canny fronts library (WC + ATL) with shared helpers in one file.
+Shared MUR SST fronts utilities for Cloud Run processing.
 
-Goal: keep original flow + logic while removing duplication.
-- WC region behavior: uses legacy Canny1.canny1()
-- ATL region behavior: uses legacy Canny2.canny2() gradients + skimage.feature.canny edges
+This module keeps the legacy MUR fronts processing logic available in a single
+Cloud Run-safe location. It provides helpers to extract regional MUR SST grids,
+run West Coast and Atlantic Canny edge detection, convert contours to edge
+rasters, apply legacy smoothing filters, and create the NetCDF container used by
+ERDDAP-facing fronts products.
 
-GCP note:
-- The old hard-coded file_base ("/u00/satellite/...") is NOT assumed anymore.
-- extract_mur() accepts either:
-    * a full path (recommended), OR
-    * (file_name + file_base) for legacy compatibility.
+The original hard-coded on-prem file base is not required. Callers should pass a
+full local MUR file path when running in Cloud Run.
 """
 
 from __future__ import annotations
@@ -32,6 +31,7 @@ from netCDF4 import Dataset
 # Legacy helpers (shared)
 # -----------------------------------------------------------------------------
 def isleap(year: int) -> bool:
+    """Return True when year is a Gregorian leap year."""
     from datetime import date
     try:
         date(year, 2, 29)
@@ -91,12 +91,18 @@ def extract_mur(
 
 
 def my_contours(edges):
+    """Extract OpenCV contours from a binary edge raster."""
     edge_image = edges.astype(np.uint8)
     contours, hierarchy = cv2.findContours(edge_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     return contours
 
 
 def contours_to_edges(contours, edge_shape, min_len: int = 20):
+    """Convert OpenCV contours into a binary edge raster.
+
+    Contours shorter than min_len points are ignored to preserve the legacy fronts
+    filtering behavior.
+    """
     num_contours = len(contours)
     contour_lens = []
     contour_edges = np.zeros(edge_shape)
@@ -116,6 +122,7 @@ def contours_to_edges(contours, edge_shape, min_len: int = 20):
 
 
 def filt5(lon, lat, ingrid):
+    """Apply the legacy 5-point neighborhood fill/filter to a masked grid."""
     l1 = lat.shape[0]
     l2 = lon.shape[0]
     outgrid = np.zeros((l1, l2), np.int32)
@@ -138,6 +145,7 @@ def filt5(lon, lat, ingrid):
 
 
 def filt35(lon, lat, ingrid, grid5):
+    """Apply the legacy wider-neighborhood fill/filter to a masked grid."""
     l1 = lat.shape[0]
     l2 = lon.shape[0]
     outgrid = np.zeros((l1, l2))
@@ -173,6 +181,12 @@ def create_canny_nc(
     lon_min: float = -135.0,
     lon_max: float = -105.0,
 ):
+    """Create an empty MUR fronts NetCDF file for the requested date and region.
+
+    The returned file path points to a NetCDF file containing the coordinate axes,
+    fronts variables, gradient variables, and metadata expected by the legacy MUR
+    fronts products.
+    """
     from netCDF4 import Dataset  # local import preserved (legacy style)
     import numpy as np  # local import preserved
     import numpy.ma as ma  # local import preserved
@@ -325,6 +339,7 @@ def create_canny_nc(
 # -----------------------------------------------------------------------------
 def myCanny_WC(myData, myMask, sigma=10.0, lower=0.8, upper=0.9, use_quantiles=True):
     # WC: edges + gradients from Canny1.canny1
+    """Run the West Coast Canny fronts implementation and return edges and gradients."""
     from Canny1 import canny1  # local import to preserve region package differences
 
     edges, x_gradient, y_gradient, magnitude = canny1(
@@ -343,6 +358,7 @@ def myCanny_WC(myData, myMask, sigma=10.0, lower=0.8, upper=0.9, use_quantiles=T
 
 def myCanny_ATL(myData, myMask, sigma=10.0, lower=0.8, upper=0.9, use_quantiles=True):
     # ATL: gradients from Canny2.canny2, edges from skimage.feature.canny
+    """Run the Atlantic Canny fronts implementation and return edges and gradients."""
     from Canny2 import canny2  # local import to preserve region package differences
     from skimage.feature import canny
 

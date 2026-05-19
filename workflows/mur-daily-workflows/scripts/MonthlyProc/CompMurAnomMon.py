@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 """
-CompMurAnomMon.py  -  Monthly MUR41 SST Anomaly Composite (Cloud Run / GCS-native)
+Build and publish a monthly MUR v4.1 SST anomaly composite.
 
-Usage:
-    python CompMurAnomMon.py <YEAR> <MONTH>
-Example:
-    python CompMurAnomMon.py 2026 01
+This script discovers daily MUR v4.1 anomaly files for a requested year and
+month from the production GCS archive, downloads them to a temporary Cloud Run
+workspace, computes a monthly mean anomaly field, writes the output using the
+configured monthly anomaly NetCDF template, and publishes the result with
+send_to_servers().
+
+The computation is performed in latitude blocks so the monthly aggregation can
+run within Cloud Run memory limits.
+
+Usage
+-----
+python CompMurAnomMon.py <YEAR> <MONTH>
+
+Example
+-------
+python CompMurAnomMon.py 2026 01
 """
 
 import sys
@@ -44,6 +56,7 @@ def _discover_daily_anom_blobs(bucket, prefix: str, yyyymm: str) -> list:
 
 
 def _download_blob(args: tuple) -> Path:
+    """Download one GCS blob to a local destination path."""
     blob, dest = args
     blob.download_to_filename(str(dest))
     return dest
@@ -51,6 +64,7 @@ def _download_blob(args: tuple) -> Path:
 
 def _parallel_download(blobs: list, dl_dir: Path,
                        workers: int = DL_WORKERS) -> list[Path]:
+    """Download a sorted list of daily anomaly blobs into a local directory in parallel."""
     print(f"[INFO] Downloading {len(blobs)} files (parallel, {workers} workers)...")
     args = [(blob, dl_dir / Path(blob.name).name) for blob in blobs]
 
@@ -68,6 +82,7 @@ def _parallel_download(blobs: list, dl_dir: Path,
 
 
 def main(comp_year: str, comp_month: str) -> None:
+    """Create and publish the monthly MUR anomaly composite for comp_year/comp_month."""
     prod_cfg = CFG["PUBLISH_TARGETS"]["prod"]
     prod_bucket_name = prod_cfg["bucket"]
     prod_root = prod_cfg["root"].strip("/")

@@ -1,8 +1,13 @@
-'''
-roylib.py (refactored for GCP)
-- Edits the workslow of ERD processing workflow to align with GCP migration
-- This script should live in /home/erd/src on the ERD VM
-'''
+"""
+Shared utility functions for ERD Cloud Run processing workflows.
+
+This module centralizes configuration loading, path expansion, Google Cloud
+Storage helpers, NASA OceanColor file-search utilities, NetCDF aggregation
+helpers, and publishing logic used by the MH1, MPOC, and MPIC workflows.
+
+Configuration is loaded from ROYLIB_CONFIG when provided, or from
+/app/config/config.yml inside the Cloud Run container.
+"""
 
 from __future__ import print_function
 from __future__ import division
@@ -30,7 +35,11 @@ _VAR = re.compile(r"\$\{([^}]+)\}")
 
 
 def _expand_once(value, cfg):
-    """Expand ${KEY} using env first, then cfg; also expand $HOME etc."""
+    """Expand ${KEY} placeholders using environment variables or config values.
+
+    Environment variables take precedence over keys in cfg. Shell-style
+    variables such as $HOME and user paths such as ~ are also expanded.
+    """
     if not isinstance(value, str):
         return value
 
@@ -53,7 +62,7 @@ def _expand_once(value, cfg):
 
 
 def _expand_tree(obj, cfg):
-    """Recursively expand strings within dicts/lists using current cfg."""
+    """Recursively expand strings contained in dictionaries and lists."""
     if isinstance(obj, dict):
         return {k: _expand_tree(_expand_once(v, cfg), cfg) for k, v in obj.items()}
     if isinstance(obj, list):
@@ -102,6 +111,12 @@ def _inject_dirs(cfg: dict) -> dict:
 
 
 def load_cfg(path: str):
+    """Load a YAML configuration file and resolve path-style variables.
+
+    The loader supports ${KEY} references to other config values or environment
+    variables, expands shell-style variables, and injects absolute paths for
+    entries under HOME_DIR + DIRS.
+    """
     with open(path, "r") as f:
         raw = yaml.safe_load(f) or {}
 
@@ -126,7 +141,14 @@ def load_cfg(path: str):
 
 
 # Use env var ROYLIB_CONFIG or default path you prefer:
-CFG_PATH = os.environ.get("ROYLIB_CONFIG")
+# Use repo-local config by default, while still allowing ROYLIB_CONFIG to override it.
+CFG_PATH = os.environ.get("ROYLIB_CONFIG", "/app/config/config.yml")
+
+if not CFG_PATH:
+    raise RuntimeError(
+        "No configuration path set. Set ROYLIB_CONFIG or include /app/config/config.yml."
+    )
+
 CFG = load_cfg(CFG_PATH)
 
 
@@ -142,13 +164,13 @@ NCGEN_BIN = CFG.get("NCGEN_BIN", "/usr/bin/ncgen")
 
 def list_bucket_content(bucket_name: str, dir_path: str) -> List[str]:
     """
-    Returns a list containing only the base filenames (e.g., 'file.txt' instead of 
+    Returns a list containing only the base filenames (e.g., 'file.txt' instead of
     'folder/file.txt') within a GCS bucket directory.
 
     :param bucket_name: The name of the GCS bucket (e.g. CFG.get("ERDPROD_BUCKET") ).
     :param dir_path: The directory or prefix (e.g., "ERDprod/satellite/MH1_NRT/chla/1day") to search within.
     :return: A list of base filenames (strings).
-    
+
     You must have the 'google-cloud-storage'
 
     Edited by
@@ -156,7 +178,7 @@ def list_bucket_content(bucket_name: str, dir_path: str) -> List[str]:
     Jonathan Sherman — 10/10/2025
     """
     storage_client = storage.Client()
-    
+
     # Ensure the path ends with a slash to act as a proper prefix filter
     prefix = dir_path
     if prefix and not prefix.endswith('/'):
@@ -170,23 +192,23 @@ def list_bucket_content(bucket_name: str, dir_path: str) -> List[str]:
         # 1. Skip the directory key itself if it exists as a separate object
         if blob.name == prefix:
             continue
-            
+
         # 2. Extract the base filename using os.path.basename
         basename = os.path.basename(blob.name)
         file_basenames.append(basename)
-            
+
     return file_basenames
 
 
 
 def get_nasa_l2_flist(day: datetime, param: str) -> list[str]:
     """
-    refactor of roylib lecgcy url_lines1 fucntion
+    refactor of roylib lecgcy url_lines1 function
     Query NASA OceanColor `file_search/` for MODIS-Aqua L2 filenames over a time window.
-    
+
     The function takes a Python datetime object (`day`), automatically builds
-    the start (`sdate`) and end (`edate`) strings needed for file serach
-    
+    the start (`sdate`) and end (`edate`) strings needed for file search
+
     This version performs a single HTTP POST (form-encoded) to the
     `https://oceandata.sci.gsfc.nasa.gov/file_search/` endpoint, passing a time-bounded
     window (`sdate`, `edate`) and a product selector via `dtid` derived from `param`.
@@ -196,7 +218,7 @@ def get_nasa_l2_flist(day: datetime, param: str) -> list[str]:
     day : datetime.datetime
         Target date for the query. The function will search from 00:00:00 to 23:59:59 UTC.
     param : str, optional
-        MODIS data parameter to query (e.g., "OC" or "SST"). mapped to dtid_map interanlly 
+        MODIS data parameter to query (e.g., "OC" or "SST"). mapped to dtid_map internally
         See https://oceandata.sci.gsfc.nasa.gov/file_search/file_search_help/ for dtid list.
 
     Returns
@@ -221,12 +243,12 @@ def get_nasa_l2_flist(day: datetime, param: str) -> list[str]:
       • Removes the 24-try retry loop and relies on a single request with a 30 s timeout.
         If you still want retries, wrap this function at the call site.
       • Adds a minimal log of the HTTP method, endpoint, and encoded payload.
-    
+
     Edited by
     ----------
     Jonathan Sherman — 10/23/2025
     """
-    
+
     # Map product family to dataset id (verify values against OceanColor docs as needed).
     dtid_map = {
         "OC": 1053,
@@ -501,10 +523,10 @@ def retrieve_new_files(l2_bucket: str, l2_prefix: str, param: str, day) -> bool:
 #     covering the full UTC day (00:00:00–23:59:59), retrieves the list of matching MODIS-Aqua
 #     L2 filenames via `get_nasa_l2_flist`, and verifies that each file exists locally under
 #     a date-partitioned directory structure:
-    
+
 #         <data_root>/<YYYY>/<DDD>/<param>/
 
-#     where `<DDD>` is the Julian day-of-year (001–366).  
+#     where `<DDD>` is the Julian day-of-year (001–366).
 #     For example:
 #         /ERDwork/modisa/data/netcdf/2025/001/OC/ (for OC data from Jan 1st 2025)
 
@@ -556,7 +578,7 @@ def retrieve_new_files(l2_bucket: str, l2_prefix: str, param: str, day) -> bool:
 
 #     # Target dir: YYYY/DDD/<param>
 #     yyyy = day.strftime("%Y")
-#     doy  = day.strftime("%j") 
+#     doy  = day.strftime("%j")
 #     target_dir = data_root / yyyy / doy / param
 #     target_dir.mkdir(parents=True, exist_ok=True)
 #     print(f"Target directory: {target_dir}")
@@ -717,8 +739,8 @@ def update_modis_1day(
     ----------
     Jonathan Sherman — 2025-10-24
     """
-    
-    
+
+
     python_bin = CFG["PYTHON_BIN"]
     script_dir = Path(CFG["HOME_DIR"].rstrip("/")) / "scripts" / "modisa"
 
@@ -878,13 +900,13 @@ def list_daily_blob_names(
             <rel_prefix>/<REGION>YYYYDOY_YYYYDOY_<dtype>.nc
 
         For daily products, the start and end DOY in the filename are equal.
-        
+
     Edited by
     ----------
     Jonathan Sherman — 2025-12-05: Added this helper function (originally embedded in the composite script) into roylib. Updates include generalizing the logic for cross
     region application (MW/MB) and improving clarity and reusability.
     """
-    
+
     blob_names = []
     region = region.upper()
     suffix = f"_{dtype}.nc"
@@ -949,10 +971,10 @@ def meanVar(mean, num, obs):
     None
         Shape mismatches or invalid operations will propagate NumPy errors.
 
-    
+
     Edited by
     ----------
-    Jonathan Sherman — 2025-12-02: changd fucntion to use Dale's meanVar version (update_mean as Dale defines it)
+    Jonathan Sherman — 2025-12-02: changd function to use Dale's meanVar version (update_mean as Dale defines it)
     """
     # Valid (unmasked) entries
     mask = ~ma.getmaskarray(obs)
@@ -965,7 +987,7 @@ def meanVar(mean, num, obs):
     mean[mask] += (obs[mask] - mean[mask]) / num_float
 
     return mean, num
-    
+
 # def meanVar(mean, num, obs):
 #     """
 #     Update the running mean and count of observations with new data.
@@ -1134,7 +1156,7 @@ def makeNetcdf(mean, nobs, interval, outFile, filesUsed, workDir):
     RuntimeError
         If the `ncgen` command returns a non-zero exit code.
 
-        
+
     Edited by
     ----------
     Jonathan Sherman — 2025-12-02: Refactored to remove directory-changing side effects, use pathlib for file handling, fix the undefined return value, and streamline
@@ -1144,11 +1166,11 @@ def makeNetcdf(mean, nobs, interval, outFile, filesUsed, workDir):
     import subprocess
     from pathlib import Path
     from datetime import datetime, date, timedelta
-    
+
     import numpy as np
     import numpy.ma as ma
     from netCDF4 import Dataset, date2num
-    
+
     # Recompute nobs and percent coverage from the masked mean
     nobs = ma.count(mean)
     noMiss = ma.count_masked(mean)
@@ -1283,7 +1305,7 @@ def makeNetcdfmDay(mean, nobs, interval, outFile, filesUsed, workDir):
     Edited by
     ----------
     Jonathan Sherman — 2025-12-05: Refactored to match makeNetcdf
-    fucntion (pathlib, cfg-based ncgen/cdl paths, no chdir, clearer parsing)
+    function (pathlib, cfg-based ncgen/cdl paths, no chdir, clearer parsing)
     while preserving original monthly center-time logic and mDay templates.
     """
     import os
@@ -1434,7 +1456,7 @@ def grd2netcdf1(grdFile, fileOut, filesUsed, my_mask, fType):
     Edited by
     ----------
     Jonathan Sherman — 2025-10-24
-    
+
     """
     now = datetime.now()
     now1 = date(now.year, now.month, now.day)
@@ -1460,7 +1482,7 @@ def grd2netcdf1(grdFile, fileOut, filesUsed, my_mask, fType):
     nobs = int(ma.count(z_ma))
     noMiss = int(ma.count_masked(z_ma))
     percentCoverage = float(nobs) / float(nobs + noMiss) if (nobs + noMiss) > 0 else 0.0
-    
+
     '''
     REFACTOR!!!
     '''
@@ -1604,7 +1626,7 @@ def grd2netcdf1(grdFile, filesUsed, fType):
     print(ncFile)
 
 
-    
+
     # --- CDL and ncgen ---
     cdlFile = f"{CFG['CDL_DIR']}/{dataset}{param}{interval}Day.cdl"
     print(cdlFile)

@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 """
-Legacy-compatible fronts runner (uses cv2 contour logic).
+Generate one daily MUR SST fronts NetCDF file for a configured region.
 
-Unified setup:
-- Always imports: canny_lib.py
-- Region selection calls:
-    - WC  -> canny_lib.myCanny_WC
-    - ATL -> canny_lib.myCanny_ATL
+The daily MUR v4.1 workflow calls this script after downloading a local MUR SST
+file. The script extracts a regional SST subset, runs the region-specific Canny
+front detector, converts edge contours to the legacy fronts representation, and
+writes the resulting frontal edges and SST gradients to a NetCDF file.
 
-Caller provides a LOCAL MUR file path that was just downloaded by the MUR loop.
+Supported regions are:
+- WC: U.S. West Coast bounding box, using canny_lib.myCanny_WC()
+- ATL: U.S. Atlantic bounding box, using canny_lib.myCanny_ATL()
 
-Usage:
-  python3 /app/scripts/fronts/calc_mur_fronts_from_file_legacy.py \
-    --src /tmp/mur_sync_YYYYMMDD/<murfile>.nc \
-    --region WC \
-    --out /tmp/mur_sync_YYYYMMDD/Canny_Front_YYYYMMDD.nc \
-    --day YYYY-MM-DD
+Usage
+-----
+python calc_mur_fronts.py   --src /tmp/mur_sync_YYYYMMDD/<murfile>.nc   --region WC   --out /tmp/mur_sync_YYYYMMDD/Canny_Front_YYYYMMDD.nc   --day YYYY-MM-DD
 """
 
 from __future__ import annotations
@@ -36,6 +34,7 @@ ATL_BBOX = dict(lat_min=20.0, lat_max=50.0, lon_min=-90.0, lon_max=-60.0)
 
 
 def main():
+    """Parse command-line arguments, run the selected fronts workflow, and write NetCDF output."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--src", required=True, help="Local MUR41 .nc path (downloaded file)")
     ap.add_argument("--region", required=True, choices=["WC", "ATL"])

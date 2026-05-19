@@ -226,5 +226,8 @@
   },
   "gcp-setup.qmd": {
     "gcp-setup.html": "ebf64de2"
+  },
+  "code-pages/mur-sst/roylib.qmd": {
+    "roylib.html": "017e71f5"
   }
 }

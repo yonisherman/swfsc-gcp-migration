@@ -150,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Project Overview</span></a>
+  <a href="../../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">SWFSC ERDDAP Cloud Migration</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -517,6 +517,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <a href="../../code-pages/mur-sst/requirements.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">requirements.txt</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../code-pages/mur-sst/roylib.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">roylib.py</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -608,200 +613,221 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-shell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python3</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">CompMURmon.py  -  Monthly MUR41 SST Composite (Cloud Run / GCS-native)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">Build and publish a monthly MUR v4.1 SST composite.</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">Usage:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">    python CompMURmon.py &lt;YEAR&gt; &lt;MONTH&gt;</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">Example:</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    python CompMURmon.py 2026 01</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">This script discovers daily MUR v4.1 SST files for a requested year and month</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">from the production GCS archive, downloads them to a temporary Cloud Run</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">workspace, computes a monthly mean SST composite, writes the output using the</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">configured monthly SST NetCDF template, and publishes the result with</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">send_to_servers().</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tempfile</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ThreadPoolExecutor, as_completed</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, date</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> calendar <span class="im">import</span> monthrange</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy.ma <span class="im">as</span> ma</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> netCDF4 <span class="im">import</span> Dataset, date2num</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> storage</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, <span class="st">"/app/src"</span>)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> roylib <span class="im">import</span> CFG, send_to_servers</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>TEMPLATE_FILE <span class="op">=</span> Path(<span class="st">"/app/templates/murSSTmday.nc"</span>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>LAT_BLOCK <span class="op">=</span> <span class="dv">1023</span>   <span class="co"># matches MUR template chunk size</span></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>DL_WORKERS <span class="op">=</span> <span class="dv">8</span>     <span class="co"># parallel download threads</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">The computation is performed in latitude blocks so the monthly aggregation can</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">run within Cloud Run memory limits.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">Usage</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">-----</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">python CompMURmon.py &lt;YEAR&gt; &lt;MONTH&gt;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">Example</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">-------</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">python CompMURmon.py 2026 01</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> logging</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tempfile</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ThreadPoolExecutor, as_completed</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime, date</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> calendar <span class="im">import</span> monthrange</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _setup_logging(log_path: Path) <span class="op">-&gt;</span> logging.Logger:</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    log_path.parent.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    logging.basicConfig(</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>        level<span class="op">=</span>logging.INFO,</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>        <span class="bu">format</span><span class="op">=</span><span class="st">"[</span><span class="sc">%(asctime)s</span><span class="st">] [</span><span class="sc">%(levelname)s</span><span class="st">] </span><span class="sc">%(message)s</span><span class="st">"</span>,</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>        datefmt<span class="op">=</span><span class="st">"%Y-%m-</span><span class="sc">%d</span><span class="st"> %H:%M:%S"</span>,</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>        handlers<span class="op">=</span>[logging.FileHandler(log_path), logging.StreamHandler(sys.stdout)],</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> logging.getLogger()</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy.ma <span class="im">as</span> ma</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> netCDF4 <span class="im">import</span> Dataset, date2num</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> google.cloud <span class="im">import</span> storage</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, <span class="st">"/app/src"</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> roylib <span class="im">import</span> CFG, send_to_servers</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>TEMPLATE_FILE <span class="op">=</span> Path(<span class="st">"/app/templates/murSSTmday.nc"</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>LAT_BLOCK <span class="op">=</span> <span class="dv">1023</span>   <span class="co"># matches MUR template chunk size</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>DL_WORKERS <span class="op">=</span> <span class="dv">8</span>     <span class="co"># parallel download threads</span></span>
 <span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _discover_daily_blobs(bucket, prod_root: <span class="bu">str</span>, prod_dst_dir: <span class="bu">str</span>,</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>                          interval_dir: <span class="bu">str</span>, yyyymm: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    prefix <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>prod_root<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>prod_dst_dir<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>interval_dir<span class="sc">}</span><span class="ss">/"</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    blobs <span class="op">=</span> [</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>        b <span class="cf">for</span> b <span class="kw">in</span> bucket.list_blobs(prefix<span class="op">=</span>prefix)</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> Path(b.name).name.startswith(yyyymm) <span class="kw">and</span> b.name.endswith(<span class="st">".nc"</span>)</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    blobs.sort(key<span class="op">=</span><span class="kw">lambda</span> b: b.name)</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> blobs</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _download_blob(args: <span class="bu">tuple</span>) <span class="op">-&gt;</span> Path:</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    blob, dest <span class="op">=</span> args</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    blob.download_to_filename(<span class="bu">str</span>(dest))</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dest</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _setup_logging(log_path: Path) <span class="op">-&gt;</span> logging.Logger:</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Configure file and stdout logging for a monthly SST run."""</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    log_path.parent.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    logging.basicConfig(</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>        level<span class="op">=</span>logging.INFO,</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>        <span class="bu">format</span><span class="op">=</span><span class="st">"[</span><span class="sc">%(asctime)s</span><span class="st">] [</span><span class="sc">%(levelname)s</span><span class="st">] </span><span class="sc">%(message)s</span><span class="st">"</span>,</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>        datefmt<span class="op">=</span><span class="st">"%Y-%m-</span><span class="sc">%d</span><span class="st"> %H:%M:%S"</span>,</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>        handlers<span class="op">=</span>[logging.FileHandler(log_path), logging.StreamHandler(sys.stdout)],</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> logging.getLogger()</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _discover_daily_blobs(bucket, prod_root: <span class="bu">str</span>, prod_dst_dir: <span class="bu">str</span>,</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>                          interval_dir: <span class="bu">str</span>, yyyymm: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">list</span>:</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Return daily MUR SST blobs for the requested YYYYMM month.</span></span>
 <span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _parallel_download(blobs: <span class="bu">list</span>, dl_dir: Path, log: logging.Logger,</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>                       workers: <span class="bu">int</span> <span class="op">=</span> DL_WORKERS) <span class="op">-&gt;</span> <span class="bu">list</span>[Path]:</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"Downloading </span><span class="sc">{</span><span class="bu">len</span>(blobs)<span class="sc">}</span><span class="ss"> files (parallel, </span><span class="sc">{</span>workers<span class="sc">}</span><span class="ss"> workers)..."</span>)</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> [(blob, dl_dir <span class="op">/</span> Path(blob.name).name) <span class="cf">for</span> blob <span class="kw">in</span> blobs]</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    local_files <span class="op">=</span> [<span class="va">None</span>] <span class="op">*</span> <span class="bu">len</span>(args)</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPoolExecutor(max_workers<span class="op">=</span>workers) <span class="im">as</span> executor:</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>        future_to_idx <span class="op">=</span> {executor.submit(_download_blob, arg): i</span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>                         <span class="cf">for</span> i, arg <span class="kw">in</span> <span class="bu">enumerate</span>(args)}</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> future <span class="kw">in</span> as_completed(future_to_idx):</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>            idx <span class="op">=</span> future_to_idx[future]</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>            path <span class="op">=</span> future.result()</span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>            local_files[idx] <span class="op">=</span> path</span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>            log.info(<span class="ss">f"  Downloaded: </span><span class="sc">{</span>path<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    <span class="co"># local_files preserves blob order (same order as blobs list)</span></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> local_files</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co">    The search is limited to the configured production prefix and returns matching</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="co">    NetCDF objects sorted by object name.</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    prefix <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>prod_root<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>prod_dst_dir<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>interval_dir<span class="sc">}</span><span class="ss">/"</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    blobs <span class="op">=</span> [</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>        b <span class="cf">for</span> b <span class="kw">in</span> bucket.list_blobs(prefix<span class="op">=</span>prefix)</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> Path(b.name).name.startswith(yyyymm) <span class="kw">and</span> b.name.endswith(<span class="st">".nc"</span>)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    blobs.sort(key<span class="op">=</span><span class="kw">lambda</span> b: b.name)</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> blobs</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _download_blob(args: <span class="bu">tuple</span>) <span class="op">-&gt;</span> Path:</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Download one GCS blob to a local destination path."""</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    blob, dest <span class="op">=</span> args</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    blob.download_to_filename(<span class="bu">str</span>(dest))</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dest</span>
 <span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(comp_year: <span class="bu">str</span>, comp_month: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    ds_key <span class="op">=</span> <span class="st">"MUR41"</span></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    ds_cfg <span class="op">=</span> CFG[ds_key]</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    prod_cfg <span class="op">=</span> CFG[<span class="st">"PUBLISH_TARGETS"</span>][<span class="st">"prod"</span>]</span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    prod_bucket_name <span class="op">=</span> prod_cfg[<span class="st">"bucket"</span>]</span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    prod_root <span class="op">=</span> prod_cfg[<span class="st">"root"</span>].strip(<span class="st">"/"</span>)</span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>    interval_fmt <span class="op">=</span> prod_cfg.get(<span class="st">"interval_fmt"</span>, <span class="st">"</span><span class="sc">{interval}</span><span class="st">day"</span>)</span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>    interval_1day <span class="op">=</span> <span class="bu">str</span>(ds_cfg.get(<span class="st">"interval"</span>, <span class="st">"1"</span>))</span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>    prod_dst_dir <span class="op">=</span> ds_cfg[<span class="st">"prod_dst_dir"</span>].strip(<span class="st">"/"</span>)</span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>    interval_dir <span class="op">=</span> interval_fmt.<span class="bu">format</span>(interval<span class="op">=</span>interval_1day)  <span class="co"># "1day"</span></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>    log_dir <span class="op">=</span> Path(<span class="st">"/tmp/logs"</span>)</span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>    log <span class="op">=</span> _setup_logging(log_dir <span class="op">/</span> <span class="ss">f"mur41_mday_</span><span class="sc">{</span>comp_year<span class="sc">}{</span>comp_month<span class="sc">}</span><span class="ss">.log"</span>)</span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"--- MUR41 monthly SST composite: </span><span class="sc">{</span>comp_year<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>comp_month<span class="sc">}</span><span class="ss"> ---"</span>)</span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"Template: </span><span class="sc">{</span>TEMPLATE_FILE<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> TEMPLATE_FILE.exists():</span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Template not found: </span><span class="sc">{</span>TEMPLATE_FILE<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _parallel_download(blobs: <span class="bu">list</span>, dl_dir: Path, log: logging.Logger,</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>                       workers: <span class="bu">int</span> <span class="op">=</span> DL_WORKERS) <span class="op">-&gt;</span> <span class="bu">list</span>[Path]:</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Download a sorted list of daily blobs into a local directory in parallel."""</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"Downloading </span><span class="sc">{</span><span class="bu">len</span>(blobs)<span class="sc">}</span><span class="ss"> files (parallel, </span><span class="sc">{</span>workers<span class="sc">}</span><span class="ss"> workers)..."</span>)</span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> [(blob, dl_dir <span class="op">/</span> Path(blob.name).name) <span class="cf">for</span> blob <span class="kw">in</span> blobs]</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    local_files <span class="op">=</span> [<span class="va">None</span>] <span class="op">*</span> <span class="bu">len</span>(args)</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPoolExecutor(max_workers<span class="op">=</span>workers) <span class="im">as</span> executor:</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>        future_to_idx <span class="op">=</span> {executor.submit(_download_blob, arg): i</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>                         <span class="cf">for</span> i, arg <span class="kw">in</span> <span class="bu">enumerate</span>(args)}</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> future <span class="kw">in</span> as_completed(future_to_idx):</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>            idx <span class="op">=</span> future_to_idx[future]</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>            path <span class="op">=</span> future.result()</span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>            local_files[idx] <span class="op">=</span> path</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>            log.info(<span class="ss">f"  Downloaded: </span><span class="sc">{</span>path<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>    <span class="co"># local_files preserves blob order (same order as blobs list)</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> local_files</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>    yyyymm <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>comp_year<span class="sc">}{</span>comp_month<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>    storage_client <span class="op">=</span> storage.Client()</span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>    bucket <span class="op">=</span> storage_client.bucket(prod_bucket_name)</span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>    blobs <span class="op">=</span> _discover_daily_blobs(bucket, prod_root, prod_dst_dir, interval_dir, yyyymm)</span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> blobs:</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>        log.warning(<span class="ss">f"No daily SST files found for </span><span class="sc">{</span>yyyymm<span class="sc">}</span><span class="ss"> in GCS. Exiting."</span>)</span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"Found </span><span class="sc">{</span><span class="bu">len</span>(blobs)<span class="sc">}</span><span class="ss"> daily blobs"</span>)</span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"First: </span><span class="sc">{</span>Path(blobs[<span class="dv">0</span>].name)<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"Last : </span><span class="sc">{</span>Path(blobs[<span class="op">-</span><span class="dv">1</span>].name)<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(comp_year: <span class="bu">str</span>, comp_month: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Create and publish the monthly MUR SST composite for comp_year/comp_month."""</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>    ds_key <span class="op">=</span> <span class="st">"MUR41"</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>    ds_cfg <span class="op">=</span> CFG[ds_key]</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>    prod_cfg <span class="op">=</span> CFG[<span class="st">"PUBLISH_TARGETS"</span>][<span class="st">"prod"</span>]</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>    prod_bucket_name <span class="op">=</span> prod_cfg[<span class="st">"bucket"</span>]</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>    prod_root <span class="op">=</span> prod_cfg[<span class="st">"root"</span>].strip(<span class="st">"/"</span>)</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>    interval_fmt <span class="op">=</span> prod_cfg.get(<span class="st">"interval_fmt"</span>, <span class="st">"</span><span class="sc">{interval}</span><span class="st">day"</span>)</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>    interval_1day <span class="op">=</span> <span class="bu">str</span>(ds_cfg.get(<span class="st">"interval"</span>, <span class="st">"1"</span>))</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>    prod_dst_dir <span class="op">=</span> ds_cfg[<span class="st">"prod_dst_dir"</span>].strip(<span class="st">"/"</span>)</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>    interval_dir <span class="op">=</span> interval_fmt.<span class="bu">format</span>(interval<span class="op">=</span>interval_1day)  <span class="co"># "1day"</span></span>
 <span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>    month_end <span class="op">=</span> monthrange(<span class="bu">int</span>(comp_year), <span class="bu">int</span>(comp_month))[<span class="dv">1</span>]</span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>    out_name <span class="op">=</span> (</span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>comp_year<span class="sc">}{</span>comp_month<span class="sc">}</span><span class="ss">01"</span></span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>comp_year<span class="sc">}{</span>comp_month<span class="sc">}{</span><span class="bu">str</span>(month_end)<span class="sc">.</span>zfill(<span class="dv">2</span>)<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"-GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"</span></span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> tempfile.TemporaryDirectory(<span class="bu">dir</span><span class="op">=</span><span class="st">"/tmp"</span>, prefix<span class="op">=</span><span class="ss">f"mur_mday_</span><span class="sc">{</span>yyyymm<span class="sc">}</span><span class="ss">_"</span>) <span class="im">as</span> tmp_root:</span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>        tmp_path <span class="op">=</span> Path(tmp_root)</span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>        dl_dir <span class="op">=</span> tmp_path <span class="op">/</span> <span class="st">"daily"</span></span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>        dl_dir.mkdir()</span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>        out_path <span class="op">=</span> tmp_path <span class="op">/</span> out_name</span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Parallel download ----</span></span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>        local_files <span class="op">=</span> _parallel_download(blobs, dl_dir, log)</span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>        log.info(<span class="st">"All downloads complete."</span>)</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>    log_dir <span class="op">=</span> Path(<span class="st">"/tmp/logs"</span>)</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>    log <span class="op">=</span> _setup_logging(log_dir <span class="op">/</span> <span class="ss">f"mur41_mday_</span><span class="sc">{</span>comp_year<span class="sc">}{</span>comp_month<span class="sc">}</span><span class="ss">.log"</span>)</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"--- MUR41 monthly SST composite: </span><span class="sc">{</span>comp_year<span class="sc">}</span><span class="ss">-</span><span class="sc">{</span>comp_month<span class="sc">}</span><span class="ss"> ---"</span>)</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"Template: </span><span class="sc">{</span>TEMPLATE_FILE<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> TEMPLATE_FILE.exists():</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Template not found: </span><span class="sc">{</span>TEMPLATE_FILE<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>    yyyymm <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>comp_year<span class="sc">}{</span>comp_month<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>    storage_client <span class="op">=</span> storage.Client()</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>    bucket <span class="op">=</span> storage_client.bucket(prod_bucket_name)</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>    blobs <span class="op">=</span> _discover_daily_blobs(bucket, prod_root, prod_dst_dir, interval_dir, yyyymm)</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> blobs:</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>        log.warning(<span class="ss">f"No daily SST files found for </span><span class="sc">{</span>yyyymm<span class="sc">}</span><span class="ss"> in GCS. Exiting."</span>)</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
 <span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Copy template ----</span></span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>        shutil.copyfile(<span class="bu">str</span>(TEMPLATE_FILE), <span class="bu">str</span>(out_path))</span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Write time + creation_date ----</span></span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>        mydate <span class="op">=</span> datetime(<span class="bu">int</span>(comp_year), <span class="bu">int</span>(comp_month), <span class="dv">16</span>)</span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>        cenTime <span class="op">=</span> date2num(mydate, units<span class="op">=</span><span class="st">"seconds since 1970-01-01T00:00:00Z"</span>)</span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> Dataset(<span class="bu">str</span>(out_path), <span class="st">"a"</span>) <span class="im">as</span> out_nc:</span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>            out_nc.variables[<span class="st">"time"</span>][<span class="dv">0</span>] <span class="op">=</span> cenTime</span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>            out_nc.creation_date <span class="op">=</span> <span class="bu">str</span>(date.today())</span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Stripe accumulation ----</span></span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>        log.info(<span class="ss">f"Accumulating stripes (LAT_BLOCK=</span><span class="sc">{</span>LAT_BLOCK<span class="sc">}</span><span class="ss">)..."</span>)</span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>        out_nc <span class="op">=</span> Dataset(<span class="bu">str</span>(out_path), <span class="st">"a"</span>)</span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>        out_sst <span class="op">=</span> out_nc.variables[<span class="st">"sst"</span>]</span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>        out_nobs <span class="op">=</span> out_nc.variables[<span class="st">"nobs"</span>]</span>
-<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>            nlat <span class="op">=</span> out_sst.shape[<span class="dv">1</span>]</span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>            nlon <span class="op">=</span> out_sst.shape[<span class="dv">2</span>]</span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>            log.info(<span class="ss">f"Grid: nlat=</span><span class="sc">{</span>nlat<span class="sc">}</span><span class="ss">, nlon=</span><span class="sc">{</span>nlon<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"Found </span><span class="sc">{</span><span class="bu">len</span>(blobs)<span class="sc">}</span><span class="ss"> daily blobs"</span>)</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"First: </span><span class="sc">{</span>Path(blobs[<span class="dv">0</span>].name)<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"Last : </span><span class="sc">{</span>Path(blobs[<span class="op">-</span><span class="dv">1</span>].name)<span class="sc">.</span>name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>    month_end <span class="op">=</span> monthrange(<span class="bu">int</span>(comp_year), <span class="bu">int</span>(comp_month))[<span class="dv">1</span>]</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>    out_name <span class="op">=</span> (</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>comp_year<span class="sc">}{</span>comp_month<span class="sc">}</span><span class="ss">01"</span></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>comp_year<span class="sc">}{</span>comp_month<span class="sc">}{</span><span class="bu">str</span>(month_end)<span class="sc">.</span>zfill(<span class="dv">2</span>)<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"-GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc"</span></span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> tempfile.TemporaryDirectory(<span class="bu">dir</span><span class="op">=</span><span class="st">"/tmp"</span>, prefix<span class="op">=</span><span class="ss">f"mur_mday_</span><span class="sc">{</span>yyyymm<span class="sc">}</span><span class="ss">_"</span>) <span class="im">as</span> tmp_root:</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>        tmp_path <span class="op">=</span> Path(tmp_root)</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>        dl_dir <span class="op">=</span> tmp_path <span class="op">/</span> <span class="st">"daily"</span></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>        dl_dir.mkdir()</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>        out_path <span class="op">=</span> tmp_path <span class="op">/</span> out_name</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Parallel download ----</span></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>        local_files <span class="op">=</span> _parallel_download(blobs, dl_dir, log)</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>        log.info(<span class="st">"All downloads complete."</span>)</span>
 <span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> lat0 <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, nlat, LAT_BLOCK):</span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>                lat1 <span class="op">=</span> <span class="bu">min</span>(lat0 <span class="op">+</span> LAT_BLOCK, nlat)</span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>                h <span class="op">=</span> lat1 <span class="op">-</span> lat0</span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>                log.info(<span class="ss">f"  Stripe lat[</span><span class="sc">{</span>lat0<span class="sc">}</span><span class="ss">:</span><span class="sc">{</span>lat1<span class="sc">}</span><span class="ss">]"</span>)</span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>                sum_blk <span class="op">=</span> np.zeros((h, nlon), dtype<span class="op">=</span>np.float32)</span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>                num_blk <span class="op">=</span> np.zeros((h, nlon), dtype<span class="op">=</span>np.int32)</span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> fpath <span class="kw">in</span> local_files:</span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">with</span> Dataset(<span class="bu">str</span>(fpath), <span class="st">"r"</span>) <span class="im">as</span> nc:</span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>                        obs <span class="op">=</span> nc.variables[<span class="st">"analysed_sst"</span>][<span class="dv">0</span>, lat0:lat1, :]</span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(obs, ma.MaskedArray):</span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>                        obs <span class="op">=</span> ma.array(obs)</span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>                    num_add <span class="op">=</span> np.ones((h, nlon), dtype<span class="op">=</span>np.int32)</span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>                    num_add[ma.getmaskarray(obs)] <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>                    num_blk <span class="op">+=</span> num_add</span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>                    sum_blk <span class="op">+=</span> obs.filled(<span class="fl">0.0</span>).astype(np.float32)</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>                mean_blk <span class="op">=</span> ma.array(sum_blk, mask<span class="op">=</span>(num_blk <span class="op">==</span> <span class="dv">0</span>), fill_value<span class="op">=-</span><span class="fl">999.0</span>)</span>
-<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>                denom <span class="op">=</span> ma.array(num_blk, mask<span class="op">=</span>(num_blk <span class="op">==</span> <span class="dv">0</span>)).astype(np.float32)</span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>                mean_blk <span class="op">=</span> (mean_blk <span class="op">/</span> denom) <span class="op">-</span> <span class="fl">273.15</span>  <span class="co"># K -&gt; C</span></span>
-<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>                out_sst[<span class="dv">0</span>, lat0:lat1, :] <span class="op">=</span> mean_blk.filled(<span class="op">-</span><span class="fl">999.0</span>).astype(np.float32)</span>
-<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>                out_nobs[<span class="dv">0</span>, lat0:lat1, :] <span class="op">=</span> num_blk.astype(np.int32)</span>
-<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>                <span class="kw">del</span> sum_blk, num_blk, mean_blk, denom</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Copy template ----</span></span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>        shutil.copyfile(<span class="bu">str</span>(TEMPLATE_FILE), <span class="bu">str</span>(out_path))</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Write time + creation_date ----</span></span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>        mydate <span class="op">=</span> datetime(<span class="bu">int</span>(comp_year), <span class="bu">int</span>(comp_month), <span class="dv">16</span>)</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>        cenTime <span class="op">=</span> date2num(mydate, units<span class="op">=</span><span class="st">"seconds since 1970-01-01T00:00:00Z"</span>)</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> Dataset(<span class="bu">str</span>(out_path), <span class="st">"a"</span>) <span class="im">as</span> out_nc:</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>            out_nc.variables[<span class="st">"time"</span>][<span class="dv">0</span>] <span class="op">=</span> cenTime</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>            out_nc.creation_date <span class="op">=</span> <span class="bu">str</span>(date.today())</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Stripe accumulation ----</span></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>        log.info(<span class="ss">f"Accumulating stripes (LAT_BLOCK=</span><span class="sc">{</span>LAT_BLOCK<span class="sc">}</span><span class="ss">)..."</span>)</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>        out_nc <span class="op">=</span> Dataset(<span class="bu">str</span>(out_path), <span class="st">"a"</span>)</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>        out_sst <span class="op">=</span> out_nc.variables[<span class="st">"sst"</span>]</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>        out_nobs <span class="op">=</span> out_nc.variables[<span class="st">"nobs"</span>]</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>            nlat <span class="op">=</span> out_sst.shape[<span class="dv">1</span>]</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>            nlon <span class="op">=</span> out_sst.shape[<span class="dv">2</span>]</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>            log.info(<span class="ss">f"Grid: nlat=</span><span class="sc">{</span>nlat<span class="sc">}</span><span class="ss">, nlon=</span><span class="sc">{</span>nlon<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> lat0 <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, nlat, LAT_BLOCK):</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>                lat1 <span class="op">=</span> <span class="bu">min</span>(lat0 <span class="op">+</span> LAT_BLOCK, nlat)</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>                h <span class="op">=</span> lat1 <span class="op">-</span> lat0</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>                log.info(<span class="ss">f"  Stripe lat[</span><span class="sc">{</span>lat0<span class="sc">}</span><span class="ss">:</span><span class="sc">{</span>lat1<span class="sc">}</span><span class="ss">]"</span>)</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>                sum_blk <span class="op">=</span> np.zeros((h, nlon), dtype<span class="op">=</span>np.float32)</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>                num_blk <span class="op">=</span> np.zeros((h, nlon), dtype<span class="op">=</span>np.int32)</span>
 <span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>        <span class="cf">finally</span>:</span>
-<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>            out_nc.close()</span>
-<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>        log.info(<span class="st">"Stripe accumulation complete."</span>)</span>
-<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Publish ----</span></span>
-<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>        send_to_servers(<span class="bu">str</span>(out_path), <span class="ss">f"/</span><span class="sc">{</span>prod_dst_dir<span class="sc">}</span><span class="ss">"</span>, <span class="st">"m"</span>)</span>
-<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>        log.info(<span class="ss">f"Published: </span><span class="sc">{</span>out_name<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"--- Complete: </span><span class="sc">{</span>out_name<span class="sc">}</span><span class="ss"> ---"</span>)</span>
-<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>                <span class="cf">for</span> fpath <span class="kw">in</span> local_files:</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">with</span> Dataset(<span class="bu">str</span>(fpath), <span class="st">"r"</span>) <span class="im">as</span> nc:</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>                        obs <span class="op">=</span> nc.variables[<span class="st">"analysed_sst"</span>][<span class="dv">0</span>, lat0:lat1, :]</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> <span class="kw">not</span> <span class="bu">isinstance</span>(obs, ma.MaskedArray):</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>                        obs <span class="op">=</span> ma.array(obs)</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>                    num_add <span class="op">=</span> np.ones((h, nlon), dtype<span class="op">=</span>np.int32)</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>                    num_add[ma.getmaskarray(obs)] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>                    num_blk <span class="op">+=</span> num_add</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>                    sum_blk <span class="op">+=</span> obs.filled(<span class="fl">0.0</span>).astype(np.float32)</span>
 <span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(sys.argv) <span class="op">!=</span> <span class="dv">3</span>:</span>
-<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Usage: python CompMURmon.py &lt;YEAR&gt; &lt;MONTH&gt;"</span>)</span>
-<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>        sys.exit(<span class="dv">2</span>)</span>
-<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>    main(<span class="bu">str</span>(sys.argv[<span class="dv">1</span>]), <span class="bu">str</span>(sys.argv[<span class="dv">2</span>]).zfill(<span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>                mean_blk <span class="op">=</span> ma.array(sum_blk, mask<span class="op">=</span>(num_blk <span class="op">==</span> <span class="dv">0</span>), fill_value<span class="op">=-</span><span class="fl">999.0</span>)</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>                denom <span class="op">=</span> ma.array(num_blk, mask<span class="op">=</span>(num_blk <span class="op">==</span> <span class="dv">0</span>)).astype(np.float32)</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>                mean_blk <span class="op">=</span> (mean_blk <span class="op">/</span> denom) <span class="op">-</span> <span class="fl">273.15</span>  <span class="co"># K -&gt; C</span></span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>                out_sst[<span class="dv">0</span>, lat0:lat1, :] <span class="op">=</span> mean_blk.filled(<span class="op">-</span><span class="fl">999.0</span>).astype(np.float32)</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>                out_nobs[<span class="dv">0</span>, lat0:lat1, :] <span class="op">=</span> num_blk.astype(np.int32)</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>                <span class="kw">del</span> sum_blk, num_blk, mean_blk, denom</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>        <span class="cf">finally</span>:</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>            out_nc.close()</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>        log.info(<span class="st">"Stripe accumulation complete."</span>)</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ---- Publish ----</span></span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>        send_to_servers(<span class="bu">str</span>(out_path), <span class="ss">f"/</span><span class="sc">{</span>prod_dst_dir<span class="sc">}</span><span class="ss">"</span>, <span class="st">"m"</span>)</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>        log.info(<span class="ss">f"Published: </span><span class="sc">{</span>out_name<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>    log.info(<span class="ss">f"--- Complete: </span><span class="sc">{</span>out_name<span class="sc">}</span><span class="ss"> ---"</span>)</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(sys.argv) <span class="op">!=</span> <span class="dv">3</span>:</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Usage: python CompMURmon.py &lt;YEAR&gt; &lt;MONTH&gt;"</span>)</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>        sys.exit(<span class="dv">2</span>)</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>    main(<span class="bu">str</span>(sys.argv[<span class="dv">1</span>]), <span class="bu">str</span>(sys.argv[<span class="dv">2</span>]).zfill(<span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 

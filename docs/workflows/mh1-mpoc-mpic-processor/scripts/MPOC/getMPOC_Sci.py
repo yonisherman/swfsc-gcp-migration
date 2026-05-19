@@ -1,15 +1,45 @@
 """
-Overview
---------
-This script automates the retrieval and distribution of Level-3 Science Quality (Standard) 
-MODIS-Aqua Particulate Organic Carbon (POC) products for 1-day, 8-day, and monthly 
-periods. It queries NASA for refined science products (dtid=1102) and publishes 
-to ``ERDprod/satellite/MPOC/<period>``.
+Retrieve and publish science-quality MODIS-Aqua particulate organic carbon.
+
+This script queries the NASA OceanColor file search API for MODIS-Aqua
+Level-3 mapped science-quality particulate organic carbon (POC) products,
+compares the returned filenames against files already staged in the production
+Google Cloud Storage (GCS) bucket, downloads only missing files to the Cloud
+Run container, publishes them with send_to_servers(), and removes local
+temporary files.
+
+Product
+-------
+- prod_id: poc
+- dataset family: MPOC
+
+Periods
+-------
+- DAY -> 1day
+- 8D  -> 8day
+- MO  -> mday
+
+NASA query settings
+-------------------
+- sensor_id: 7 (MODIS-Aqua)
+- dtid: 1102
+- resolution_id: 4km
+- stream: science quality / standard delayed
+
+Output
+------
+Files are published under the MPOC GCS path family, with period-specific
+subdirectories. Science-quality paths do not use the _NRT suffix.
+
+Runtime requirements
+--------------------
+- ROYLIB_CONFIG points to the runtime config.yml file.
+- Earthdata .netrc and URS cookies are available under /tmp.
+- The Cloud Run service account can read and write the configured GCS bucket.
 
 Usage
 -----
-::
-    python getMPOC_Sci.py
+python getMPOC_Sci.py
 """
 
 if __name__ == "__main__":

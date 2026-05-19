@@ -1,0 +1,125 @@
+# ============================================================
+# Configuration for the MUR SST Cloud Run workflow
+# ------------------------------------------------------------
+# This workflow retrieves and publishes MUR SST products used by
+# ERDDAP-facing datasets.
+#
+# Main processing streams:
+#  - MUR v4.1 daily SST
+#  - MUR v4.1 daily SST anomaly
+#  - MUR v4.1 monthly SST composite
+#  - MUR v4.1 monthly SST anomaly composite
+#  - MUR v4.1 frontal products
+#  - MUR v4.2 daily SST
+#
+# The Cloud Run container uses /tmp for local scratch space. Final
+# products are uploaded to the production GCS bucket configured below.
+# ============================================================
+
+# ------------------------------------------------------------
+# Local runtime directories
+# ------------------------------------------------------------
+# Cloud Run local disk is ephemeral. These paths are used only during
+# a single job execution.
+HOME_DIR: "/tmp"
+
+DIRS:
+  CDL_DIR: "templates"                  # NetCDF template files
+  LOG_DIR: "logs"                       # Runtime logs
+  LOCAL_STAGE_DIR: "data/staging"       # Downloads and temporary processing files
+  LOCAL_OUTPUT_DIR: "data/staging/out"  # Final local outputs before upload
+
+# ------------------------------------------------------------
+# Google Cloud Storage buckets
+# ------------------------------------------------------------
+# Bucket names only. Do not include the "gs://" prefix.
+ERDPROD_BUCKET: "YOUR_PRODUCTION_BUCKET"       # Production bucket served by ERDDAP
+ERDWORK_BUCKET: "YOUR_WORK_BUCKET"         # Work bucket used for auxiliary inputs
+
+# ------------------------------------------------------------
+# Production publishing target
+# ------------------------------------------------------------
+# Final products are published under:
+#
+#   gs://<prod_bucket>/<prod_root>/<prod_dst_dir>/<interval>day/<filename>
+#
+# The interval formatter is shared by the shell and Python scripts.
+# For example:
+#   interval = "1" -> "1day"
+#   interval = "m" -> "mday"
+PUBLISH_TARGETS:
+  prod:
+    bucket: "YOUR_PRODUCTION_BUCKET"
+    root: "satellite"
+    interval_fmt: "{interval}day"
+
+# ------------------------------------------------------------
+# Auxiliary MUR inputs
+# ------------------------------------------------------------
+# Full GCS URI for the MUR climatology files used by anomaly processing.
+MUR_CLIM_GCS_PREFIX: "gs://<bucket>/<prefix>"
+
+# ------------------------------------------------------------
+# MUR v4.1 daily SST
+# ------------------------------------------------------------
+MUR41:
+  collection: "MUR-JPL-L4-GLOB-v4.1"     # PO.DAAC collection short name
+  local_stage_subdir: "mur41"
+  prod_dst_dir: "MUR41/ssta"
+  interval: "1"
+
+# ------------------------------------------------------------
+# MUR v4.1 monthly SST composite
+# ------------------------------------------------------------
+MUR41_MDAY:
+  prod_dst_dir: "MUR41/ssta"
+  interval: "m"
+
+# ------------------------------------------------------------
+# MUR v4.1 daily SST anomaly
+# ------------------------------------------------------------
+MUR41_ANOM:
+  prod_dst_dir: "MUR41/anom"
+  interval: "1"
+
+# ------------------------------------------------------------
+# MUR v4.1 monthly SST anomaly composite
+# ------------------------------------------------------------
+MUR41_ANOM_MDAY:
+  prod_dst_dir: "MUR41/anom"
+  interval: "m"
+
+# ------------------------------------------------------------
+# MUR v4.1 fronts
+# ------------------------------------------------------------
+MUR41_FRONTS_WC:
+  local_stage_subdir: "mur41"
+  prod_dst_dir: "MUR41/erdMurFront41USWest"
+  interval: "1"
+
+MUR41_FRONTS_EC:
+  local_stage_subdir: "mur41"
+  prod_dst_dir: "MUR41/erdMurFront41USAtlantic"
+  interval: "1"
+
+# ------------------------------------------------------------
+# MUR v4.2 daily SST
+# ------------------------------------------------------------
+MUR42:
+  collection: "MUR25-JPL-L4-GLOB-v04.2"
+  local_stage_subdir: "mur42"
+  prod_dst_dir: "MUR42/ssta"
+  interval: "1"
+
+  # Optional ERDDAP flag endpoint for forcing a dataset reload after upload.
+  # Keep real flag keys out of source control. If this is needed operationally,
+  # inject the full URL at runtime through Secret Manager or an environment
+  # variable rather than committing it here.
+  flag_url: ""
+
+# ------------------------------------------------------------
+# External endpoints
+# ------------------------------------------------------------
+NASA_OCEANDATA_URL: "https://oceandata.sci.gsfc.nasa.gov"
+NASA_FILE_SEARCH_URL: "https://oceandata.sci.gsfc.nasa.gov/file_search"
+NASA_GETFILE_URL: "https://oceandata.sci.gsfc.nasa.gov/ob/getfile"

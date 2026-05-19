@@ -1,0 +1,18 @@
+---
+title: "roylib.py"
+toc: false
+page-layout: full
+number-sections: false
+---
+
+[← Back to workflow](../../mur-sst.html)
+
+Workflow-specific configuration and GCS publishing utilities for the MUR SST workflow.
+
+::: {.code-shell}
+
+```{.python}
+{{< include ../../workflows/mur-daily-workflows/src/roylib.py >}}
+```
+
+:::

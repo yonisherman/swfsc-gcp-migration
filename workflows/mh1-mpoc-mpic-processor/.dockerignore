@@ -1,11 +1,8 @@
-# Credentials (CRITICAL)
+# Credentials only
 .netrc
 .urs_cookies
 
-#config
-config/config.yml
-
-# Old Individual Scripts (Cleanup)
+# Old Individual Scripts
 scripts/MH1/original_scripts/
 scripts/MPIC/original_scripts/
 scripts/MPOC/original_scripts/

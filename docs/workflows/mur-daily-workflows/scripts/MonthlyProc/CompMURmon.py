@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
 """
-CompMURmon.py  -  Monthly MUR41 SST Composite (Cloud Run / GCS-native)
+Build and publish a monthly MUR v4.1 SST composite.
 
-Usage:
-    python CompMURmon.py <YEAR> <MONTH>
-Example:
-    python CompMURmon.py 2026 01
+This script discovers daily MUR v4.1 SST files for a requested year and month
+from the production GCS archive, downloads them to a temporary Cloud Run
+workspace, computes a monthly mean SST composite, writes the output using the
+configured monthly SST NetCDF template, and publishes the result with
+send_to_servers().
+
+The computation is performed in latitude blocks so the monthly aggregation can
+run within Cloud Run memory limits.
+
+Usage
+-----
+python CompMURmon.py <YEAR> <MONTH>
+
+Example
+-------
+python CompMURmon.py 2026 01
 """
 
 import sys
@@ -31,6 +43,7 @@ DL_WORKERS = 8     # parallel download threads
 
 
 def _setup_logging(log_path: Path) -> logging.Logger:
+    """Configure file and stdout logging for a monthly SST run."""
     log_path.parent.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(
         level=logging.INFO,
@@ -43,6 +56,11 @@ def _setup_logging(log_path: Path) -> logging.Logger:
 
 def _discover_daily_blobs(bucket, prod_root: str, prod_dst_dir: str,
                           interval_dir: str, yyyymm: str) -> list:
+    """Return daily MUR SST blobs for the requested YYYYMM month.
+
+    The search is limited to the configured production prefix and returns matching
+    NetCDF objects sorted by object name.
+    """
     prefix = f"{prod_root}/{prod_dst_dir}/{interval_dir}/"
     blobs = [
         b for b in bucket.list_blobs(prefix=prefix)
@@ -53,6 +71,7 @@ def _discover_daily_blobs(bucket, prod_root: str, prod_dst_dir: str,
 
 
 def _download_blob(args: tuple) -> Path:
+    """Download one GCS blob to a local destination path."""
     blob, dest = args
     blob.download_to_filename(str(dest))
     return dest
@@ -60,6 +79,7 @@ def _download_blob(args: tuple) -> Path:
 
 def _parallel_download(blobs: list, dl_dir: Path, log: logging.Logger,
                        workers: int = DL_WORKERS) -> list[Path]:
+    """Download a sorted list of daily blobs into a local directory in parallel."""
     log.info(f"Downloading {len(blobs)} files (parallel, {workers} workers)...")
     args = [(blob, dl_dir / Path(blob.name).name) for blob in blobs]
 
@@ -78,6 +98,7 @@ def _parallel_download(blobs: list, dl_dir: Path, log: logging.Logger,
 
 
 def main(comp_year: str, comp_month: str) -> None:
+    """Create and publish the monthly MUR SST composite for comp_year/comp_month."""
     ds_key = "MUR41"
     ds_cfg = CFG[ds_key]
 

@@ -1,4 +1,10 @@
 #!/bin/bash
+# Cloud Run entrypoint for the MH1 / MPOC / MPIC processor.
+#
+# The job prepares writable runtime directories, copies Earthdata credentials
+# from Secret Manager mounts into /tmp, then runs all near-real-time retrieval
+# suites followed by all science-quality retrieval suites.
+
 set -e # Exit immediately if a command fails
 
 # ---------------------------------------------------------

@@ -1,0 +1,25 @@
+# Configuration
+pyyaml==6.0
+
+# Data Processing (match thredds2 as close as possible)
+numpy==1.22.4
+scipy==1.9.1
+scikit-image==0.19.3
+netCDF4==1.6.3
+xarray==2022.6.0
+h5netcdf==1.1.0
+python-dateutil>=2.8
+
+# Canny/contours
+opencv-python-headless==4.7.0.72
+
+# NASA / PO.DAAC
+podaac-data-subscriber
+
+# Google Cloud & Filesystem
+google-cloud-storage==2.10.0
+gcsfs==2022.8.2
+fsspec==2022.8.2
+
+# Compatibility (Legacy support)
+future==0.18.3

@@ -1,4 +1,9 @@
 #!/bin/bash
+# Cloud Run entrypoint for the MUR daily workflows.
+#
+# Prepares writable /tmp runtime paths, stages Earthdata credentials from
+# Secret Manager mounts, selects the workflow from JOB_MODE, and runs the
+# matching daily or monthly processing driver.
 set -euo pipefail
 
 cd /app

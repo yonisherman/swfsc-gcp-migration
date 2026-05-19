@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# mur_v41_monthly_proc.sh  -  MUR41 Monthly Composite Runner
+# mur_v41_monthly_proc.sh  —  MUR41 Monthly Composite Runner
 #
 # Runs inside the same container as the daily jobs.
 # Triggered by JOB_MODE=mur41_monthly in entrypoint.sh.
