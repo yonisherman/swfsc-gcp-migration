@@ -1,5 +1,5 @@
 ---
-title: "Overview"
+title: "SWFSC ERDDAP Cloud Migration"
 ---
 
 This book documents the migration of NOAA CoastWatch West Coast Node / SWFSC ERDDAP services and associated data processing workflows to Google Cloud Platform (GCP). The documentation is intended to serve as a practical technical record of the cloud architecture, serving environment, reusable deployment patterns, and operational workflows developed during the migration.

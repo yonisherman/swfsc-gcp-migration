@@ -20,11 +20,41 @@
     ]
   },
   {
+    "objectID": "index.html#cloud-architecture",
+    "href": "index.html#cloud-architecture",
+    "title": "SWFSC ERDDAP Cloud Migration",
+    "section": "Cloud architecture",
+    "text": "Cloud architecture\nThe migration uses a combination of long-lived serving infrastructure, processing environments, and scheduled cloud-native jobs.\nAt the center of the system is a dedicated ERDDAP VM configured for high-performance data serving. The ERDDAP environment uses persistent storage for caches and working directories, rclone-mounted Google Cloud Storage buckets for dataset access, and a Tomcat-hosted ERDDAP instance for data distribution.\nOperational processing is handled through two main patterns. Processing VMs support interactive development, testing, validation, reprocessing, and heavier data-generation tasks. Cloud Run Jobs support containerized workflows that run on a schedule or on demand. Cloud Scheduler triggers recurring jobs, Artifact Registry stores workflow container images, and Secret Manager provides credentials and runtime secrets without storing them directly in code.\nAcross the system, reusable templates and consistent repository structures are used to make workflows easier to deploy, compare, and maintain.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+    ]
+  },
+  {
     "objectID": "index.html#workflow-modernization",
     "href": "index.html#workflow-modernization",
     "title": "SWFSC ERDDAP Cloud Migration",
     "section": "Workflow modernization",
     "text": "Workflow modernization\nMany of the workflows documented here began as long-running operational scripts developed over many years. As part of the migration, these workflows have been reorganized into more standardized, reproducible, and cloud-ready systems.\nThis modernization includes separating configuration from runtime logic, reducing machine-specific assumptions, containerizing processing code, standardizing deployment scripts, and documenting input/output paths, scheduling behavior, and ERDDAP integration. The intent is to preserve the underlying science and operational products while improving maintainability and transparency.\nFor the shared project structures and deployment patterns used across workflows, see the GCP Data Processing Templates chapter.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#project-sections",
+    "href": "index.html#project-sections",
+    "title": "SWFSC ERDDAP Cloud Migration",
+    "section": "Project sections",
+    "text": "Project sections\nThis book is organized into three main sections.\n\nCloud setup\nThe cloud setup chapters document the shared infrastructure, VM access patterns, ERDDAP serving environment, processing VM setup, migration/recovery notes, and reusable deployment templates.\n\nSetup Overview provides a high-level map of the setup documentation.\nCloud Infrastructure Setup documents Terraform-managed VMs, buckets, disks, IAM, and snapshot policies.\nAccessing VMs documents SSH, IAP tunneling, browser SSH, and port forwarding.\nERDDAP VM Setup documents the dedicated ERDDAP serving environment.\nProcessing VM Setup documents processing and development VM configuration.\nMigration, Upgrade, and Recovery documents snapshot and cleanup steps used during rebuilds or migrations.\nGCP Data Processing Templates describes the Cloud Run and processing VM template repositories used to standardize workflow structure across projects.\n\n\n\nWorkflows\nThe workflow chapters document individual operational pipelines migrated or adapted for cloud-based processing.\n\nMH1 / MPOC / MPIC Processor documents the Cloud Run workflow for retrieving and publishing MODIS-Aqua MH1 ocean color, MH1 SST, MPIC, and MPOC products.\nVIIRS Net Primary Productivity documents the daily and monthly VIIRS NetPP workflow for SNPP and NOAA-20.\nMUR SST documents the MUR SST, anomaly, frontal, and monthly-processing workflows.\nC-HARM documents the containerized C-HARM processing workflow.\n\n\n\nPresentations\nThe presentations section collects project update slides and status material used during the migration.\n\nPresentations and Project Updates provides access to the ERDDAP cloud migration presentation materials.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#status",
+    "href": "index.html#status",
+    "title": "SWFSC ERDDAP Cloud Migration",
+    "section": "Status",
+    "text": "Status\nThis documentation is a living technical record. It is intended to capture both the final cloud architecture and the practical operational details needed to maintain, troubleshoot, and extend the migrated workflows.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
     ]
@@ -1281,36 +1311,6 @@
     "crumbs": [
       "Code: viirs-netpp",
       "<span class='chapter-number'>76</span>  <span class='chapter-title'>requirements.txt</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#cloud-architecture",
-    "href": "index.html#cloud-architecture",
-    "title": "SWFSC ERDDAP Cloud Migration",
-    "section": "Cloud architecture",
-    "text": "Cloud architecture\nThe migration uses a combination of long-lived serving infrastructure, processing environments, and scheduled cloud-native jobs.\nAt the center of the system is a dedicated ERDDAP VM configured for high-performance data serving. The ERDDAP environment uses persistent storage for caches and working directories, rclone-mounted Google Cloud Storage buckets for dataset access, and a Tomcat-hosted ERDDAP instance for data distribution.\nOperational processing is handled through two main patterns. Processing VMs support interactive development, testing, validation, reprocessing, and heavier data-generation tasks. Cloud Run Jobs support containerized workflows that run on a schedule or on demand. Cloud Scheduler triggers recurring jobs, Artifact Registry stores workflow container images, and Secret Manager provides credentials and runtime secrets without storing them directly in code.\nAcross the system, reusable templates and consistent repository structures are used to make workflows easier to deploy, compare, and maintain.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#project-sections",
-    "href": "index.html#project-sections",
-    "title": "SWFSC ERDDAP Cloud Migration",
-    "section": "Project sections",
-    "text": "Project sections\nThis book is organized into three main sections.\n\nCloud setup\nThe cloud setup chapters document the shared infrastructure, VM access patterns, ERDDAP serving environment, processing VM setup, migration/recovery notes, and reusable deployment templates.\n\nSetup Overview provides a high-level map of the setup documentation.\nCloud Infrastructure Setup documents Terraform-managed VMs, buckets, disks, IAM, and snapshot policies.\nAccessing VMs documents SSH, IAP tunneling, browser SSH, and port forwarding.\nERDDAP VM Setup documents the dedicated ERDDAP serving environment.\nProcessing VM Setup documents processing and development VM configuration.\nMigration, Upgrade, and Recovery documents snapshot and cleanup steps used during rebuilds or migrations.\nGCP Data Processing Templates describes the Cloud Run and processing VM template repositories used to standardize workflow structure across projects.\n\n\n\nWorkflows\nThe workflow chapters document individual operational pipelines migrated or adapted for cloud-based processing.\n\nMH1 / MPOC / MPIC Processor documents the Cloud Run workflow for retrieving and publishing MODIS-Aqua MH1 ocean color, MH1 SST, MPIC, and MPOC products.\nVIIRS Net Primary Productivity documents the daily and monthly VIIRS NetPP workflow for SNPP and NOAA-20.\nMUR SST documents the MUR SST, anomaly, frontal, and monthly-processing workflows.\nC-HARM documents the containerized C-HARM processing workflow.\n\n\n\nPresentations\nThe presentations section collects project update slides and status material used during the migration.\n\nPresentations and Project Updates provides access to the ERDDAP cloud migration presentation materials.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#status",
-    "href": "index.html#status",
-    "title": "SWFSC ERDDAP Cloud Migration",
-    "section": "Status",
-    "text": "Status\nThis documentation is a living technical record. It is intended to capture both the final cloud architecture and the practical operational details needed to maintain, troubleshoot, and extend the migrated workflows.",
-    "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Overview</span>"
     ]
   }
 ]
