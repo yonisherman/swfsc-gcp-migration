@@ -6,7 +6,7 @@ import yaml
 
 
 top_chapters = [
-    "index.qmd",
+    {"text": "Overview", "href": "index.qmd"},
     {
         "part": "Cloud Setup",
         "chapters": [

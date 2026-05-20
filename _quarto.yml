@@ -11,7 +11,8 @@ book:
     logo: assets/logo.png
     title: ''
   chapters:
-  - index.qmd
+  - text: Overview
+    href: index.qmd
   - part: Cloud Setup
     chapters:
     - gcp-setup.qmd
