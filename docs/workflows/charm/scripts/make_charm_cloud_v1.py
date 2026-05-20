@@ -46,6 +46,7 @@ from src.python.charm_model_functions import forecast
 
 
 def main(argv: Iterable[str] | None = None) -> int:
+    """Run the end-to-end C-HARM processing pipeline for one target date."""
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
 
@@ -222,7 +223,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         if not (eof_work_dir / band / eof_nc.first.format(band)).exists()
         ]
     if missing:
-        logger.error("Skipping DINEOF - input files not created by concat_l3_files: %s", missing)
+        logger.error("Skipping DINEOF — input files not created by concat_l3_files: %s", missing)
         raise RuntimeError(f"DINEOF inputs missing: {missing}")
 
     run_first_dineof(sat_vars.gappy, pre_int_eof1, config.eof_dir, eof_init_dir)

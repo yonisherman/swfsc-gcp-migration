@@ -1,0 +1,214 @@
+---
+title: "Cloud Infrastructure Setup"
+---
+
+This section covers the Terraform-managed infrastructure layer: virtual machines, storage buckets, networking, service accounts, IAM permissions, and supporting cloud services.
+
+### 1. Access the Infrastructure Configuration
+
+Before creating or modifying any VM environment, access the Terraform infrastructure repository used to manage the deployment configuration. In this setup, the Terraform configuration is stored in a centralized source control repository managed within Google Cloud.
+
+1. Log into the [Google Cloud Console](https://console.cloud.google.com).
+2. Start Cloud Shell by clicking the terminal icon (`>_`) in the top-right corner.
+3. Clone the infrastructure repository:
+
+```{.bash}
+git clone https://source.developers.google.com/p/YOUR_GCP_PROJECT_ID/r/YOUR_TERRAFORM_REPO
+# Replace with the appropriate infrastructure repository for your environment
+cd YOUR_TERRAFORM_REPO
+```
+
+The repository contains the Terraform configuration files used to define VM infrastructure, storage resources, networking, and related cloud resources.
+
+### 2. Review and Deploy Infrastructure with Terraform
+
+The Terraform configuration is organized across three main files.
+
+**`main.tf`** defines the Terraform backend, required provider, and shared project-wide variables including GCP project ID, region, zone, NOAA metadata labels, and environment name. These shared variables are referenced throughout `bucket.tf` and `instance.tf` to avoid hard-coding configuration values across multiple files.
+
+```{.python}
+# PROJECT STANDARDS & PROVIDER CONFIGURATION
+# Replace backend bucket, project variables, bucket names, and service accounts
+# with the appropriate values for your deployment.
+
+terraform {
+  backend "gcs" {
+    bucket = "tf-local-swfsc-prod"   # Terraform remote state backend bucket
+    prefix = "terraform/state"
+  }
+  required_providers { google = { source = "hashicorp/google" } }
+}
+
+# GLOBAL VARIABLES
+variable "project-id"      { default = "YOUR_GCP_PROJECT_ID" }
+variable "system-id"       { default = "YOUR_SYSTEM_ID" }
+variable "lineoffice"      { default = "YOUR_LINE_OFFICE" }
+variable "taskorder"       { default = "YOUR_TASK_ORDER" }
+variable "billing-id"      { default = "YOUR_BILLING_ID" }
+variable "application-id"  { default = "YOUR_APPLICATION_ID" }
+variable "stakeholder"     { default = "YOUR_STAKEHOLDER" }
+variable "environment"     { default = "dev" }
+variable "region1"         { default = "us-east4" }
+variable "zone1"           { default = "us-east4-a" }
+```
+
+**`bucket.tf`** defines the GCS buckets used by the environment and assigns IAM permissions to the service accounts that need access. In many deployments the required buckets may already exist — review the bucket names, IAM bindings, and service accounts to confirm they match the environment. Copy and edit the block below when creating a new bucket:
+
+```{.python}
+resource "google_storage_bucket" "erddap_bucket" {
+  name                        = "YOUR_ERDDAP_BUCKET_NAME"
+  project                     = var.project-id
+  location                    = var.region1
+  force_destroy               = true   # Common in dev/testing; prefer false in production
+  uniform_bucket_level_access = true
+
+  labels = {
+    environment        = var.environment
+    noaa_fismaid       = var.system-id
+    noaa_lineoffice    = var.lineoffice
+    noaa_taskorder     = var.taskorder
+    noaa_environment   = var.environment
+    noaa_applicationid = var.application-id
+    noaa_project_id    = var.project-id
+  }
+
+  hierarchical_namespace { enabled = true }
+
+  lifecycle_rule {
+    condition { num_newer_versions = 5 }
+    action    { type = "Delete" }
+  }
+}
+
+locals {
+  buckets = [
+    "YOUR_PROCESSING_OR_DATA_BUCKET_NAME",
+    "YOUR_ERDDAP_BUCKET_NAME",
+  ]
+}
+
+resource "google_storage_bucket_iam_member" "vm_service_account_object_admins" {
+  for_each = toset(local.buckets)
+  bucket   = each.value
+  role     = "roles/storage.objectAdmin"
+  member   = "serviceAccount:YOUR_VM_SERVICE_ACCOUNT_EMAIL"
+}
+
+resource "google_storage_bucket_iam_member" "cloud_run_service_account_object_admins" {
+  for_each = toset(local.buckets)
+  bucket   = each.value
+  role     = "roles/storage.objectAdmin"
+  member   = "serviceAccount:YOUR_CLOUD_RUN_SERVICE_ACCOUNT_EMAIL"
+}
+```
+
+If you add a new bucket and IAM is applied through `locals.buckets`, add the new bucket name to that list as well.
+
+**`instance.tf`** defines all VMs in the project, including persistent data disks, machine type, boot disk, networking, service account, metadata, labels, and snapshot policy attachments. Copy and edit the blocks below when deploying a new ERDDAP VM. For additional machine type options, refer to the [Google Cloud Compute Engine machine type documentation](https://cloud.google.com/compute/docs/machine-resource).
+
+```{.python}
+# ERDDAP data disk
+resource "google_compute_disk" "erddap_data_disk" {
+  name    = "YOUR_ERDDAP_DATA_DISK_NAME"   # Example: erddap-data-disk
+  project = var.project-id
+  zone    = var.zone1
+  type    = "hyperdisk-balanced"            # Recommended for high I/O NetCDF workloads
+  size    = 4096                            # Disk size in GB (4 TB)
+}
+
+# ERDDAP VM
+resource "google_compute_instance" "erddap_vm" {
+  name                  = "YOUR_ERDDAP_VM_NAME"   # Example: erd-erddap
+  project               = var.project-id
+  zone                  = var.zone1
+  machine_type          = "c4-highmem-16"          # High-memory C4 instance for ERDDAP
+  allow_stopping_for_update = true
+
+  metadata = {
+    block-project-ssh-keys = true
+    enable-osconfig        = true
+  }
+
+  labels = {
+    environment        = var.environment
+    noaa_fismaid       = var.system-id
+    noaa_lineoffice    = var.lineoffice
+    noaa_taskorder     = var.taskorder
+    noaa_environment   = var.environment
+    noaa_applicationid = var.application-id
+    noaa_project_id    = var.project-id
+    role               = "erddap-server"
+  }
+
+  boot_disk {
+    device_name = "YOUR_ERDDAP_BOOT_DISK_NAME"
+    initialize_params {
+      image = "YOUR_BOOT_IMAGE"
+      size  = "360"
+      type  = "hyperdisk-balanced"
+    }
+  }
+
+  attached_disk {
+    source      = google_compute_disk.erddap_data_disk.id
+    device_name = "erddap-data"
+  }
+
+  network_interface {
+    subnetwork = "YOUR_SUBNETWORK_SELF_LINK"
+    nic_type   = "GVNIC"   # Required for C4-series instances
+  }
+
+  service_account {
+    email  = "YOUR_VM_SERVICE_ACCOUNT_EMAIL"
+    scopes = ["cloud-platform"]
+  }
+
+  lifecycle {
+    ignore_changes = [boot_disk]
+  }
+}
+
+# BACKUP & RECOVERY: Snapshot Policy Attachments
+resource "google_compute_disk_resource_policy_attachment" "erddap_boot_snap" {
+  name    = "snap-policy"
+  disk    = google_compute_instance.erddap_vm.name
+  project = var.project-id
+  zone    = var.zone1
+}
+
+resource "google_compute_disk_resource_policy_attachment" "erddap_data_snap" {
+  name    = "snap-policy"
+  disk    = google_compute_disk.erddap_data_disk.name
+  project = var.project-id
+  zone    = var.zone1
+}
+```
+
+Key configuration notes:
+
+- `c4-highmem-*` instances are recommended for ERDDAP workloads — ERDDAP benefits from additional memory for dataset caching and large NetCDF access.
+- `hyperdisk-balanced` storage is used for high-throughput NetCDF access and rclone VFS caching.
+- GVNIC networking is required for C4-series instances.
+- The attached data disk is separated from the boot disk to simplify upgrades, rebuilds, and recovery.
+- Snapshot policies are recommended for automated backup and recovery.
+
+### 3. Deploy Infrastructure
+
+After reviewing and editing the Terraform configuration, preview the proposed changes:
+
+```{.bash}
+terraform plan    # Review resources that will be created, modified, or destroyed
+```
+
+Carefully review the output before applying, especially in existing environments where resources may already be in use. Once the plan looks correct, apply:
+
+```{.bash}
+terraform apply   # Create or update VMs, disks, buckets, IAM permissions, and related resources
+```
+
+In some environments, `terraform apply` may need to be run more than once if dependent resources are still initializing.
+
+---
+
+---

@@ -156,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Setup</span></a>
+ <span class="menu-text">Cloud Setup</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -164,7 +164,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GCP Environment Setup</span></a>
+  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setup Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-infrastructure.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Cloud Infrastructure Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-vm-access.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Accessing VMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-erddap-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ERDDAP VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-processing-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Processing VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-migration-recovery.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Migration, Upgrade, and Recovery</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -262,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../code-pages/charm/delpoy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">delpoy_job.sh</span></a>
+  <a href="../../code-pages/charm/deploy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">deploy_job.sh</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -659,258 +684,259 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main(argv: Iterable[<span class="bu">str</span>] <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    logging.basicConfig(level<span class="op">=</span>logging.INFO)</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    logger <span class="op">=</span> logging.getLogger(<span class="va">__name__</span>)</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    config_path <span class="op">=</span> os.getenv(<span class="st">"CONFIG_PATH"</span>, <span class="st">"/app/config/config.yaml"</span>)</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    config <span class="op">=</span> load_config(config_path)</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Run the end-to-end C-HARM processing pipeline for one target date."""</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    logging.basicConfig(level<span class="op">=</span>logging.INFO)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    logger <span class="op">=</span> logging.getLogger(<span class="va">__name__</span>)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>    config_path <span class="op">=</span> os.getenv(<span class="st">"CONFIG_PATH"</span>, <span class="st">"/app/config/config.yaml"</span>)</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>    config <span class="op">=</span> load_config(config_path)</span>
 <span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use configured base dir if present; otherwise just stay where we are.</span></span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>        os.chdir(<span class="bu">str</span>(config.base_dir))</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span>:</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="st">"Could not chdir to config.base_dir=</span><span class="sc">%s</span><span class="st">; continuing"</span>, config.base_dir)</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parse args: (date, backfill flag, overwrite)</span></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    now, arg_bkfill, overwrite <span class="op">=</span> parse_args(argv)</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    eof_nc <span class="op">=</span> config.eof_nc</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    sat_vars <span class="op">=</span> config.sat_vars</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Local persistent-ish (within container lifetime) dirs</span></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    viirs_in_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"nasa_source_data"</span></span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    processed_viirs_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"processed_nasa_data"</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    results_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"results"</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use configured base dir if present; otherwise just stay where we are.</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>        os.chdir(<span class="bu">str</span>(config.base_dir))</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span>:</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="st">"Could not chdir to config.base_dir=</span><span class="sc">%s</span><span class="st">; continuing"</span>, config.base_dir)</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parse args: (date, backfill flag, overwrite)</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>    now, arg_bkfill, overwrite <span class="op">=</span> parse_args(argv)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    eof_nc <span class="op">=</span> config.eof_nc</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    sat_vars <span class="op">=</span> config.sat_vars</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Local persistent-ish (within container lifetime) dirs</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    viirs_in_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"nasa_source_data"</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    processed_viirs_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"processed_nasa_data"</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    results_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"results"</span></span>
 <span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    sync_processed_l3_from_work_bucket(processed_viirs_dir, config)</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Cloud Run ephemeral scratch root (from config)</span></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    stage_root <span class="op">=</span> <span class="bu">getattr</span>(config, <span class="st">"stage_root"</span>, Path(<span class="st">"/tmp/charm"</span>))</span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    stage_root <span class="op">=</span> Path(stage_root)</span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    ensure_dirs(stage_root)</span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Put heavy intermediates under stage_root (Cloud Run friendly)</span></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    work_root <span class="op">=</span> stage_root <span class="op">/</span> <span class="st">"work_dirs"</span></span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>    dineof_root <span class="op">=</span> stage_root <span class="op">/</span> <span class="st">"dineof"</span></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    ensure_dirs(work_root, dineof_root)</span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> arg_bkfill:</span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>        work_dir <span class="op">=</span> work_root <span class="op">/</span> <span class="st">"bf_work"</span></span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>        l3_work_dir <span class="op">=</span> work_root <span class="op">/</span> <span class="st">"bf_L3_work"</span></span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>        eof_init_dir <span class="op">=</span> config.config_dirs <span class="op">/</span> <span class="st">"bf_dineof"</span></span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>        eof_work_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"bf_dineof"</span>   <span class="co"># matches /tmp/data/bf_dineof/ in .init files</span></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>        dine_now_pre <span class="op">=</span> <span class="st">"now_bf_"</span></span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>        dine_for_pre <span class="op">=</span> <span class="st">"for_bf_"</span></span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">=</span> now</span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>        now_wcofs <span class="op">=</span> now <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>        work_dir <span class="op">=</span> work_root <span class="op">/</span> <span class="st">"work"</span></span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>        l3_work_dir <span class="op">=</span> work_root <span class="op">/</span> <span class="st">"L3_work"</span></span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>        eof_init_dir <span class="op">=</span> config.config_dirs <span class="op">/</span> <span class="st">"dineof"</span></span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>        eof_work_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"dineof"</span>      <span class="co"># matches /tmp/data/dineof/ in .init files</span></span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>        dine_now_pre <span class="op">=</span> <span class="st">"now_"</span></span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>        dine_for_pre <span class="op">=</span> <span class="st">"for_"</span></span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">=</span> now <span class="op">-</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>        now_wcofs <span class="op">=</span> now</span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>    combotimes <span class="op">=</span> [</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>        now_satellite,</span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">2</span>),</span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">3</span>),</span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>    ]</span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>    ensure_dirs(</span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>        l3_work_dir,</span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>        eof_work_dir,</span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>        viirs_in_dir,</span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>        processed_viirs_dir,</span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>        results_dir,</span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Clean work dir: </span><span class="sc">%s</span><span class="st">"</span>, work_dir)</span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>    patterns <span class="op">=</span> [re.<span class="bu">compile</span>(<span class="vs">r"o</span><span class="dv">\d</span><span class="op">+</span><span class="vs">wcofs"</span>), re.<span class="bu">compile</span>(<span class="vs">r"output_</span><span class="op">*</span><span class="vs">"</span>), re.<span class="bu">compile</span>(<span class="vs">r"st</span><span class="op">*</span><span class="vs">"</span>)]</span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pattern <span class="kw">in</span> patterns:</span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>        delete_files_in_directory(work_dir, pattern<span class="op">=</span>pattern)</span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Deletion of files in work dir with pattern: </span><span class="sc">%s</span><span class="st">"</span>, pattern.pattern)</span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>    <span class="co"># variables for DINEOF</span></span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>    eof_init_template <span class="op">=</span> <span class="st">"</span><span class="sc">{eof}{{</span><span class="st">param</span><span class="sc">}}</span><span class="st">_v4.init"</span></span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>    pre_int_eof1 <span class="op">=</span> eof_init_template.<span class="bu">format</span>(eof<span class="op">=</span>dine_now_pre)</span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>    pre_int_eof2 <span class="op">=</span> eof_init_template.<span class="bu">format</span>(eof<span class="op">=</span>dine_for_pre)</span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>    now_date_str <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>now_satellite<span class="sc">:</span><span class="op">%</span>Y<span class="op">%</span>m<span class="op">%</span>d<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Begin processing </span><span class="sc">%s</span><span class="st">"</span>, now_satellite)</span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check for existing results</span></span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>    results_year_dir <span class="op">=</span> results_dir <span class="op">/</span> <span class="bu">str</span>(now_satellite.year)</span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>    ensure_dirs(results_year_dir)</span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>    results_list <span class="op">=</span> (</span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>        [f <span class="cf">for</span> f <span class="kw">in</span> os.listdir(results_year_dir) <span class="cf">if</span> <span class="st">"charm_v3_forecast_0day"</span> <span class="kw">in</span> f]</span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> os.path.isdir(results_year_dir)</span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> []</span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>    results_dates <span class="op">=</span> [f.split(<span class="st">"_"</span>)[<span class="op">-</span><span class="dv">1</span>].replace(<span class="st">".nc"</span>, <span class="st">""</span>) <span class="cf">for</span> f <span class="kw">in</span> results_list]</span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> now_date_str <span class="kw">in</span> results_dates <span class="kw">and</span> <span class="kw">not</span> overwrite:</span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"C-HARM products exist for this date. No overwrite selected."</span>)</span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="dv">1</span>)</span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Prepare L3 inputs</span></span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>    logger.info(</span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Starting L3 creation for reference date </span><span class="sc">%s</span><span class="st"> (backfill=</span><span class="sc">%s</span><span class="st">)"</span>,</span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>        now.date(), arg_bkfill</span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>    local_l3 <span class="op">=</span> list_local_l3_files(processed_viirs_dir)</span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>    needed <span class="op">=</span> needed_l3_filenames_for_period(now_satellite, days<span class="op">=</span><span class="bu">getattr</span>(config, <span class="st">"history_days_required"</span>, <span class="dv">180</span>))</span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>    missing <span class="op">=</span> [fn <span class="cf">for</span> fn <span class="kw">in</span> needed <span class="cf">if</span> fn <span class="kw">not</span> <span class="kw">in</span> local_l3]</span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Need </span><span class="sc">%d</span><span class="st"> L3 files, missing </span><span class="sc">%d</span><span class="st">"</span>, <span class="bu">len</span>(needed), <span class="bu">len</span>(missing))</span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>    created <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fn <span class="kw">in</span> missing:</span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>            date_part <span class="op">=</span> fn.split(<span class="st">"_"</span>)[<span class="dv">1</span>]</span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>            fd <span class="op">=</span> parse(date_part)</span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>            process_charm_files_for_day(</span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>                fd,</span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>                config.nasa_base_url,</span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>                viirs_in_dir,</span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>                l3_work_dir,</span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>                config.res_dir,</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>                config.cwutil_dir,</span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>                processed_viirs_dir,</span>
-<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>                config.gridding,</span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>                sat_vars.gappy,</span>
-<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>            created <span class="op">+=</span> <span class="dv">1</span></span>
-<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> exc:</span>
-<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>            logger.exception(<span class="st">"Error processing </span><span class="sc">%s</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, fn, exc)</span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"L3 creation complete: created </span><span class="sc">%d</span><span class="st"> new files"</span>, created)</span>
-<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sync any newly created L3 files back to work bucket for future runs</span></span>
-<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> created <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> config.erdwork_bucket:</span>
-<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>        gcs_dst <span class="op">=</span> <span class="ss">f"gs://</span><span class="sc">{</span>config<span class="sc">.</span>erdwork_bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>config<span class="sc">.</span>work_l2_prefix<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Syncing </span><span class="sc">%d</span><span class="st"> new L3 files back to work bucket: </span><span class="sc">%s</span><span class="st">"</span>, created, gcs_dst)</span>
-<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>        <span class="im">from</span> src.python.charm_helper_functions <span class="im">import</span> run_cmd <span class="im">as</span> _run_cmd</span>
-<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>        _run_cmd(</span>
-<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>            [<span class="st">"gsutil"</span>, <span class="st">"-m"</span>, <span class="st">"rsync"</span>, <span class="st">"-r"</span>, <span class="bu">str</span>(processed_viirs_dir), gcs_dst],</span>
-<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>            msg<span class="op">=</span><span class="st">"gsutil rsync L3 back to work bucket"</span></span>
-<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Verify L3 file availability</span></span>
-<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>    local_l3 <span class="op">=</span> list_local_l3_files(processed_viirs_dir)</span>
-<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>    l3_files_to_use <span class="op">=</span> <span class="bu">sorted</span>(fn <span class="cf">for</span> fn <span class="kw">in</span> needed <span class="cf">if</span> fn <span class="kw">in</span> local_l3)</span>
-<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> l3_files_to_use:</span>
-<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="st">"No L3 files available to use."</span>)</span>
-<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">max</span>(needed) <span class="kw">not</span> <span class="kw">in</span> l3_files_to_use:</span>
-<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"Latest L3 not found. Found: </span><span class="sc">%s</span><span class="st">, Needed: </span><span class="sc">%s</span><span class="st">"</span>,</span>
-<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>                     <span class="bu">max</span>(l3_files_to_use), <span class="bu">max</span>(needed))</span>
-<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>        sys.exit(<span class="dv">1</span>)</span>
-<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>    concat_l3_files(l3_files_to_use, sat_vars.gappy, eof_nc.first, processed_viirs_dir, eof_work_dir)</span>
-<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>    mylatm, mylonm, themask <span class="op">=</span> mask_and_log_transform(</span>
-<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>        sat_vars.gappy, eof_nc.first, eof_work_dir, config.res_dir</span>
-<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>    model_lon_grid, model_lat_grid <span class="op">=</span> np.meshgrid(mylonm, mylatm)</span>
-<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>    <span class="co"># WCOFS merge and regrid</span></span>
-<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> regrid_stack_wcofs_st(</span>
-<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>        now_wcofs,</span>
-<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
-<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>        config.res_dir,</span>
-<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>        model_lon_grid,</span>
-<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>        model_lat_grid,</span>
-<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>        config.wcofs_st_config,</span>
-<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>    <span class="co"># First DINEOF</span></span>
-<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>    missing <span class="op">=</span> [</span>
-<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>        <span class="bu">str</span>(eof_work_dir <span class="op">/</span> band <span class="op">/</span> eof_nc.first.<span class="bu">format</span>(band))</span>
-<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> band <span class="kw">in</span> sat_vars.gappy</span>
-<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> (eof_work_dir <span class="op">/</span> band <span class="op">/</span> eof_nc.first.<span class="bu">format</span>(band)).exists()</span>
-<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> missing:</span>
-<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"Skipping DINEOF - input files not created by concat_l3_files: </span><span class="sc">%s</span><span class="st">"</span>, missing)</span>
-<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="ss">f"DINEOF inputs missing: </span><span class="sc">{</span>missing<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a>    run_first_dineof(sat_vars.gappy, pre_int_eof1, config.eof_dir, eof_init_dir)</span>
-<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>    prepare_second_dineof_inputs(</span>
-<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>        eof_nc.first, eof_nc.second, sat_vars.gappy, sat_vars.filled, eof_work_dir</span>
-<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Advection step</span></span>
-<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>    x, y, rtime <span class="op">=</span> create_advection_step(</span>
-<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>        now_wcofs, <span class="dv">7</span>, work_dir, mylonm, mylatm,</span>
-<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a>        model_lon_grid, model_lat_grid, themask</span>
-<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>    time_last <span class="op">=</span> update_eof_files(</span>
-<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>        eof_work_dir, eof_nc.first, eof_nc.second,</span>
-<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>        sat_vars.filled, sat_vars.gappy,</span>
-<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>        x, y,</span>
-<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>        model_lon_grid, model_lat_grid,</span>
-<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>        themask, rtime, advect</span>
-<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>    time_last <span class="op">=</span> [time_last.item()]</span>
-<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>    rtime <span class="op">=</span> rtime.tolist()</span>
-<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>    model_time <span class="op">=</span> [<span class="op">*</span>time_last, <span class="op">*</span>rtime]</span>
-<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"model_time: </span><span class="sc">%s</span><span class="st">"</span>, model_time)</span>
-<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Second DINEOF</span></span>
-<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>    run_second_dineof(sat_vars.gappy, pre_int_eof2, config.eof_dir, eof_init_dir)</span>
-<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"C-HARM processing complete for </span><span class="sc">%s</span><span class="st">"</span>, now_satellite)</span>
-<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cntr, ovar <span class="kw">in</span> <span class="bu">enumerate</span>(sat_vars.gappy):</span>
-<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>        data_dict[ovar] <span class="op">=</span> get_eof2_filled_vars(</span>
-<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>            ovar, sat_vars.filled[cntr], eof_nc.second, eof_work_dir</span>
-<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run C-HARM model</span></span>
-<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a>    pn, pda, pca, mchla, m486, m551 <span class="op">=</span> forecast(</span>
-<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"chlor_a"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"Rrs_489"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"Rrs_556"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>        data_dict[<span class="st">"thesalt"</span>], data_dict[<span class="st">"thetemp"</span>], combotimes</span>
-<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save results to netCDF and archive</span></span>
-<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a>    charms_out_files <span class="op">=</span> charms_nc3(</span>
-<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a>        pn, pda, pca, model_time,</span>
-<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"chlor_a"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"Rrs_489"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"Rrs_556"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>        data_dict[<span class="st">"thesalt"</span>], data_dict[<span class="st">"thetemp"</span>],</span>
-<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>        work_dir, config.res_dir,</span>
-<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>        data_dict[<span class="st">"salt_mins"</span>], data_dict[<span class="st">"temp_mins"</span>]</span>
-<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>    archive_charm_outputs(charms_out_files, work_dir, results_dir, now_satellite)</span>
-<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>    <span class="co"># OPTIONAL: publish to GCS if enabled (Cloud Run Job-friendly)</span></span>
-<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.getenv(<span class="st">"PUBLISH_ENABLE"</span>, <span class="st">"0"</span>) <span class="op">==</span> <span class="st">"1"</span>:</span>
-<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>        publish_results_to_gcs(</span>
-<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>            results_year_dir<span class="op">=</span>(results_dir <span class="op">/</span> <span class="bu">str</span>(now_satellite.year)),</span>
-<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>            config<span class="op">=</span>config,</span>
-<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>            interval_days<span class="op">=</span><span class="bu">int</span>((<span class="bu">getattr</span>(config, <span class="st">"c_harm"</span>, <span class="va">None</span>) <span class="kw">or</span> {}).get(<span class="st">"interval"</span>, <span class="dv">1</span>)),</span>
-<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clean up</span></span>
-<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pattern <span class="kw">in</span> patterns:</span>
-<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a>        delete_files_in_directory(work_dir, pattern<span class="op">=</span>pattern)</span>
-<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Deletion of files in work dir with pattern: </span><span class="sc">%s</span><span class="st">"</span>, pattern.pattern)</span>
-<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span></span>
-<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    sync_processed_l3_from_work_bucket(processed_viirs_dir, config)</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Cloud Run ephemeral scratch root (from config)</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    stage_root <span class="op">=</span> <span class="bu">getattr</span>(config, <span class="st">"stage_root"</span>, Path(<span class="st">"/tmp/charm"</span>))</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    stage_root <span class="op">=</span> Path(stage_root)</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    ensure_dirs(stage_root)</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Put heavy intermediates under stage_root (Cloud Run friendly)</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>    work_root <span class="op">=</span> stage_root <span class="op">/</span> <span class="st">"work_dirs"</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    dineof_root <span class="op">=</span> stage_root <span class="op">/</span> <span class="st">"dineof"</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    ensure_dirs(work_root, dineof_root)</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> arg_bkfill:</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>        work_dir <span class="op">=</span> work_root <span class="op">/</span> <span class="st">"bf_work"</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>        l3_work_dir <span class="op">=</span> work_root <span class="op">/</span> <span class="st">"bf_L3_work"</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>        eof_init_dir <span class="op">=</span> config.config_dirs <span class="op">/</span> <span class="st">"bf_dineof"</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>        eof_work_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"bf_dineof"</span>   <span class="co"># matches /tmp/data/bf_dineof/ in .init files</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>        dine_now_pre <span class="op">=</span> <span class="st">"now_bf_"</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>        dine_for_pre <span class="op">=</span> <span class="st">"for_bf_"</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">=</span> now</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>        now_wcofs <span class="op">=</span> now <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>        work_dir <span class="op">=</span> work_root <span class="op">/</span> <span class="st">"work"</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>        l3_work_dir <span class="op">=</span> work_root <span class="op">/</span> <span class="st">"L3_work"</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>        eof_init_dir <span class="op">=</span> config.config_dirs <span class="op">/</span> <span class="st">"dineof"</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>        eof_work_dir <span class="op">=</span> config.data_dir <span class="op">/</span> <span class="st">"dineof"</span>      <span class="co"># matches /tmp/data/dineof/ in .init files</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>        dine_now_pre <span class="op">=</span> <span class="st">"now_"</span></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>        dine_for_pre <span class="op">=</span> <span class="st">"for_"</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">=</span> now <span class="op">-</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>        now_wcofs <span class="op">=</span> now</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>    combotimes <span class="op">=</span> [</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>        now_satellite,</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">2</span>),</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>        now_satellite <span class="op">+</span> timedelta(days<span class="op">=</span><span class="dv">3</span>),</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>    ensure_dirs(</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>        l3_work_dir,</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>        eof_work_dir,</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>        viirs_in_dir,</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>        processed_viirs_dir,</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>        results_dir,</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Clean work dir: </span><span class="sc">%s</span><span class="st">"</span>, work_dir)</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>    patterns <span class="op">=</span> [re.<span class="bu">compile</span>(<span class="vs">r"o</span><span class="dv">\d</span><span class="op">+</span><span class="vs">wcofs"</span>), re.<span class="bu">compile</span>(<span class="vs">r"output_</span><span class="op">*</span><span class="vs">"</span>), re.<span class="bu">compile</span>(<span class="vs">r"st</span><span class="op">*</span><span class="vs">"</span>)]</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pattern <span class="kw">in</span> patterns:</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>        delete_files_in_directory(work_dir, pattern<span class="op">=</span>pattern)</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Deletion of files in work dir with pattern: </span><span class="sc">%s</span><span class="st">"</span>, pattern.pattern)</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>    <span class="co"># variables for DINEOF</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>    eof_init_template <span class="op">=</span> <span class="st">"</span><span class="sc">{eof}{{</span><span class="st">param</span><span class="sc">}}</span><span class="st">_v4.init"</span></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>    pre_int_eof1 <span class="op">=</span> eof_init_template.<span class="bu">format</span>(eof<span class="op">=</span>dine_now_pre)</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>    pre_int_eof2 <span class="op">=</span> eof_init_template.<span class="bu">format</span>(eof<span class="op">=</span>dine_for_pre)</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>    now_date_str <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>now_satellite<span class="sc">:</span><span class="op">%</span>Y<span class="op">%</span>m<span class="op">%</span>d<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Begin processing </span><span class="sc">%s</span><span class="st">"</span>, now_satellite)</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check for existing results</span></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>    results_year_dir <span class="op">=</span> results_dir <span class="op">/</span> <span class="bu">str</span>(now_satellite.year)</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>    ensure_dirs(results_year_dir)</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a>    results_list <span class="op">=</span> (</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>        [f <span class="cf">for</span> f <span class="kw">in</span> os.listdir(results_year_dir) <span class="cf">if</span> <span class="st">"charm_v3_forecast_0day"</span> <span class="kw">in</span> f]</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> os.path.isdir(results_year_dir)</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span> []</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>    results_dates <span class="op">=</span> [f.split(<span class="st">"_"</span>)[<span class="op">-</span><span class="dv">1</span>].replace(<span class="st">".nc"</span>, <span class="st">""</span>) <span class="cf">for</span> f <span class="kw">in</span> results_list]</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> now_date_str <span class="kw">in</span> results_dates <span class="kw">and</span> <span class="kw">not</span> overwrite:</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"C-HARM products exist for this date. No overwrite selected."</span>)</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="dv">1</span>)</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Prepare L3 inputs</span></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>    logger.info(</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Starting L3 creation for reference date </span><span class="sc">%s</span><span class="st"> (backfill=</span><span class="sc">%s</span><span class="st">)"</span>,</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>        now.date(), arg_bkfill</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>    local_l3 <span class="op">=</span> list_local_l3_files(processed_viirs_dir)</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>    needed <span class="op">=</span> needed_l3_filenames_for_period(now_satellite, days<span class="op">=</span><span class="bu">getattr</span>(config, <span class="st">"history_days_required"</span>, <span class="dv">180</span>))</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>    missing <span class="op">=</span> [fn <span class="cf">for</span> fn <span class="kw">in</span> needed <span class="cf">if</span> fn <span class="kw">not</span> <span class="kw">in</span> local_l3]</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Need </span><span class="sc">%d</span><span class="st"> L3 files, missing </span><span class="sc">%d</span><span class="st">"</span>, <span class="bu">len</span>(needed), <span class="bu">len</span>(missing))</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>    created <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> fn <span class="kw">in</span> missing:</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>            date_part <span class="op">=</span> fn.split(<span class="st">"_"</span>)[<span class="dv">1</span>]</span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>            fd <span class="op">=</span> parse(date_part)</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>            process_charm_files_for_day(</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>                fd,</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>                config.nasa_base_url,</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>                viirs_in_dir,</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>                l3_work_dir,</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>                config.res_dir,</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>                config.cwutil_dir,</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>                processed_viirs_dir,</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>                config.gridding,</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>                sat_vars.gappy,</span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>            created <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> exc:</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>            logger.exception(<span class="st">"Error processing </span><span class="sc">%s</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, fn, exc)</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"L3 creation complete: created </span><span class="sc">%d</span><span class="st"> new files"</span>, created)</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sync any newly created L3 files back to work bucket for future runs</span></span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> created <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> config.erdwork_bucket:</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>        gcs_dst <span class="op">=</span> <span class="ss">f"gs://</span><span class="sc">{</span>config<span class="sc">.</span>erdwork_bucket<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>config<span class="sc">.</span>work_l2_prefix<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Syncing </span><span class="sc">%d</span><span class="st"> new L3 files back to work bucket: </span><span class="sc">%s</span><span class="st">"</span>, created, gcs_dst)</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>        <span class="im">from</span> src.python.charm_helper_functions <span class="im">import</span> run_cmd <span class="im">as</span> _run_cmd</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>        _run_cmd(</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>            [<span class="st">"gsutil"</span>, <span class="st">"-m"</span>, <span class="st">"rsync"</span>, <span class="st">"-r"</span>, <span class="bu">str</span>(processed_viirs_dir), gcs_dst],</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>            msg<span class="op">=</span><span class="st">"gsutil rsync L3 back to work bucket"</span></span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Verify L3 file availability</span></span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>    local_l3 <span class="op">=</span> list_local_l3_files(processed_viirs_dir)</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>    l3_files_to_use <span class="op">=</span> <span class="bu">sorted</span>(fn <span class="cf">for</span> fn <span class="kw">in</span> needed <span class="cf">if</span> fn <span class="kw">in</span> local_l3)</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> l3_files_to_use:</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="st">"No L3 files available to use."</span>)</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">max</span>(needed) <span class="kw">not</span> <span class="kw">in</span> l3_files_to_use:</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"Latest L3 not found. Found: </span><span class="sc">%s</span><span class="st">, Needed: </span><span class="sc">%s</span><span class="st">"</span>,</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>                     <span class="bu">max</span>(l3_files_to_use), <span class="bu">max</span>(needed))</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>        sys.exit(<span class="dv">1</span>)</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>    concat_l3_files(l3_files_to_use, sat_vars.gappy, eof_nc.first, processed_viirs_dir, eof_work_dir)</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>    mylatm, mylonm, themask <span class="op">=</span> mask_and_log_transform(</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>        sat_vars.gappy, eof_nc.first, eof_work_dir, config.res_dir</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>    model_lon_grid, model_lat_grid <span class="op">=</span> np.meshgrid(mylonm, mylatm)</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>    <span class="co"># WCOFS merge and regrid</span></span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>    data_dict <span class="op">=</span> regrid_stack_wcofs_st(</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>        now_wcofs,</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>        config.res_dir,</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>        model_lon_grid,</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>        model_lat_grid,</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>        config.wcofs_st_config,</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>    <span class="co"># First DINEOF</span></span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>    missing <span class="op">=</span> [</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>        <span class="bu">str</span>(eof_work_dir <span class="op">/</span> band <span class="op">/</span> eof_nc.first.<span class="bu">format</span>(band))</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> band <span class="kw">in</span> sat_vars.gappy</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> (eof_work_dir <span class="op">/</span> band <span class="op">/</span> eof_nc.first.<span class="bu">format</span>(band)).exists()</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> missing:</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"Skipping DINEOF — input files not created by concat_l3_files: </span><span class="sc">%s</span><span class="st">"</span>, missing)</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="ss">f"DINEOF inputs missing: </span><span class="sc">{</span>missing<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a>    run_first_dineof(sat_vars.gappy, pre_int_eof1, config.eof_dir, eof_init_dir)</span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>    prepare_second_dineof_inputs(</span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>        eof_nc.first, eof_nc.second, sat_vars.gappy, sat_vars.filled, eof_work_dir</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Advection step</span></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>    x, y, rtime <span class="op">=</span> create_advection_step(</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a>        now_wcofs, <span class="dv">7</span>, work_dir, mylonm, mylatm,</span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a>        model_lon_grid, model_lat_grid, themask</span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>    time_last <span class="op">=</span> update_eof_files(</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>        eof_work_dir, eof_nc.first, eof_nc.second,</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a>        sat_vars.filled, sat_vars.gappy,</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>        x, y,</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>        model_lon_grid, model_lat_grid,</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>        themask, rtime, advect</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>    time_last <span class="op">=</span> [time_last.item()]</span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>    rtime <span class="op">=</span> rtime.tolist()</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>    model_time <span class="op">=</span> [<span class="op">*</span>time_last, <span class="op">*</span>rtime]</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"model_time: </span><span class="sc">%s</span><span class="st">"</span>, model_time)</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Second DINEOF</span></span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>    run_second_dineof(sat_vars.gappy, pre_int_eof2, config.eof_dir, eof_init_dir)</span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"C-HARM processing complete for </span><span class="sc">%s</span><span class="st">"</span>, now_satellite)</span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cntr, ovar <span class="kw">in</span> <span class="bu">enumerate</span>(sat_vars.gappy):</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>        data_dict[ovar] <span class="op">=</span> get_eof2_filled_vars(</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>            ovar, sat_vars.filled[cntr], eof_nc.second, eof_work_dir</span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run C-HARM model</span></span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>    pn, pda, pca, mchla, m486, m551 <span class="op">=</span> forecast(</span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"chlor_a"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"Rrs_489"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"Rrs_556"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a>        data_dict[<span class="st">"thesalt"</span>], data_dict[<span class="st">"thetemp"</span>], combotimes</span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save results to netCDF and archive</span></span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a>    charms_out_files <span class="op">=</span> charms_nc3(</span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>        pn, pda, pca, model_time,</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"chlor_a"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"Rrs_489"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>        np.flip(data_dict[<span class="st">"Rrs_556"</span>], axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>        data_dict[<span class="st">"thesalt"</span>], data_dict[<span class="st">"thetemp"</span>],</span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>        work_dir, config.res_dir,</span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>        data_dict[<span class="st">"salt_mins"</span>], data_dict[<span class="st">"temp_mins"</span>]</span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>    archive_charm_outputs(charms_out_files, work_dir, results_dir, now_satellite)</span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>    <span class="co"># OPTIONAL: publish to GCS if enabled (Cloud Run Job-friendly)</span></span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> os.getenv(<span class="st">"PUBLISH_ENABLE"</span>, <span class="st">"0"</span>) <span class="op">==</span> <span class="st">"1"</span>:</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>        publish_results_to_gcs(</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>            results_year_dir<span class="op">=</span>(results_dir <span class="op">/</span> <span class="bu">str</span>(now_satellite.year)),</span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>            config<span class="op">=</span>config,</span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>            interval_days<span class="op">=</span><span class="bu">int</span>((<span class="bu">getattr</span>(config, <span class="st">"c_harm"</span>, <span class="va">None</span>) <span class="kw">or</span> {}).get(<span class="st">"interval"</span>, <span class="dv">1</span>)),</span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clean up</span></span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> pattern <span class="kw">in</span> patterns:</span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>        delete_files_in_directory(work_dir, pattern<span class="op">=</span>pattern)</span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Deletion of files in work dir with pattern: </span><span class="sc">%s</span><span class="st">"</span>, pattern.pattern)</span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span></span>
 <span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">SystemExit</span>(main())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">SystemExit</span>(main())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 

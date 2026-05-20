@@ -1,11 +1,11 @@
 #!/bin/bash
 # =============================================================================
-# entrypoint.sh - VIIRS primary productivity Cloud Run entrypoint
+# entrypoint.sh — VIIRS primary productivity Cloud Run entrypoint
 #
 # JOB_MODE controls what this container instance does:
 #
-#   nrt_daily   - All enabled sensors, NRT, yesterday − 3 days → yesterday
-#   sq_sweep    - All enabled sensors, SQ, sensor start → yesterday
+#   nrt_daily   — All enabled sensors, NRT, yesterday − 3 days → yesterday
+#   sq_sweep    — All enabled sensors, SQ, sensor start → yesterday
 #                 (idempotent: make script skips already-present GCS outputs)
 #
 # Both modes call control_viirs_netpp.py, which in turn calls make_viirs_netpp.py
@@ -34,7 +34,7 @@ if [[ -f /secrets/netrc/file ]]; then
     cp /secrets/netrc/file "$NETRC"
     chmod 600 "$NETRC"
 else
-    echo "ERROR: /secrets/netrc/file not found - netrc-secret mount missing?" >&2
+    echo "ERROR: /secrets/netrc/file not found — netrc-secret mount missing?" >&2
     exit 1
 fi
 
@@ -61,7 +61,7 @@ TODAY=$(date -u +%Y%m%d)
 # Yesterday in UTC
 YESTERDAY=$(date -u -d "yesterday" +%Y%m%d 2>/dev/null \
     || python3 -c "from datetime import datetime,timedelta; print((datetime.utcnow()-timedelta(days=1)).strftime('%Y%m%d'))")
-# 3 days ago - NRT buffer to catch stragglers
+# 3 days ago — NRT buffer to catch stragglers
 THREE_DAYS_AGO=$(date -u -d "3 days ago" +%Y%m%d 2>/dev/null \
     || python3 -c "from datetime import datetime,timedelta; print((datetime.utcnow()-timedelta(days=3)).strftime('%Y%m%d'))")
 
@@ -75,7 +75,7 @@ echo "-----------------------------------------------------"
 case "$MODE" in
 
   # -----------------------------------------------------------------------
-  # NRT daily - run yesterday-3d through yesterday for all enabled sensors
+  # NRT daily — run yesterday-3d through yesterday for all enabled sensors
   # -----------------------------------------------------------------------
   nrt_daily)
     echo "Running NRT daily sweep: ${THREE_DAYS_AGO} → ${YESTERDAY}"
@@ -89,7 +89,7 @@ case "$MODE" in
     ;;
 
   # -----------------------------------------------------------------------
-  # SQ sweep - scan from each sensor's operational start to yesterday.
+  # SQ sweep — scan from each sensor's operational start to yesterday.
   # The make script's gcs_exists() check makes this idempotent; it only
   # downloads and processes dates that are not yet in GCS. Running daily
   # means new SQ releases are picked up automatically regardless of when
@@ -107,7 +107,7 @@ case "$MODE" in
     ;;
 
   # -----------------------------------------------------------------------
-  # Monthly composite - previous full calendar month by default, or a user-
+  # Monthly composite — previous full calendar month by default, or a user-
   # supplied TARGET_YEAR / TARGET_MONTH override for backfills.
   #
   # This Cloud Run job is intended to be sensor-specific:

@@ -4,15 +4,15 @@ set -euo pipefail
 # ----------------------------
 # SETTINGS
 # ----------------------------
-PROJECT_ID="YOUR_GCP_PROJECT_ID"
-REGION="YOUR_GCP_REGION"
+PROJECT_ID="YOUR_PROJECT_ID"
+REGION="us-east4"
 
 # IMPORTANT: Changed to match your C-HARM naming convention
-REPO_NAME="YOUR_ARTIFACT_REGISTRY_REPO"              
-IMAGE_NAME="YOUR_ARTIFACT_REGISTRY_REPO-cloud-run"   
+REPO_NAME="edge-charm"              
+IMAGE_NAME="edge-charm-cloud-run"   
 TAG="v1"
 
-SERVICE_ACCOUNT="YOUR_CLOUD_RUN_SERVICE_ACCOUNT@${PROJECT_ID}.iam.gserviceaccount.com"
+SERVICE_ACCOUNT="YOUR_SERVICE_ACCOUNT@${PROJECT_ID}.iam.gserviceaccount.com"
 PLATFORM="${PLATFORM:-linux/amd64}"
 
 # Full image path
@@ -71,10 +71,10 @@ echo "OK: pushed ${IMAGE_PATH}"
 # ----------------------------
 # 4) Deploy Cloud Run Job
 # ----------------------------
-echo "Deploying Cloud Run Job: YOUR_CLOUD_RUN_JOB"
+echo "Deploying Cloud Run Job: edge-charm-daily"
 
 # We use 'deploy' but for jobs it's specifically 'gcloud run jobs deploy'
-gcloud run jobs deploy "YOUR_CLOUD_RUN_JOB" \
+gcloud run jobs deploy "edge-charm-daily" \
   --image "${IMAGE_PATH}" \
   --service-account "${SERVICE_ACCOUNT}" \
   --tasks 1 \
@@ -95,14 +95,14 @@ echo "Configuring Cloud Scheduler..."
 PROJECT_NUMBER="$(gcloud projects describe "${PROJECT_ID}" --format='value(projectNumber)')"
 
 # Run at 09:00 AM PST (adjust as needed for NASA data availability)
-SCHEDULER_NAME="YOUR_CLOUD_RUN_JOB-sync"
+SCHEDULER_NAME="edge-charm-daily-sync"
 gcloud scheduler jobs delete "${SCHEDULER_NAME}" --location "${REGION}" --quiet || true
 
 gcloud scheduler jobs create http "${SCHEDULER_NAME}" \
   --location "${REGION}" \
   --schedule "0 9 * * *" \
   --time-zone "America/Los_Angeles" \
-  --uri "https://${REGION}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${PROJECT_NUMBER}/jobs/YOUR_CLOUD_RUN_JOB:run" \
+  --uri "https://${REGION}-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/${PROJECT_NUMBER}/jobs/edge-charm-daily:run" \
   --http-method POST \
   --oauth-service-account-email "${SERVICE_ACCOUNT}" \
   --oauth-token-scope "https://www.googleapis.com/auth/cloud-platform"

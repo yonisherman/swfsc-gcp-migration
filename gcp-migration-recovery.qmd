@@ -1,0 +1,36 @@
+---
+title: "Migration, Upgrade, and Recovery"
+---
+
+### Optional: Data Preservation Snapshot
+
+::: {.callout-note}
+Required only when rebuilding, migrating, or cloning an existing VM rather than deploying from a fresh image — for example, during machine family changes or environment rebuilds where the existing data and configuration need to be preserved.
+:::
+
+Before creating a snapshot, stop any active services writing to the disk to ensure filesystem consistency:
+
+```{.bash}
+sudo systemctl stop tomcat
+```
+
+Create a persistent disk snapshot from Cloud Shell or another authenticated terminal:
+
+```{.bash}
+gcloud compute disks snapshot YOUR_INSTANCE_NAME \
+    --project=YOUR_GCP_PROJECT_ID \
+    --zone=YOUR_GCP_ZONE \
+    --snapshot-names=YOUR_INSTANCE_NAME-migration-backup
+```
+
+### Optional: Migration Snapshot Cleanup
+
+::: {.callout-note}
+Required only when rebuilding or migrating an existing VM using temporary manual snapshots. In many environments, temporary migration snapshots are retained for at least 24 hours before cleanup.
+:::
+
+After the new environment has been validated and operating normally, delete the migration snapshot:
+
+```{.bash}
+gcloud compute snapshots delete YOUR_INSTANCE_NAME-migration-backup --quiet
+```

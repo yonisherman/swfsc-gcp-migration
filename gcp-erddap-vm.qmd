@@ -1,0 +1,193 @@
+---
+title: "ERDDAP VM Setup"
+---
+
+This section describes the initialization and configuration of the dedicated ERDDAP serving environment after infrastructure has been deployed. The ERDDAP VM uses C4 high-memory instances (for example, `c4-highmem-16`) together with Hyperdisk Balanced storage, rclone-mounted GCS buckets for dataset access, and Tomcat-hosted ERDDAP for data distribution.
+
+### 1. Configure the Operating System Environment
+
+#### 1.1 Configure Shared User Group Permissions
+
+Create a shared group for operational data access and add the required users:
+
+```{.bash}
+sudo groupadd cwatch                              # Create the cwatch group if it does not already exist
+sudo usermod -aG cwatch $USER                     # Add your current user
+sudo usermod -aG cwatch YOUR_OPERATIONAL_USERNAME # Add the operational/service account (e.g. erd)
+newgrp cwatch                                     # Refresh group membership (or log out and back in)
+```
+
+#### 1.2 Initialize and Mount the Persistent Data Disk
+
+Before formatting or mounting the persistent data disk, determine whether the disk is new or reattached from an existing deployment. **If the disk was attached from a previous VM, do not reformat it.**
+
+```{.bash}
+# Identify the attached disk
+ls -l /dev/disk/by-id/
+
+# Check whether the disk already contains a filesystem
+sudo blkid /dev/disk/by-id/google-erddap-data
+
+# If no filesystem exists, create one
+sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard \
+    /dev/disk/by-id/google-erddap-data
+
+# Create mount point and mount the disk
+sudo mkdir -p /mnt/disks/erddap-data
+sudo mount -o discard,defaults \
+    /dev/disk/by-id/google-erddap-data \
+    /mnt/disks/erddap-data
+
+# Set permissions for the shared cwatch group
+sudo chown -R root:cwatch /mnt/disks/erddap-data
+sudo chmod -R 2775 /mnt/disks/erddap-data
+
+# Optional: standard symlink used by operational workflows
+sudo ln -s /mnt/disks/erddap-data /data
+```
+
+#### 1.3 Configure GCS Connectivity with Rclone {#sec-rclone}
+
+Rclone is used to mount GCS buckets directly into the ERDDAP VM filesystem using a Virtual File System (VFS) mount. The persistent high-speed data disk acts as a local VFS cache to improve ERDDAP performance when serving large NetCDF datasets from cloud storage.
+
+Install rclone:
+
+```{.bash}
+sudo curl https://rclone.org/install.sh | sudo bash
+```
+
+Create a shared rclone configuration:
+
+```{.bash}
+sudo mkdir -p /home/YOUR_OPERATIONAL_USERNAME/rclone/
+
+sudo tee /home/YOUR_OPERATIONAL_USERNAME/rclone/rclone.conf > /dev/null <<EOF
+[gcs-remote]
+type = google cloud storage
+env_auth = true
+project_number = YOUR_GCP_PROJECT_NUMBER
+location = YOUR_GCP_REGION
+EOF
+
+sudo chown -R root:cwatch /home/YOUR_OPERATIONAL_USERNAME/rclone/
+```
+
+Create the local cache and mount directories, then create the systemd persistence service:
+
+```{.bash}
+sudo tee /etc/systemd/system/rclone-mount.service > /dev/null <<EOF
+[Unit]
+Description=Rclone High-Performance GCS Mount
+After=network-online.target mnt-disks-erddap\x2ddata.mount
+Wants=network-online.target
+
+[Service]
+Type=notify
+User=root
+
+ExecStart=/usr/bin/rclone mount gcs-remote:YOUR_ERDDAP_BUCKET_NAME /mnt/gcs/erd \
+    --config /home/YOUR_OPERATIONAL_USERNAME/rclone/rclone.conf \
+    --allow-other \
+    --read-only \
+    --dir-cache-time 1h \
+    --attr-timeout 1m \
+    --vfs-cache-mode full \
+    --vfs-cache-max-age 48h \
+    --vfs-cache-max-size 2000G \
+    --vfs-cache-poll-interval 1m \
+    --cache-dir /mnt/disks/erddap-data/rclone-cache \
+    --buffer-size 128M \
+    --vfs-read-ahead 256M \
+    --vfs-read-chunk-size 64M \
+    --vfs-read-chunk-size-limit 2G \
+    --dir-perms 0775 \
+    --file-perms 0775 \
+    --gid $(getent group cwatch | cut -d: -f3) \
+    --umask 002 \
+    --rc \
+    --rc-no-auth
+
+ExecStop=/usr/bin/fusermount -u /mnt/gcs/erd
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+Key rclone mount notes:
+
+- `--read-only` prevents accidental modification of cloud-hosted datasets.
+- `--vfs-cache-mode full` enables local caching on the persistent disk.
+- `--vfs-read-ahead` improves sequential read performance for ERDDAP requests.
+- `--attr-timeout 1m` helps rclone detect when NRT files are replaced by science-quality versions in GCS.
+
+Enable and start the service:
+
+```{.bash}
+sudo systemctl daemon-reload
+sudo systemctl enable rclone-mount.service
+sudo systemctl start rclone-mount.service
+```
+
+Verify the mount and cache status:
+
+```{.bash}
+ls -l /mnt/gcs/erd       # Confirm GCS bucket contents are visible
+rclone rc vfs/stats       # Monitor cache usage and read-ahead status
+```
+
+::: {.callout-tip}
+**Storage capacity:** The 2 TB cache is a managed ceiling — rclone will automatically purge the oldest data if it hits this limit, ensuring the disk never fills up.
+
+**NRT updates:** By checking attributes once per minute, the system will automatically fetch the updated science-quality version of a file even if the filename has not changed.
+:::
+
+### 2. Install and Configure ERDDAP
+
+#### 2.1 Run the CoastWatch ERDDAP Installation Script
+
+This setup uses the [CoastWatch ERDDAP installation script](https://github.com/erd-coastwatch/cloud-erddap-setup/blob/main/setup_scripts/erddap_setup.sh) to install Tomcat, ERDDAP, Java dependencies, and supporting system configuration.
+
+```{.bash}
+wget https://raw.githubusercontent.com/erd-coastwatch/cloud-erddap-setup/main/setup_scripts/erddap_setup.sh
+chmod +x erddap_setup.sh
+./erddap_setup.sh
+
+# If reinstalling, remove the previous Tomcat installation first
+sudo rm -rf /usr/local/apache-tomcat-10.1.44/
+./erddap_setup.sh
+```
+
+#### 2.2 Configure Tomcat and ERDDAP
+
+```{.bash}
+sudo su -s /bin/bash tomcat
+cd /usr/local/tomcat_erddap/conf
+vi server.xml
+
+cd /usr/local/tomcat_erddap/content/erddap
+vi setup.xml
+```
+
+#### 2.3 Start and Verify ERDDAP
+
+```{.bash}
+# Start ERDDAP
+sudo su -s /bin/bash tomcat
+cd /usr/local/tomcat_erddap/bin
+./startup.sh
+
+# Stop ERDDAP
+./shutdown.sh
+
+# Verify installation
+curl http://localhost:8080
+
+# Install additional dependencies
+sudo apt install -y fontconfig
+sudo apt install -y lynx
+```
+
+---

@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-title">SWFSC ERDDAP Cloud Migration</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-title">Overview</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -114,13 +114,13 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">SWFSC ERDDAP Cloud Migration</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Setup</span></a>
+ <span class="menu-text">Cloud Setup</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -128,7 +128,32 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GCP Environment Setup</span></a>
+  <a href="./gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setup Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-infrastructure.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Cloud Infrastructure Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-vm-access.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Accessing VMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-erddap-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ERDDAP VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-processing-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Processing VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-migration-recovery.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Migration, Upgrade, and Recovery</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -226,7 +251,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./code-pages/charm/delpoy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">delpoy_job.sh</span></a>
+  <a href="./code-pages/charm/deploy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">deploy_job.sh</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -554,19 +579,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#swfsc-erddap-cloud-migration" id="toc-swfsc-erddap-cloud-migration" class="nav-link active" data-scroll-target="#swfsc-erddap-cloud-migration">SWFSC ERDDAP Cloud Migration</a>
-  <ul class="collapse">
-  <li><a href="#project-goals" id="toc-project-goals" class="nav-link" data-scroll-target="#project-goals">Project goals</a></li>
+  <li><a href="#project-goals" id="toc-project-goals" class="nav-link active" data-scroll-target="#project-goals">Project goals</a></li>
   <li><a href="#cloud-architecture" id="toc-cloud-architecture" class="nav-link" data-scroll-target="#cloud-architecture">Cloud architecture</a></li>
   <li><a href="#workflow-modernization" id="toc-workflow-modernization" class="nav-link" data-scroll-target="#workflow-modernization">Workflow modernization</a></li>
   <li><a href="#project-sections" id="toc-project-sections" class="nav-link" data-scroll-target="#project-sections">Project sections</a>
   <ul class="collapse">
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#cloud-setup" id="toc-cloud-setup" class="nav-link" data-scroll-target="#cloud-setup">Cloud setup</a></li>
   <li><a href="#workflows" id="toc-workflows" class="nav-link" data-scroll-target="#workflows">Workflows</a></li>
   <li><a href="#presentations" id="toc-presentations" class="nav-link" data-scroll-target="#presentations">Presentations</a></li>
   </ul></li>
   <li><a href="#status" id="toc-status" class="nav-link" data-scroll-target="#status">Status</a></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -592,8 +614,6 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="swfsc-erddap-cloud-migration" class="level1">
-<h1>SWFSC ERDDAP Cloud Migration</h1>
 <p>This book documents the migration of NOAA CoastWatch West Coast Node / SWFSC ERDDAP services and associated data processing workflows to Google Cloud Platform (GCP). The documentation is intended to serve as a practical technical record of the cloud architecture, serving environment, reusable deployment patterns, and operational workflows developed during the migration.</p>
 <p>The project is part of a broader NOAA/NMFS effort to move data systems away from legacy on-premises infrastructure and into cloud-based environments. The goal is not only to preserve existing ERDDAP services and operational data products, but also to make the supporting workflows more reproducible, maintainable, and easier to operate over time.</p>
 <section id="project-goals" class="level2">
@@ -606,7 +626,7 @@ ul.task-list li input[type="checkbox"] {
 <li>standardize workflow structure across projects</li>
 <li>reduce hard-coded paths, credentials, and hidden system assumptions</li>
 <li>support reproducible infrastructure and containerized processing</li>
-<li>document enough operational detail for review, handoff, maintenance, and future workflow development</li>
+<li>document operational details for review, handoff, maintenance, and future workflow development</li>
 </ul>
 </section>
 <section id="cloud-architecture" class="level2">
@@ -625,11 +645,16 @@ ul.task-list li input[type="checkbox"] {
 <section id="project-sections" class="level2">
 <h2 class="anchored" data-anchor-id="project-sections">Project sections</h2>
 <p>This book is organized into three main sections.</p>
-<section id="setup" class="level3">
-<h3 class="anchored" data-anchor-id="setup">Setup</h3>
-<p>The setup chapters document the shared cloud infrastructure and reusable deployment patterns used across the migration.</p>
+<section id="cloud-setup" class="level3">
+<h3 class="anchored" data-anchor-id="cloud-setup">Cloud setup</h3>
+<p>The cloud setup chapters document the shared infrastructure, VM access patterns, ERDDAP serving environment, processing VM setup, migration/recovery notes, and reusable deployment templates.</p>
 <ul>
-<li><a href="./gcp-setup.html">GCP Environment Setup</a> describes VM access, ERDDAP serving environment setup, processing VM setup, storage configuration, rclone-mounted GCS access, user permissions, and migration/recovery steps.</li>
+<li><a href="./gcp-setup.html">Setup Overview</a> provides a high-level map of the setup documentation.</li>
+<li><a href="./gcp-infrastructure.html">Cloud Infrastructure Setup</a> documents Terraform-managed VMs, buckets, disks, IAM, and snapshot policies.</li>
+<li><a href="./gcp-vm-access.html">Accessing VMs</a> documents SSH, IAP tunneling, browser SSH, and port forwarding.</li>
+<li><a href="./gcp-erddap-vm.html">ERDDAP VM Setup</a> documents the dedicated ERDDAP serving environment.</li>
+<li><a href="./gcp-processing-vm.html">Processing VM Setup</a> documents processing and development VM configuration.</li>
+<li><a href="./gcp-migration-recovery.html">Migration, Upgrade, and Recovery</a> documents snapshot and cleanup steps used during rebuilds or migrations.</li>
 <li><a href="./gcp-templates.html">GCP Data Processing Templates</a> describes the Cloud Run and processing VM template repositories used to standardize workflow structure across projects.</li>
 </ul>
 </section>
@@ -637,25 +662,25 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="workflows">Workflows</h3>
 <p>The workflow chapters document individual operational pipelines migrated or adapted for cloud-based processing.</p>
 <ul>
-<li><a href="./mh1-processor.html">MH1 / MPOC / MPIC Processor</a> documents the Cloud Run workflow for retrieving and distributing MODIS-Aqua ocean color, SST, particulate organic carbon, and particulate inorganic carbon products.</li>
-<li><a href="./viirs-netpp.html">VIIRS Net Primary Productivity</a> documents the Cloud Run workflow for generating daily and monthly VIIRS productivity products.</li>
-<li><a href="./mur-sst.html">MUR SST</a> documents the MUR SST workflow, including download logic, NRT-to-final upgrade handling, anomaly generation, frontal edge detection, and monthly composites.</li>
-<li><a href="./charm.html">CHARM</a> documents the CHARM workflow, including VIIRS input handling, DINEOF gap-filling, model processing, template use, and ERDDAP-ready output generation.</li>
+<li><a href="./mh1-processor.html">MH1 / MPOC / MPIC Processor</a> documents the Cloud Run workflow for retrieving and publishing MODIS-Aqua MH1 ocean color, MH1 SST, MPIC, and MPOC products.</li>
+<li><a href="./viirs-netpp.html">VIIRS Net Primary Productivity</a> documents the daily and monthly VIIRS NetPP workflow for SNPP and NOAA-20.</li>
+<li><a href="./mur-sst.html">MUR SST</a> documents the MUR SST, anomaly, frontal, and monthly-processing workflows.</li>
+<li><a href="./charm.html">C-HARM</a> documents the containerized C-HARM processing workflow.</li>
 </ul>
-<p>Each workflow chapter includes a processing overview, repository structure, cloud deployment pattern, operational logic, and links to rendered code pages for scripts, configuration files, Dockerfiles, templates, and deployment assets.</p>
 </section>
 <section id="presentations" class="level3">
 <h3 class="anchored" data-anchor-id="presentations">Presentations</h3>
-<p>The <a href="./erddap-cloud-migration-presentations.html">ERDDAP Cloud Migration Presentations</a> chapter collects slide materials used for project updates, architecture discussions, and stakeholder briefings.</p>
+<p>The presentations section collects project update slides and status material used during the migration.</p>
+<ul>
+<li><a href="./erddap-cloud-migration-presentations.html">Presentations and Project Updates</a> provides access to the ERDDAP cloud migration presentation materials.</li>
+</ul>
 </section>
 </section>
 <section id="status" class="level2">
 <h2 class="anchored" data-anchor-id="status">Status</h2>
-<p>This book is a working technical record of an active migration. Some sections are polished operational documentation, while others capture implementation details and lessons learned as the system evolves.</p>
-<p>The broader objective is a cloud-based ERDDAP ecosystem that preserves existing services while making the underlying infrastructure and workflows more reproducible, transparent, and maintainable.</p>
+<p>This documentation is a living technical record. It is intended to capture both the final cloud architecture and the practical operational details needed to maintain, troubleshoot, and extend the migrated workflows.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -1065,8 +1090,8 @@ ul.task-list li input[type="checkbox"] {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./gcp-setup.html" class="pagination-link" aria-label="GCP Environment Setup">
-        <span class="nav-page-text"><span class="chapter-title">GCP Environment Setup</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./gcp-setup.html" class="pagination-link" aria-label="Setup Overview">
+        <span class="nav-page-text"><span class="chapter-title">Setup Overview</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

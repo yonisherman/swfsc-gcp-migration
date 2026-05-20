@@ -263,11 +263,11 @@ pages = [
      "Cloud Run entrypoint and job mode selector.",
      "workflows/charm/entrypoint.sh"),
 
-    ("code-pages/charm/delpoy_job.qmd",
-     "delpoy_job.sh",
+    ("code-pages/charm/deploy_job.qmd",
+     "deploy_job.sh",
      "bash",
      "Builds, deploys, and schedules the CHARM Cloud Run job.",
-     "workflows/charm/delpoy_job.sh"),
+     "workflows/charm/deploy_job.sh"),
 
     ("code-pages/charm/config.qmd",
      "config.yaml",

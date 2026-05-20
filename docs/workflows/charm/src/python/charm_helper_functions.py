@@ -45,6 +45,7 @@ def delete_files_in_directory(
     pattern: Union[str, Pattern[str], None] = None,
     recursive: bool = False
 ) -> None:
+    """Delete files in a directory whose names match a regex pattern."""
     directory = Path(directory_path)
 
     if not directory.is_dir():
@@ -120,6 +121,7 @@ class Config:
     work_l2_prefix: str = "edge/c-harm/processed_nasa_data"
 
 def load_config(filepath: str) -> Config:
+    """Load the multi-document CHARM YAML config into a typed runtime object."""
     with open(filepath, "r") as f:
         yaml_docs_list = list(yaml.safe_load_all(f))
 
@@ -222,6 +224,7 @@ def load_config(filepath: str) -> Config:
 
 
 def parse_args(argv: List[str] | None) -> Tuple[datetime, bool, bool]:
+    """Parse date, backfill, and overwrite flags for one CHARM run."""
     parser = argparse.ArgumentParser(description="C-HARM nowcast/backfill control utility.")
 
     parser.add_argument(
@@ -260,11 +263,13 @@ def parse_args(argv: List[str] | None) -> Tuple[datetime, bool, bool]:
 
 
 def ensure_dirs(*dirs: Path) -> None:
+    """Create one or more directories if they do not already exist."""
     for d in dirs:
         Path(d).mkdir(parents=True, exist_ok=True)
 
 
 def run_cmd(cmd: Union[List[str], str], msg: Optional[str] = None) -> None:
+    """Run a command and raise RuntimeError when it exits unsuccessfully."""
     printable = " ".join(cmd) if isinstance(cmd, list) else cmd
     log_message = f"[run_cmd] {msg}: {printable}" if msg else f"[run_cmd] {printable}"
     logger.info(log_message)
@@ -320,7 +325,7 @@ def sync_processed_l3_from_work_bucket(processed_viirs_dir: Path, config) -> Non
 def publish_results_to_gcs(results_year_dir: Path, config: Config, interval_days: int = 1) -> None:
     """
     Publish archived netCDFs to GCS.
-    Structure: gs://YOUR_BUCKET_NAME/YOUR_PATH<bucket>/wvcharmV4_<Nday>/<year>/<file>.nc
+    Structure: gs://<bucket>/wvcharmV4_<Nday>/<year>/<file>.nc
     """
     if not config.publish_targets or "prod" not in config.publish_targets:
         logger.warning("publish_results_to_gcs: no publish_targets.prod in config; skipping")
@@ -348,7 +353,7 @@ def publish_results_to_gcs(results_year_dir: Path, config: Config, interval_days
             logger.warning("Could not parse day offset from %s, skipping", nc_file.name)
             continue
 
-        # gs://YOUR_BUCKET_NAME/YOUR_PATH<bucket>/edge/charm_v4/wvcharmV4_<Nday>/<year>/<file>.nc
+        # gs://<bucket>/edge/charm_v4/wvcharmV4_<Nday>/<year>/<file>.nc
         root = prod.get("root", "edge")
         gcs_dst = f"gs://{bucket}/{root}/wvcharmV4_{day_str}/{year}/{nc_file.name}"
 
@@ -654,15 +659,15 @@ def mymove1(
         time: 1D sequence of times (same units as returned - typically days as
             ordinal+fraction, e.g. `date.toordinal() + hour/24`). Length `nt`.
         x_pos: 1D array of longitudes (size `nx`) OR 2D grid of longitudes
-            (shape `ny,nx`) - used to derive the lon axis.
+            (shape `ny,nx`) — used to derive the lon axis.
         y_pos: 1D array of latitudes (size `ny`) OR 2D grid of latitudes
-            (shape `ny,nx`) - used to derive the lat axis.
+            (shape `ny,nx`) — used to derive the lat axis.
         xarr: 2D longitude grid (`ny, nx`) (usually `np.meshgrid(mylonm, mylatm)[1]`).
         yarr: 2D latitude grid (`ny, nx`)  (usually `np.meshgrid(mylonm, mylatm)[0]`).
         modelu: 3D u-velocity array with shape `(nt, ny, nx)` (degrees/day).
         modelv: 3D v-velocity array with shape `(nt, ny, nx)` (degrees/day).
         t0: initial reference time (kept for signature compatibility; not used
-            internally here - `time` controls the integration).
+            internally here — `time` controls the integration).
         themask: 2D mask array (`ny, nx`) where `1` means ocean/valid and `0`
             means land/invalid.
 

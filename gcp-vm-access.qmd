@@ -1,0 +1,110 @@
+---
+title: "Accessing VMs"
+---
+
+Once infrastructure is deployed, you can connect to any VM using either the `gcloud` CLI or the GCP Console browser-based SSH. Both methods use [Identity-Aware Proxy (IAP)](https://cloud.google.com/iap/docs/concepts-overview) tunneling, so no public IP address or open firewall ports are required.
+
+### Prerequisites
+
+Before connecting to a VM for the first time, complete the following setup steps.
+
+#### 1. Install the Google Cloud SDK
+
+Download and install the [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) for your operating system. The SDK provides the `gcloud` command-line tool used throughout this documentation.
+
+After installation, initialize the SDK:
+
+```{.bash}
+gcloud init
+```
+
+This walks you through selecting a Google account and default project.
+
+#### 2. Authenticate
+
+Log in with your Google account:
+
+```{.bash}
+gcloud auth login
+```
+
+This opens a browser window to complete authentication. Once done, confirm the active account and project:
+
+```{.bash}
+gcloud config list
+```
+
+#### 3. Confirm IAP Access
+
+Connecting to VMs through the CLI requires the `IAP-secured Tunnel User` (`roles/iap.tunnelResourceAccessor`) IAM role on the project. In this setup, that role is managed by IT through a centralized `roles.tf` Terraform configuration — you will need to request access from whoever administers that if you don't have it yet.
+
+Once access has been granted, confirm the role is assigned to your account:
+
+```{.bash}
+gcloud projects get-iam-policy YOUR_GCP_PROJECT_ID \
+    --flatten="bindings[].members" \
+    --filter="bindings.members:YOUR_EMAIL@noaa.gov" \
+    --format="table(bindings.role)"
+```
+
+`roles/iap.tunnelResourceAccessor` should appear in the output. If it does not, follow up with your IT team or project admin.
+
+
+### Via the gcloud CLI
+
+The general pattern for connecting to a VM is:
+
+```{.bash}
+gcloud compute ssh YOUR_VM_NAME \
+    --project=YOUR_GCP_PROJECT_ID \
+    --zone=YOUR_GCP_ZONE \
+    --tunnel-through-iap
+```
+
+Port forwarding is added via `--ssh-flag` to make local services on the VM accessible in your browser. The `-4` flag forces IPv4, which avoids common IAP tunneling issues.
+
+**ERDDAP VM** — forwards both the ERDDAP web interface (port 8080) and JupyterLab (port 8888):
+
+```{.bash}
+gcloud compute ssh YOUR_ERDDAP_VM_NAME \
+    --project=YOUR_GCP_PROJECT_ID \
+    --zone=YOUR_GCP_ZONE \
+    --tunnel-through-iap \
+    --ssh-flag="-4 -L 8080:localhost:8080 -L 8888:localhost:8888"
+```
+
+Once connected, the ERDDAP interface is accessible at `http://localhost:8080/erddap` in your local browser (ERDDAP runs continuously via Tomcat). To use JupyterLab, start it on the VM first:
+
+```{.bash}
+jupyter lab --no-browser --port=8888
+```
+
+Jupyter will print a URL with a token to the terminal — copy and paste the `http://localhost:8888/lab?token=...` URL into your local browser.
+
+**Dataproc / processing VM** — forwards JupyterLab (port 8081 to avoid conflicts if the ERDDAP VM tunnel is already open):
+
+```{.bash}
+gcloud compute ssh YOUR_DATAPROC_VM_NAME \
+    --project=YOUR_GCP_PROJECT_ID \
+    --zone=YOUR_GCP_ZONE \
+    --tunnel-through-iap \
+    --ssh-flag="-4 -L 8081:localhost:8081"
+```
+
+Once connected, start JupyterLab on the VM:
+
+```{.bash}
+jupyter lab --no-browser --port=8081
+```
+
+Jupyter will print a URL with a token to the terminal — copy and paste the `http://localhost:8081/lab?token=...` URL into your local browser.
+
+### Via the GCP Console
+
+For quick access without the CLI:
+
+1. Go to the [Compute Engine VM instances](https://console.cloud.google.com/compute/instances) page in the GCP Console.
+2. Find your VM in the list.
+3. Click the **SSH** button in the Connect column.
+
+The console opens a browser-based terminal connected to the VM through IAP. This is convenient for quick checks but does not support port forwarding or persistent sessions.

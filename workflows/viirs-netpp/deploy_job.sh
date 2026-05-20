@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# deploy.sh - Build, push, and configure VIIRS netpp Cloud Run jobs
+# deploy.sh — Build, push, and configure VIIRS netpp Cloud Run jobs
 #
 # Jobs deployed:
 #   viirs-netpp-nrt-daily        Daily NRT run (all sensors, yesterday-3d → yesterday)
@@ -15,28 +15,22 @@
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
-# Settings - edit these for your project
+# Settings — edit these for your project
 # ---------------------------------------------------------------------------
-# ---------------------------------------------------------------------------
-# User settings - replace these for your environment
-# ---------------------------------------------------------------------------
-PROJECT_ID="YOUR_GCP_PROJECT_ID"
-REGION="YOUR_GCP_REGION"          # e.g., "us-east4"
+PROJECT_ID="YOUR_PROJECT_ID"
+REGION="us-east4"
 
 REPO_NAME="viirs-netpp-processor"
 IMAGE_NAME="viirs-netpp-processor"
 TAG="v1"
 
-# Cloud Run service account used to execute jobs
-SERVICE_ACCOUNT="YOUR_CLOUD_RUN_SERVICE_ACCOUNT@${PROJECT_ID}.iam.gserviceaccount.com"
+SERVICE_ACCOUNT="YOUR_SERVICE_ACCOUNT@${PROJECT_ID}.iam.gserviceaccount.com"
 
-# Secrets
-# This workflow requires Secret Manager mounts for authentication
-# (e.g., NASA Earthdata credentials). Secrets must be configured
-# prior to deployment - see setup documentation.
+# Shared secrets mounted into every job task
+# Secret names must already exist in Secret Manager
 COMMON_SECRETS="/secrets/netrc/file=netrc-secret:latest,/secrets/cookies/file=urs-cookies-secret:latest"
 
-# Cross-platform build flag
+# Cross-platform build flag (keep for Apple Silicon dev machines; no-op on Linux CI)
 PLATFORM="${PLATFORM:-linux/amd64}"
 
 IMAGE_PATH="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:${TAG}"
@@ -70,7 +64,7 @@ if $PUSH; then
     echo ">>> Ensuring Artifact Registry repo: ${REPO_NAME} (${REGION})"
     if ! gcloud artifacts repositories describe "${REPO_NAME}" \
             --location="${REGION}" >/dev/null 2>&1; then
-        echo "    Repo not found - creating..."
+        echo "    Repo not found — creating..."
         gcloud artifacts repositories create "${REPO_NAME}" \
             --repository-format=docker \
             --location="${REGION}" \
@@ -121,7 +115,7 @@ deploy_job() {
         --set-env-vars      "${env_vars}"
 }
 
-# NRT daily: 3 sensors × ~1 day each - relatively fast
+# NRT daily: 3 sensors × ~1 day each — relatively fast
 deploy_job "viirs-netpp-nrt-daily" "nrt_daily" "8Gi" "4" "2h"
 
 # SQ sweep: 3 sensors × many years on first run, then near-instant on subsequent runs
@@ -168,21 +162,21 @@ create_scheduler() {
         --oauth-token-scope           "https://www.googleapis.com/auth/cloud-platform"
 }
 
-# NRT daily - runs at 08:15 local time (America/Los_Angeles).
+# NRT daily — runs at 08:15 local time (America/Los_Angeles).
 create_scheduler \
     "viirs-netpp-nrt-daily-sched" \
     "viirs-netpp-nrt-daily" \
     "15 8 * * *" \
     "America/Los_Angeles"
 
-# SQ sweep - runs weekly on Wednesday at 23:00 local time (America/Los_Angeles).
+# SQ sweep — runs weekly on Wednesday at 23:00 local time (America/Los_Angeles).
 create_scheduler \
     "viirs-netpp-sq-sweep-sched" \
     "viirs-netpp-sq-sweep" \
     "0 23 * * 3" \
     "America/Los_Angeles"
 
-# Monthly composite - SNPP
+# Monthly composite — SNPP
 # Runs on the 5th and 10th at 11:00 local time.
 create_scheduler \
     "viirs-netpp-monthly-snpp-sched" \
@@ -190,7 +184,7 @@ create_scheduler \
     "0 11 5,10 * *" \
     "America/Los_Angeles"
 
-# Monthly composite - NOAA-20
+# Monthly composite — NOAA-20
 # Stagger by 15 minutes so both monthly jobs do not start at once.
 create_scheduler \
     "viirs-netpp-monthly-noaa20-sched" \

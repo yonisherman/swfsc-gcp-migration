@@ -3,8 +3,8 @@
 C-HARM Cloud Control Runner
 
 Runs:
-1) NRT run (default) - executes make_charm_cloud_v1 in nowcast mode
-2) Backfill runs - executes make_charm_cloud_v1 for earlier dates
+1) NRT run (default) — executes make_charm_cloud_v1 in nowcast mode
+2) Backfill runs — executes make_charm_cloud_v1 for earlier dates
 
 Key Cloud Run / Docker behaviors:
 - Uses CONFIG_PATH env var (default /app/config/config.yaml)
@@ -47,6 +47,7 @@ def load_cloud_config(filepath: str) -> dict:
 
 
 def parse_args() -> int:
+    """Parse controller options and return the exclusive backfill offset limit."""
     parser = argparse.ArgumentParser(description="Run C-HARM cloud NRT + backfill tasks.")
     parser.add_argument(
         "-b", "--backfill_days",
@@ -62,6 +63,7 @@ def parse_args() -> int:
 
 
 def main() -> None:
+    """Run the near-real-time C-HARM job and optional backfill dates."""
     config_path = os.getenv("CONFIG_PATH", "/app/config/config.yaml")
     logger.info("Using config: %s", config_path)
 
@@ -81,7 +83,7 @@ def main() -> None:
         f"{CONFIG.python} -m {MODULE_TO_RUN}"
     )
 
-    # NRT run - make_charm_cloud_v1 handles its own duplicate check via local results dir
+    # NRT run — make_charm_cloud_v1 handles its own duplicate check via local results dir
     # but since that's ephemeral, also check the bucket for today's NRT date (today - 1)
     now_utc = datetime.utcnow()
     nrt_date_str = (now_utc - timedelta(days=1)).strftime("%Y%m%d")
@@ -89,7 +91,7 @@ def main() -> None:
 
 
     if results_exist_in_gcs(nrt_date_str, prod_bucket, prod_root):
-        logger.info("Skipping NRT - results for %s already in bucket", nrt_date_str)
+        logger.info("Skipping NRT — results for %s already in bucket", nrt_date_str)
     else:
         logger.info("NRT command: %s", nrt_cmd)
         subprocess.run(nrt_cmd, shell=True, check=False)
@@ -100,7 +102,7 @@ def main() -> None:
         date_str = date_obj.strftime("%Y%m%d")
 
         if results_exist_in_gcs(date_str, prod_bucket, prod_root):
-            logger.info("Skipping backfill %s - results already in bucket", date_str)
+            logger.info("Skipping backfill %s — results already in bucket", date_str)
             continue
 
         backfill_cmd = f"{nrt_cmd} -d {date_str} -b"

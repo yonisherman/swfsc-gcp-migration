@@ -1,4 +1,4 @@
-"""Create primary productivity satellite-based products - GCP edition.
+"""Create primary productivity satellite-based products — GCP edition.
 
 Supports:
   Sensors : VIIRS SNPP (snpp), NOAA-20 (noaa20), NOAA-21 (noaa21)
@@ -10,7 +10,7 @@ Per-date workflow
 2.  Download each raw file from NASA to local scratch.
 3.  Load arrays, compute PP using Behrenfeld & Falkowski 1997 (VGPM).
 4.  Write compressed output NetCDF to local scratch.
-5.  Upload final NetCDF to gs://YOUR_GCS_BUCKET/edge/{sensor}/netpp_{dtype}/{year}/
+5.  Upload final NetCDF to gs://<production-bucket>/edge/{sensor}/netpp_{dtype}/{year}/
 6.  Clean up all local scratch files (inputs are NOT archived to GCS).
 
 Environment variables
@@ -79,6 +79,7 @@ def resolve_env(var: str, default: str | None = None) -> str:
 
 
 def build_paths(cfg: dict) -> dict:
+    """Resolve scratch, template, and NCO binary paths used during processing."""
     ncgen = shutil.which("ncgen")
     nccopy = shutil.which("nccopy")
 
@@ -195,9 +196,9 @@ def download_nasa_file(url: str, dest_dir: str, max_attempts: int = 3) -> str:
         if _validate_nc(dest):
             return dest
 
-        # File exists but is not valid HDF5 - log size for diagnostics
+        # File exists but is not valid HDF5 — log size for diagnostics
         bad_size = os.path.getsize(dest)
-        print(f"  ✗ HDF5 validation failed for {fname} ({bad_size:,} bytes) - likely corrupt download.")
+        print(f"  ✗ HDF5 validation failed for {fname} ({bad_size:,} bytes) — likely corrupt download.")
         os.remove(dest)
         if attempt == max_attempts:
             raise RuntimeError(
@@ -338,6 +339,7 @@ def calculate_PPeu(
 # ---------------------------------------------------------------------------
 
 def get_summary_and_history(sensor: str, dtype: str) -> tuple[str, str]:
+    """Return sensor/type-specific global summary and history metadata."""
     su = sensor.upper()
     dtype_label = "Near Real Time (NRT)" if dtype == "nrt" else "Science Quality (SQ)"
     dtype_short  = "NRT" if dtype == "nrt" else "Science Quality"
@@ -365,6 +367,7 @@ def write_nc_metadata(
     now: datetime,
     cfg: dict,
 ) -> None:
+    """Populate global attributes and time metadata on an output NetCDF file."""
     start_year = cfg["sensors"][sensor]["start_year"]
     summary, history = get_summary_and_history(sensor, dtype)
     su = sensor.upper()
@@ -424,6 +427,7 @@ def process_date(
     tmpl = proc_cfg["output_filename_template"][dtype]
     ofile = tmpl.format(sensor=sensor, date=date_str)
     
+    # Match dtype to the ERDDAP-facing interval folder used by the XML datasets.
     if dtype == "nrt":
         interval = "1day_nrt"
     else:
@@ -445,7 +449,7 @@ def process_date(
     print(f"{'='*60}")
 
     # ------------------------------------------------------------------
-    # Download inputs to scratch - these are temp files only, not archived
+    # Download inputs to scratch — these are temp files only, not archived
     # ------------------------------------------------------------------
     local_inputs = {}
     for var in ["chl", "par", "sst"]:
@@ -514,12 +518,14 @@ def process_date(
             lon = nc["longitude"][:]
             nlat = len(lat)
             nlon = len(lon)
-            day_len_1d = daylength(doy, lat)  # (nlat,) - compute once
+            day_len_1d = daylength(doy, lat)  # (nlat,) — compute once
 
             nc["time"][0] = noon_ts
             write_nc_metadata(nc, sensor, dtype, current_date, noon_ts, now, cfg)
 
             for row0 in range(0, nlat, CHUNK_ROWS):
+                # Process latitude strips so global 4 km arrays do not need to
+                # be fully materialized for every intermediate variable.
                 row1 = min(row0 + CHUNK_ROWS, nlat)
 
                 # Load one strip from each input (2D: lat × lon)
@@ -557,7 +563,7 @@ def process_date(
         print(f"  ✗ Failed during chunked compute/write: {exc}")
         return False
 
-    # Delete input files immediately - free disk and RAM pressure before nccopy
+    # Delete input files immediately — free disk and RAM pressure before nccopy
     for p in local_inputs.values():
         try:
             os.remove(p)
@@ -604,7 +610,8 @@ def process_date(
 # Argument parsing
 # ---------------------------------------------------------------------------
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
+    """Parse command-line options for one daily sensor/dtype date range."""
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -643,7 +650,8 @@ def parse_args():
 # Main
 # ---------------------------------------------------------------------------
 
-def main():
+def main() -> None:
+    """Validate inputs, create scratch space, and process each requested date."""
     args = parse_args()
     cfg = load_config(args.config)
     paths = build_paths(cfg)
@@ -656,7 +664,7 @@ def main():
     if args.sensor not in cfg.get("sensors", {}):
         sys.exit(f"Sensor '{args.sensor}' not found in config sensors block.")
 
-    # Enforce sensor operational start date - silently clip the range
+    # Enforce sensor operational start date — silently clip the range
     op_start = sensor_start_date(cfg, args.sensor)
     if end_date < op_start:
         sys.exit(

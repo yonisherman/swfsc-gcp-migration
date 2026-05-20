@@ -1,5 +1,5 @@
 # =============================================================================
-# Dockerfile - VIIRS primary productivity Cloud Run job
+# Dockerfile — VIIRS primary productivity Cloud Run job
 #
 # Builds a single image used by two Cloud Run jobs:
 #   viirs-netpp-nrt-daily   (JOB_MODE=nrt_daily)

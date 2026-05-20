@@ -263,13 +263,14 @@ def _run_commands_parallel(
         return cwd, force_capture
 
     def _run_one(cmd):
+        """Execute one command and return its completed process object."""
         cmd_str = cmd if isinstance(cmd, str) else " ".join(cmd)
         logger.info("START: %s", cmd_str)
 
         cwd, force_capture = _infer_cwd_and_capture(cmd)
 
         if cwd is not None:
-            logger.info("DINEOF detected - running with cwd=%s", cwd)
+            logger.info("DINEOF detected — running with cwd=%s", cwd)
 
         # For DINEOF we want captured output always; for other cmds, respect print_output
         capture = force_capture or print_output
@@ -616,7 +617,7 @@ def process_charm_files_for_day(
     ]
 
     if len(charm_files) != 3:
-        logger.warning("Skip %s - missing files", fd.date())
+        logger.warning("Skip %s — missing files", fd.date())
         return
 
     for ct, fl in enumerate(charm_files):

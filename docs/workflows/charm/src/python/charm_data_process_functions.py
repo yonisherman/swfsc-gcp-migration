@@ -170,7 +170,7 @@ def m_fdist(
 
     Notes:
         * Algorithm: Vincenty's forward formula (ellipsoidal geodesics).
-        * Output longitude is wrapped into the ``0-360°`` range.
+        * Output longitude is wrapped into the ``0–360°`` range.
         * This function converges for the vast majority of Earth geodesics but,
           like all Vincenty-based formulas, may fail for nearly antipodal points.
 
@@ -300,9 +300,9 @@ def LonLatPerCM(Lon: np.ndarray, Lat: np.ndarray) -> tuple[np.ndarray, np.ndarra
 
     Returns:
         tuple:
-            np.ndarray: ``LonPerCM`` - change in longitude (degrees) for 1 cm
+            np.ndarray: ``LonPerCM`` — change in longitude (degrees) for 1 cm
             east-west displacement at each grid point.
-            np.ndarray: ``LatPerCM`` - change in latitude (degrees) for 1 cm
+            np.ndarray: ``LatPerCM`` — change in latitude (degrees) for 1 cm
             north-south displacement at each grid point.
 
     Raises:
@@ -356,15 +356,15 @@ def mymove1(
         time: 1D sequence of times (same units as returned - typically days as
             ordinal+fraction, e.g. `date.toordinal() + hour/24`). Length `nt`.
         x_pos: 1D array of longitudes (size `nx`) OR 2D grid of longitudes
-            (shape `ny,nx`) - used to derive the lon axis.
+            (shape `ny,nx`) — used to derive the lon axis.
         y_pos: 1D array of latitudes (size `ny`) OR 2D grid of latitudes
-            (shape `ny,nx`) - used to derive the lat axis.
+            (shape `ny,nx`) — used to derive the lat axis.
         xarr: 2D longitude grid (`ny, nx`) (usually `np.meshgrid(mylonm, mylatm)[1]`).
         yarr: 2D latitude grid (`ny, nx`)  (usually `np.meshgrid(mylonm, mylatm)[0]`).
         modelu: 3D u-velocity array with shape `(nt, ny, nx)` (degrees/day).
         modelv: 3D v-velocity array with shape `(nt, ny, nx)` (degrees/day).
         t0: initial reference time (kept for signature compatibility; not used
-            internally here - `time` controls the integration).
+            internally here — `time` controls the integration).
         themask: 2D mask array (`ny, nx`) where `1` means ocean/valid and `0`
             means land/invalid.
 
@@ -685,7 +685,7 @@ def regrid_st_aws(
 
     Notes:
         * ``ocean_time`` is assumed to be seconds since ``2016-01-01``.
-        * ROMS longitudes are converted to ``0-360`` format.
+        * ROMS longitudes are converted to ``0–360`` format.
         * The interpolation function ``regrid_irr_2_reg`` must be available.
 
     Example:
@@ -817,11 +817,11 @@ def regrid_uv_aws(
 
     Returns:
         tuple[ma.MaskedArray, ma.MaskedArray, list[datetime]]:
-            * **us** - Masked array of regridded U-component velocities
+            * **us** – Masked array of regridded U-component velocities
               with shape `(ntime, ny, nx)`.
-            * **vs** - Masked array of regridded V-component velocities
+            * **vs** – Masked array of regridded V-component velocities
               with shape `(ntime, ny, nx)`.
-            * **o_time** - List of corresponding Python `datetime` objects.
+            * **o_time** – List of corresponding Python `datetime` objects.
 
     Example:
         >>> us, vs, times = regrid_uv_aws(
@@ -958,7 +958,7 @@ def get_wcofs_salt_temp_aws(
     work_dir.mkdir(parents=True, exist_ok=True)
 
     if not forecast:
-        logging.info("Nowcast mode selected - adjusting date to previous day.")
+        logging.info("Nowcast mode selected — adjusting date to previous day.")
         for_now = "n"
         charm_date -= timedelta(days=1)
     else:
@@ -1033,7 +1033,7 @@ def get_wcofs_uv_aws(
     correspond to nowcasts vs. forecasts using ``overflight_offset``.
 
     File download order:
-        * Nowcast hours: last ``overflight_offset`` hours of ``1-24``
+        * Nowcast hours: last ``overflight_offset`` hours of ``1–24``
         * Forecast hours: all forecast hours except the overlapping offset
 
     A legacy (``nos.wcofs``) filename is attempted first; if unavailable,
@@ -1076,8 +1076,8 @@ def get_wcofs_uv_aws(
     work_dir.mkdir(parents=True, exist_ok=True)
 
     # Define sequences for nowcast and forecast hours
-    forecast_hours = list(range(1, 73))   # 1-72
-    nowcast_hours = list(range(1, 25))    # 1-24
+    forecast_hours = list(range(1, 73))   # 1–72
+    nowcast_hours = list(range(1, 25))    # 1–24
 
     # Combine series based on offset rule
     hrange = nowcast_hours[-overflight_offset:] + forecast_hours[:-overflight_offset]
@@ -1455,6 +1455,7 @@ def run_commands_parallel(
     results = {}
 
     def _run_one(cmd):
+        """Execute one command for the surrounding parallel command runner."""
         cmd_str = cmd if isinstance(cmd, str) else " ".join(cmd)
         logging.info("START: %s", cmd_str)
 
@@ -1557,7 +1558,7 @@ def regrid_stack_wcofs_st(
                 "temp_mins": list[float],
             }
 
-            where index 0-3 correspond to the four configured ``st_i`` blocks.
+            where index 0–3 correspond to the four configured ``st_i`` blocks.
 
     Raises:
         KeyError:
@@ -1601,7 +1602,7 @@ def regrid_stack_wcofs_st(
             model_lat,
         )
 
-    # Stack outputs - expects keys st_0, st_1, st_2, st_3
+    # Stack outputs — expects keys st_0, st_1, st_2, st_3
     logging.info("Stacking regridded salinity and temperature arrays.")
 
     thesalt = np.stack(
@@ -1719,6 +1720,7 @@ def create_advection_step(
         now_wcofs, timezone_offset, work_dir, mylonm, mylatm,
         model_lon_grid, model_lat_grid, themask
 ):
+    """Build trajectory fields used to advect DINEOF-filled variables forward."""
     foreu1, forev1, foretime = merge_uv_wcofs_and_regrid(
         now_wcofs, timezone_offset, work_dir, model_lon_grid, model_lat_grid
     )
@@ -1943,11 +1945,11 @@ def regrid_uv_aws_parallel(
 
     Returns:
         tuple[ma.MaskedArray, ma.MaskedArray, list[datetime]]:
-            * **us** - Masked array of regridded U-component velocities
+            * **us** – Masked array of regridded U-component velocities
               with shape `(ntime, ny, nx)`.
-            * **vs** - Masked array of regridded V-component velocities
+            * **vs** – Masked array of regridded V-component velocities
               with shape `(ntime, ny, nx)`.
-            * **o_time** - List of corresponding Python `datetime` objects.
+            * **o_time** – List of corresponding Python `datetime` objects.
 
     Example:
         >>> us, vs, times = regrid_uv_aws_parallel(

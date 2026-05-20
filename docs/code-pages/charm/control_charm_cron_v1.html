@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../code-pages/charm/delpoy_job.html" rel="next">
+<link href="../../code-pages/charm/deploy_job.html" rel="next">
 <link href="../../code-pages/charm/config.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -156,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Setup</span></a>
+ <span class="menu-text">Cloud Setup</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -164,7 +164,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GCP Environment Setup</span></a>
+  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setup Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-infrastructure.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Cloud Infrastructure Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-vm-access.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Accessing VMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-erddap-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ERDDAP VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-processing-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Processing VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-migration-recovery.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Migration, Upgrade, and Recovery</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -262,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../code-pages/charm/delpoy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">delpoy_job.sh</span></a>
+  <a href="../../code-pages/charm/deploy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">deploy_job.sh</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -616,8 +641,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">C-HARM Cloud Control Runner</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">Runs:</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">1) NRT run (default) - executes make_charm_cloud_v1 in nowcast mode</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">2) Backfill runs - executes make_charm_cloud_v1 for earlier dates</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">1) NRT run (default) — executes make_charm_cloud_v1 in nowcast mode</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">2) Backfill runs — executes make_charm_cloud_v1 for earlier dates</span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">Key Cloud Run / Docker behaviors:</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">- Uses CONFIG_PATH env var (default /app/config/config.yaml)</span></span>
@@ -660,69 +685,71 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parse_args() <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span><span class="st">"Run C-HARM cloud NRT + backfill tasks."</span>)</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>        <span class="st">"-b"</span>, <span class="st">"--backfill_days"</span>,</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>,</span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        default<span class="op">=</span><span class="bu">int</span>(os.getenv(<span class="st">"BACKFILL_DAYS"</span>, <span class="st">"5"</span>)),</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        <span class="bu">help</span><span class="op">=</span><span class="st">"Number of additional days to backfill beyond the NRT run. Default 5."</span>,</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    backfill_range_end <span class="op">=</span> args.backfill_days <span class="op">+</span> <span class="dv">2</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Backfill days requested=</span><span class="sc">%d</span><span class="st"> =&gt; running offsets i=2..</span><span class="sc">%d</span><span class="st"> (exclusive upper bound=</span><span class="sc">%d</span><span class="st">)"</span>,</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>                args.backfill_days, backfill_range_end <span class="op">-</span> <span class="dv">1</span>, backfill_range_end)</span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> backfill_range_end</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Parse controller options and return the exclusive backfill offset limit."""</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    parser <span class="op">=</span> argparse.ArgumentParser(description<span class="op">=</span><span class="st">"Run C-HARM cloud NRT + backfill tasks."</span>)</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>    parser.add_argument(</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>        <span class="st">"-b"</span>, <span class="st">"--backfill_days"</span>,</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>        <span class="bu">type</span><span class="op">=</span><span class="bu">int</span>,</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>        default<span class="op">=</span><span class="bu">int</span>(os.getenv(<span class="st">"BACKFILL_DAYS"</span>, <span class="st">"5"</span>)),</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>        <span class="bu">help</span><span class="op">=</span><span class="st">"Number of additional days to backfill beyond the NRT run. Default 5."</span>,</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>    args <span class="op">=</span> parser.parse_args()</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>    backfill_range_end <span class="op">=</span> args.backfill_days <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Backfill days requested=</span><span class="sc">%d</span><span class="st"> =&gt; running offsets i=2..</span><span class="sc">%d</span><span class="st"> (exclusive upper bound=</span><span class="sc">%d</span><span class="st">)"</span>,</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>                args.backfill_days, backfill_range_end <span class="op">-</span> <span class="dv">1</span>, backfill_range_end)</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> backfill_range_end</span>
 <span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main() <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>    config_path <span class="op">=</span> os.getenv(<span class="st">"CONFIG_PATH"</span>, <span class="st">"/app/config/config.yaml"</span>)</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Using config: </span><span class="sc">%s</span><span class="st">"</span>, config_path)</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    CONFIG <span class="op">=</span> load_config(config_path)</span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>    cloud_config <span class="op">=</span> load_cloud_config(config_path)</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    prod_bucket <span class="op">=</span> cloud_config.get(<span class="st">"ERDPROD_BUCKET"</span>, <span class="st">""</span>)</span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    prod_root <span class="op">=</span> cloud_config.get(<span class="st">"PUBLISH_TARGETS"</span>, {}).get(<span class="st">"prod"</span>, {}).get(<span class="st">"root"</span>, <span class="st">"edge"</span>)</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(CONFIG.home):</span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="ss">f"Configured home directory does not exist: </span><span class="sc">{</span>CONFIG<span class="sc">.</span>home<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    os.chdir(CONFIG.home)</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    backfill_range_end <span class="op">=</span> parse_args()</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main() <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Run the near-real-time C-HARM job and optional backfill dates."""</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>    config_path <span class="op">=</span> os.getenv(<span class="st">"CONFIG_PATH"</span>, <span class="st">"/app/config/config.yaml"</span>)</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Using config: </span><span class="sc">%s</span><span class="st">"</span>, config_path)</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a>    CONFIG <span class="op">=</span> load_config(config_path)</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>    cloud_config <span class="op">=</span> load_cloud_config(config_path)</span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>    prod_bucket <span class="op">=</span> cloud_config.get(<span class="st">"ERDPROD_BUCKET"</span>, <span class="st">""</span>)</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a>    prod_root <span class="op">=</span> cloud_config.get(<span class="st">"PUBLISH_TARGETS"</span>, {}).get(<span class="st">"prod"</span>, {}).get(<span class="st">"root"</span>, <span class="st">"edge"</span>)</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(CONFIG.home):</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="ss">f"Configured home directory does not exist: </span><span class="sc">{</span>CONFIG<span class="sc">.</span>home<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    os.chdir(CONFIG.home)</span>
 <span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    nrt_cmd <span class="op">=</span> (</span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"PYTHONPATH=</span><span class="sc">{</span>CONFIG<span class="sc">.</span>home<span class="sc">}</span><span class="ss"> "</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>CONFIG<span class="sc">.</span>python<span class="sc">}</span><span class="ss"> -m </span><span class="sc">{</span>MODULE_TO_RUN<span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    <span class="co"># NRT run - make_charm_cloud_v1 handles its own duplicate check via local results dir</span></span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    <span class="co"># but since that's ephemeral, also check the bucket for today's NRT date (today - 1)</span></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    now_utc <span class="op">=</span> datetime.utcnow()</span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>    nrt_date_str <span class="op">=</span> (now_utc <span class="op">-</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)).strftime(<span class="st">"%Y%m</span><span class="sc">%d</span><span class="st">"</span>)</span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> results_exist_in_gcs(nrt_date_str, prod_bucket, prod_root):</span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Skipping NRT - results for </span><span class="sc">%s</span><span class="st"> already in bucket"</span>, nrt_date_str)</span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"NRT command: </span><span class="sc">%s</span><span class="st">"</span>, nrt_cmd)</span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>        subprocess.run(nrt_cmd, shell<span class="op">=</span><span class="va">True</span>, check<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Backfill runs</span></span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, backfill_range_end):</span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>        date_obj <span class="op">=</span> now_utc <span class="op">-</span> timedelta(days<span class="op">=</span>i)</span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>        date_str <span class="op">=</span> date_obj.strftime(<span class="st">"%Y%m</span><span class="sc">%d</span><span class="st">"</span>)</span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> results_exist_in_gcs(date_str, prod_bucket, prod_root):</span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>            logger.info(<span class="st">"Skipping backfill </span><span class="sc">%s</span><span class="st"> - results already in bucket"</span>, date_str)</span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>        backfill_cmd <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>nrt_cmd<span class="sc">}</span><span class="ss"> -d </span><span class="sc">{</span>date_str<span class="sc">}</span><span class="ss"> -b"</span></span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Backfill command for </span><span class="sc">%s</span><span class="st"> (UTC): </span><span class="sc">%s</span><span class="st">"</span>, date_str, backfill_cmd)</span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>        subprocess.run(backfill_cmd, shell<span class="op">=</span><span class="va">True</span>, check<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    backfill_range_end <span class="op">=</span> parse_args()</span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>    nrt_cmd <span class="op">=</span> (</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"PYTHONPATH=</span><span class="sc">{</span>CONFIG<span class="sc">.</span>home<span class="sc">}</span><span class="ss"> "</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"</span><span class="sc">{</span>CONFIG<span class="sc">.</span>python<span class="sc">}</span><span class="ss"> -m </span><span class="sc">{</span>MODULE_TO_RUN<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    <span class="co"># NRT run — make_charm_cloud_v1 handles its own duplicate check via local results dir</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>    <span class="co"># but since that's ephemeral, also check the bucket for today's NRT date (today - 1)</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>    now_utc <span class="op">=</span> datetime.utcnow()</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>    nrt_date_str <span class="op">=</span> (now_utc <span class="op">-</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)).strftime(<span class="st">"%Y%m</span><span class="sc">%d</span><span class="st">"</span>)</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> results_exist_in_gcs(nrt_date_str, prod_bucket, prod_root):</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Skipping NRT — results for </span><span class="sc">%s</span><span class="st"> already in bucket"</span>, nrt_date_str)</span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"NRT command: </span><span class="sc">%s</span><span class="st">"</span>, nrt_cmd)</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>        subprocess.run(nrt_cmd, shell<span class="op">=</span><span class="va">True</span>, check<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Backfill runs</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>, backfill_range_end):</span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>        date_obj <span class="op">=</span> now_utc <span class="op">-</span> timedelta(days<span class="op">=</span>i)</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>        date_str <span class="op">=</span> date_obj.strftime(<span class="st">"%Y%m</span><span class="sc">%d</span><span class="st">"</span>)</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> results_exist_in_gcs(date_str, prod_bucket, prod_root):</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>            logger.info(<span class="st">"Skipping backfill </span><span class="sc">%s</span><span class="st"> — results already in bucket"</span>, date_str)</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>        backfill_cmd <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>nrt_cmd<span class="sc">}</span><span class="ss"> -d </span><span class="sc">{</span>date_str<span class="sc">}</span><span class="ss"> -b"</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>        logger.info(<span class="st">"Backfill command for </span><span class="sc">%s</span><span class="st"> (UTC): </span><span class="sc">%s</span><span class="st">"</span>, date_str, backfill_cmd)</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>        subprocess.run(backfill_cmd, shell<span class="op">=</span><span class="va">True</span>, check<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
@@ -1137,8 +1164,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../code-pages/charm/delpoy_job.html" class="pagination-link" aria-label="delpoy_job.sh">
-        <span class="nav-page-text"><span class="chapter-title">delpoy_job.sh</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../code-pages/charm/deploy_job.html" class="pagination-link" aria-label="deploy_job.sh">
+        <span class="nav-page-text"><span class="chapter-title">deploy_job.sh</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

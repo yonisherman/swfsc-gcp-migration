@@ -229,5 +229,23 @@
   },
   "code-pages/mur-sst/roylib.qmd": {
     "roylib.html": "017e71f5"
+  },
+  "code-pages/charm/deploy_job.qmd": {
+    "deploy_job.html": "2f0d4863"
+  },
+  "gcp-infrastructure.qmd": {
+    "gcp-infrastructure.html": "87457832"
+  },
+  "gcp-vm-access.qmd": {
+    "gcp-vm-access.html": "f5c78764"
+  },
+  "gcp-erddap-vm.qmd": {
+    "gcp-erddap-vm.html": "47017c5b"
+  },
+  "gcp-processing-vm.qmd": {
+    "gcp-processing-vm.html": "c2cbfa9f"
+  },
+  "gcp-migration-recovery.qmd": {
+    "gcp-migration-recovery.html": "a833b25d"
   }
 }

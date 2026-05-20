@@ -54,7 +54,7 @@ GCS mount points follow the convention:
 /mnt/gcs/erddap_data_pw/<project>/ # ERDDAP-served output data
 ```
 
-The `data/` directory in the template is a symlink to project-specific persistent storage on the mounted Hyperdisk, keeping large datasets and workflow outputs separated from the VM boot disk. See the [GCP Environment Setup](gcp-setup.html#configure-project-workspace) page for the full workspace initialization steps.
+The `data/` directory in the template is a symlink to project-specific persistent storage on the mounted Hyperdisk, keeping large datasets and workflow outputs separated from the VM boot disk. See the [Processing VM Setup](gcp-processing-vm.html#configure-project-workspace) page for the full workspace initialization steps.
 
 Periodically review the template repository for updates to the standard project structure.
 

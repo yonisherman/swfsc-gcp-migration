@@ -4,7 +4,7 @@ Control script for VIIRS monthly primary productivity composites.
 
 Purpose
 -------
-Orchestrator only - decides which sensor / dtype / year-month combinations
+Orchestrator only — decides which sensor / dtype / year-month combinations
 to run, then calls make_viirs_netpp_monthly.py as a subprocess for each.
 
 Typical uses
@@ -51,6 +51,7 @@ MAKE_SCRIPT   = SCRIPT_DIR / "make_viirs_netpp_monthly.py"
 # ---------------------------------------------------------------------------
 
 def load_config(config_path: str) -> dict:
+    """Load one or more YAML documents from config_path into a single dict."""
     with open(config_path, "r") as fh:
         docs = list(yaml.safe_load_all(fh))
     merged = {}
@@ -61,6 +62,7 @@ def load_config(config_path: str) -> dict:
 
 
 def get_enabled_sensors(cfg: dict) -> list[str]:
+    """Return sensors that are not explicitly disabled in config.yml."""
     return [
         s for s, meta in cfg.get("sensors", {}).items()
         if meta.get("enabled", True)
@@ -86,6 +88,7 @@ def build_cmd(
     config: str,
     overwrite: bool,
 ) -> list[str]:
+    """Build the subprocess command for one monthly make-script invocation."""
     cmd = [
         sys.executable,
         str(MAKE_SCRIPT),
@@ -109,6 +112,7 @@ def run_one(
     overwrite: bool,
     dry_run: bool,
 ) -> int:
+    """Run one monthly composite subprocess, or print it in dry-run mode."""
     cmd = build_cmd(year, month, sensor, dtype, config, overwrite)
 
     print("\n" + "=" * 72)
@@ -128,6 +132,7 @@ def run_one(
 # ---------------------------------------------------------------------------
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line options and default to the previous UTC month."""
     now = datetime.utcnow()
     prev = date(now.year, now.month, 1) - relativedelta(months=1)
 
@@ -189,10 +194,12 @@ def parse_args() -> argparse.Namespace:
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    """Resolve requested monthly jobs and run each valid sensor/dtype/month."""
     args = parse_args()
     cfg  = load_config(args.config)
 
     # Resolve sensors
+    # Only schedule sensors that are present and enabled in config.yml.
     enabled = get_enabled_sensors(cfg)
     if args.sensor == "all":
         sensors = enabled
@@ -207,12 +214,13 @@ def main() -> None:
     dtypes = ["nrt", "sq"] if args.dtype == "both" else [args.dtype]
 
     # Resolve months to process
+    # Expand --all-months here so downstream loops always handle a list.
     if args.all_months:
         months = list(range(1, 13))
     else:
         months = [args.month]
 
-    # Current UTC year-month - never composite an incomplete month
+    # Current UTC year-month — never composite an incomplete month
     now        = datetime.utcnow()
     cur_year   = now.year
     cur_month  = now.month
@@ -230,7 +238,7 @@ def main() -> None:
                 if (year, month) < (start_yr, start_mo):
                     print(
                         f"  ⏭  {year}-{month:02d} [{sensor}/{dtype}] "
-                        f"before sensor start ({start_yr}-{start_mo:02d}) - skipping."
+                        f"before sensor start ({start_yr}-{start_mo:02d}) — skipping."
                     )
                     continue
 
@@ -238,7 +246,7 @@ def main() -> None:
                 if (year, month) >= (cur_year, cur_month):
                     print(
                         f"  ⏭  {year}-{month:02d} [{sensor}/{dtype}] "
-                        "is the current or a future month - skipping."
+                        "is the current or a future month — skipping."
                     )
                     continue
 

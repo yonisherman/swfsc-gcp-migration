@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>GCP Environment Setup – SWFSC ERDDAP Cloud Migration</title>
+<title>Setup Overview – SWFSC ERDDAP Cloud Migration</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,41 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -65,7 +30,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./gcp-templates.html" rel="next">
+<link href="./gcp-infrastructure.html" rel="next">
 <link href="./index.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -119,7 +84,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gcp-setup.html">Setup</a></li><li class="breadcrumb-item"><a href="./gcp-setup.html"><span class="chapter-title">GCP Environment Setup</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gcp-setup.html">Cloud Setup</a></li><li class="breadcrumb-item"><a href="./gcp-setup.html"><span class="chapter-title">Setup Overview</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -156,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Setup</span></a>
+ <span class="menu-text">Cloud Setup</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -164,7 +129,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./gcp-setup.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">GCP Environment Setup</span></a>
+  <a href="./gcp-setup.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Setup Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-infrastructure.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Cloud Infrastructure Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-vm-access.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Accessing VMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-erddap-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ERDDAP VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-processing-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Processing VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./gcp-migration-recovery.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Migration, Upgrade, and Recovery</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -262,7 +252,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./code-pages/charm/delpoy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">delpoy_job.sh</span></a>
+  <a href="./code-pages/charm/deploy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">deploy_job.sh</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -585,48 +575,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#cloud-infrastructure-setup" id="toc-cloud-infrastructure-setup" class="nav-link active" data-scroll-target="#cloud-infrastructure-setup">Cloud Infrastructure Setup</a>
-  <ul class="collapse">
-  <li><a href="#access-the-infrastructure-configuration" id="toc-access-the-infrastructure-configuration" class="nav-link" data-scroll-target="#access-the-infrastructure-configuration">1. Access the Infrastructure Configuration</a></li>
-  <li><a href="#review-and-deploy-infrastructure-with-terraform" id="toc-review-and-deploy-infrastructure-with-terraform" class="nav-link" data-scroll-target="#review-and-deploy-infrastructure-with-terraform">2. Review and Deploy Infrastructure with Terraform</a></li>
-  <li><a href="#deploy-infrastructure" id="toc-deploy-infrastructure" class="nav-link" data-scroll-target="#deploy-infrastructure">3. Deploy Infrastructure</a></li>
-  </ul></li>
-  <li><a href="#accessing-vms" id="toc-accessing-vms" class="nav-link" data-scroll-target="#accessing-vms">Accessing VMs</a>
-  <ul class="collapse">
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
-  <li><a href="#via-the-gcloud-cli" id="toc-via-the-gcloud-cli" class="nav-link" data-scroll-target="#via-the-gcloud-cli">Via the gcloud CLI</a></li>
-  <li><a href="#via-the-gcp-console" id="toc-via-the-gcp-console" class="nav-link" data-scroll-target="#via-the-gcp-console">Via the GCP Console</a></li>
-  </ul></li>
-  <li><a href="#erddap-vm-setup" id="toc-erddap-vm-setup" class="nav-link" data-scroll-target="#erddap-vm-setup">ERDDAP VM Setup</a>
-  <ul class="collapse">
-  <li><a href="#configure-the-operating-system-environment" id="toc-configure-the-operating-system-environment" class="nav-link" data-scroll-target="#configure-the-operating-system-environment">1. Configure the Operating System Environment</a></li>
-  <li><a href="#install-and-configure-erddap" id="toc-install-and-configure-erddap" class="nav-link" data-scroll-target="#install-and-configure-erddap">2. Install and Configure ERDDAP</a></li>
-  </ul></li>
-  <li><a href="#dataproc-vm-setup" id="toc-dataproc-vm-setup" class="nav-link" data-scroll-target="#dataproc-vm-setup">Dataproc VM Setup</a>
-  <ul class="collapse">
-  <li><a href="#configure-the-operating-system-environment-1" id="toc-configure-the-operating-system-environment-1" class="nav-link" data-scroll-target="#configure-the-operating-system-environment-1">1. Configure the Operating System Environment</a></li>
-  <li><a href="#configure-the-data-processing-environment" id="toc-configure-the-data-processing-environment" class="nav-link" data-scroll-target="#configure-the-data-processing-environment">2. Configure the Data Processing Environment</a></li>
-  <li><a href="#configure-project-workspace" id="toc-configure-project-workspace" class="nav-link" data-scroll-target="#configure-project-workspace">3. Configure Project Workspace</a></li>
-  </ul></li>
-  <li><a href="#migration-upgrade-and-recovery" id="toc-migration-upgrade-and-recovery" class="nav-link" data-scroll-target="#migration-upgrade-and-recovery">Migration, Upgrade, and Recovery</a>
-  <ul class="collapse">
-  <li><a href="#optional-data-preservation-snapshot" id="toc-optional-data-preservation-snapshot" class="nav-link" data-scroll-target="#optional-data-preservation-snapshot">Optional: Data Preservation Snapshot</a></li>
-  <li><a href="#optional-migration-snapshot-cleanup" id="toc-optional-migration-snapshot-cleanup" class="nav-link" data-scroll-target="#optional-migration-snapshot-cleanup">Optional: Migration Snapshot Cleanup</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gcp-setup.html">Setup</a></li><li class="breadcrumb-item"><a href="./gcp-setup.html"><span class="chapter-title">GCP Environment Setup</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./gcp-setup.html">Cloud Setup</a></li><li class="breadcrumb-item"><a href="./gcp-setup.html"><span class="chapter-title">Setup Overview</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">GCP Environment Setup</span></h1>
+<h1 class="title"><span class="chapter-title">Setup Overview</span></h1>
 </div>
 
 
@@ -643,597 +600,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This chapter describes the deployment and configuration of the Google Cloud Platform (GCP) infrastructure used to support the SWFSC CoastWatch West Coast Node cloud environment.</p>
-<p>The environment includes Terraform-managed infrastructure, ERDDAP serving systems, processing VMs, cloud storage resources, and supporting workflow components used for operational data ingest, processing, storage, and distribution. The overall architecture follows a “standardized image” and “decoupled data” model — infrastructure resources are deployed and managed through Terraform, while operational datasets remain independent from the VM itself.</p>
-<section id="cloud-infrastructure-setup" class="level2">
-<h2 class="anchored" data-anchor-id="cloud-infrastructure-setup">Cloud Infrastructure Setup</h2>
-<p>This section covers the Terraform-managed infrastructure layer: virtual machines, storage buckets, networking, service accounts, IAM permissions, and supporting cloud services.</p>
-<section id="access-the-infrastructure-configuration" class="level3">
-<h3 class="anchored" data-anchor-id="access-the-infrastructure-configuration">1. Access the Infrastructure Configuration</h3>
-<p>Before creating or modifying any VM environment, access the Terraform infrastructure repository used to manage the deployment configuration. In this setup, the Terraform configuration is stored in a centralized source control repository managed within Google Cloud.</p>
-<ol type="1">
-<li>Log into the <a href="https://console.cloud.google.com">Google Cloud Console</a>.</li>
-<li>Start Cloud Shell by clicking the terminal icon (<code>&gt;_</code>) in the top-right corner.</li>
-<li>Clone the infrastructure repository:</li>
-</ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://source.developers.google.com/p/YOUR_GCP_PROJECT_ID/r/YOUR_TERRAFORM_REPO</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace with the appropriate infrastructure repository for your environment</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> YOUR_TERRAFORM_REPO</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The repository contains the Terraform configuration files used to define VM infrastructure, storage resources, networking, and related cloud resources.</p>
-</section>
-<section id="review-and-deploy-infrastructure-with-terraform" class="level3">
-<h3 class="anchored" data-anchor-id="review-and-deploy-infrastructure-with-terraform">2. Review and Deploy Infrastructure with Terraform</h3>
-<p>The Terraform configuration is organized across three main files.</p>
-<p><strong><code>main.tf</code></strong> defines the Terraform backend, required provider, and shared project-wide variables including GCP project ID, region, zone, NOAA metadata labels, and environment name. These shared variables are referenced throughout <code>bucket.tf</code> and <code>instance.tf</code> to avoid hard-coding configuration values across multiple files.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PROJECT STANDARDS &amp; PROVIDER CONFIGURATION</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace backend bucket, project variables, bucket names, and service accounts</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># with the appropriate values for your deployment.</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>terraform {</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  backend <span class="st">"gcs"</span> {</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    bucket <span class="op">=</span> <span class="st">"tf-local-swfsc-prod"</span>   <span class="co"># Terraform remote state backend bucket</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    prefix <span class="op">=</span> <span class="st">"terraform/state"</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  required_providers { google <span class="op">=</span> { source <span class="op">=</span> <span class="st">"hashicorp/google"</span> } }</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># GLOBAL VARIABLES</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"project-id"</span>      { default <span class="op">=</span> <span class="st">"YOUR_GCP_PROJECT_ID"</span> }</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"system-id"</span>       { default <span class="op">=</span> <span class="st">"YOUR_SYSTEM_ID"</span> }</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"lineoffice"</span>      { default <span class="op">=</span> <span class="st">"YOUR_LINE_OFFICE"</span> }</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"taskorder"</span>       { default <span class="op">=</span> <span class="st">"YOUR_TASK_ORDER"</span> }</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"billing-id"</span>      { default <span class="op">=</span> <span class="st">"YOUR_BILLING_ID"</span> }</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"application-id"</span>  { default <span class="op">=</span> <span class="st">"YOUR_APPLICATION_ID"</span> }</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"stakeholder"</span>     { default <span class="op">=</span> <span class="st">"YOUR_STAKEHOLDER"</span> }</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"environment"</span>     { default <span class="op">=</span> <span class="st">"dev"</span> }</span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"region1"</span>         { default <span class="op">=</span> <span class="st">"us-east4"</span> }</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>variable <span class="st">"zone1"</span>           { default <span class="op">=</span> <span class="st">"us-east4-a"</span> }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong><code>bucket.tf</code></strong> defines the GCS buckets used by the environment and assigns IAM permissions to the service accounts that need access. In many deployments the required buckets may already exist — review the bucket names, IAM bindings, and service accounts to confirm they match the environment. Copy and edit the block below when creating a new bucket:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>resource <span class="st">"google_storage_bucket"</span> <span class="st">"erddap_bucket"</span> {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  name                        <span class="op">=</span> <span class="st">"YOUR_ERDDAP_BUCKET_NAME"</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  project                     <span class="op">=</span> var.project<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  location                    <span class="op">=</span> var.region1</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  force_destroy               <span class="op">=</span> true   <span class="co"># Common in dev/testing; prefer false in production</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  uniform_bucket_level_access <span class="op">=</span> true</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  labels <span class="op">=</span> {</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    environment        <span class="op">=</span> var.environment</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    noaa_fismaid       <span class="op">=</span> var.system<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    noaa_lineoffice    <span class="op">=</span> var.lineoffice</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    noaa_taskorder     <span class="op">=</span> var.taskorder</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    noaa_environment   <span class="op">=</span> var.environment</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    noaa_applicationid <span class="op">=</span> var.application<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    noaa_project_id    <span class="op">=</span> var.project<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  hierarchical_namespace { enabled <span class="op">=</span> true }</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  lifecycle_rule {</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    condition { num_newer_versions <span class="op">=</span> <span class="dv">5</span> }</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    action    { <span class="bu">type</span> <span class="op">=</span> <span class="st">"Delete"</span> }</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="bu">locals</span> {</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  buckets <span class="op">=</span> [</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"YOUR_PROCESSING_OR_DATA_BUCKET_NAME"</span>,</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"YOUR_ERDDAP_BUCKET_NAME"</span>,</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>resource <span class="st">"google_storage_bucket_iam_member"</span> <span class="st">"vm_service_account_object_admins"</span> {</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  for_each <span class="op">=</span> toset(local.buckets)</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  bucket   <span class="op">=</span> each.value</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  role     <span class="op">=</span> <span class="st">"roles/storage.objectAdmin"</span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  member   <span class="op">=</span> <span class="st">"serviceAccount:YOUR_VM_SERVICE_ACCOUNT_EMAIL"</span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>resource <span class="st">"google_storage_bucket_iam_member"</span> <span class="st">"cloud_run_service_account_object_admins"</span> {</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>  for_each <span class="op">=</span> toset(local.buckets)</span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>  bucket   <span class="op">=</span> each.value</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  role     <span class="op">=</span> <span class="st">"roles/storage.objectAdmin"</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  member   <span class="op">=</span> <span class="st">"serviceAccount:YOUR_CLOUD_RUN_SERVICE_ACCOUNT_EMAIL"</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>If you add a new bucket and IAM is applied through <code>locals.buckets</code>, add the new bucket name to that list as well.</p>
-<p><strong><code>instance.tf</code></strong> defines all VMs in the project, including persistent data disks, machine type, boot disk, networking, service account, metadata, labels, and snapshot policy attachments. Copy and edit the blocks below when deploying a new ERDDAP VM. For additional machine type options, refer to the <a href="https://cloud.google.com/compute/docs/machine-resource">Google Cloud Compute Engine machine type documentation</a>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ERDDAP data disk</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>resource <span class="st">"google_compute_disk"</span> <span class="st">"erddap_data_disk"</span> {</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  name    <span class="op">=</span> <span class="st">"YOUR_ERDDAP_DATA_DISK_NAME"</span>   <span class="co"># Example: erddap-data-disk</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  project <span class="op">=</span> var.project<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  zone    <span class="op">=</span> var.zone1</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">type</span>    <span class="op">=</span> <span class="st">"hyperdisk-balanced"</span>            <span class="co"># Recommended for high I/O NetCDF workloads</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  size    <span class="op">=</span> <span class="dv">4096</span>                            <span class="co"># Disk size in GB (4 TB)</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># ERDDAP VM</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>resource <span class="st">"google_compute_instance"</span> <span class="st">"erddap_vm"</span> {</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  name                  <span class="op">=</span> <span class="st">"YOUR_ERDDAP_VM_NAME"</span>   <span class="co"># Example: erd-erddap</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  project               <span class="op">=</span> var.project<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  zone                  <span class="op">=</span> var.zone1</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  machine_type          <span class="op">=</span> <span class="st">"c4-highmem-16"</span>          <span class="co"># High-memory C4 instance for ERDDAP</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  allow_stopping_for_update <span class="op">=</span> true</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  metadata <span class="op">=</span> {</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    block<span class="op">-</span>project<span class="op">-</span>ssh<span class="op">-</span>keys <span class="op">=</span> true</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    enable<span class="op">-</span>osconfig        <span class="op">=</span> true</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  labels <span class="op">=</span> {</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    environment        <span class="op">=</span> var.environment</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    noaa_fismaid       <span class="op">=</span> var.system<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    noaa_lineoffice    <span class="op">=</span> var.lineoffice</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    noaa_taskorder     <span class="op">=</span> var.taskorder</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    noaa_environment   <span class="op">=</span> var.environment</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    noaa_applicationid <span class="op">=</span> var.application<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    noaa_project_id    <span class="op">=</span> var.project<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    role               <span class="op">=</span> <span class="st">"erddap-server"</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  boot_disk {</span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    device_name <span class="op">=</span> <span class="st">"YOUR_ERDDAP_BOOT_DISK_NAME"</span></span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    initialize_params {</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>      image <span class="op">=</span> <span class="st">"YOUR_BOOT_IMAGE"</span></span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>      size  <span class="op">=</span> <span class="st">"360"</span></span>
-<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>      <span class="bu">type</span>  <span class="op">=</span> <span class="st">"hyperdisk-balanced"</span></span>
-<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  attached_disk {</span>
-<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    source      <span class="op">=</span> google_compute_disk.erddap_data_disk.<span class="bu">id</span></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    device_name <span class="op">=</span> <span class="st">"erddap-data"</span></span>
-<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  network_interface {</span>
-<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    subnetwork <span class="op">=</span> <span class="st">"YOUR_SUBNETWORK_SELF_LINK"</span></span>
-<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    nic_type   <span class="op">=</span> <span class="st">"GVNIC"</span>   <span class="co"># Required for C4-series instances</span></span>
-<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>  service_account {</span>
-<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    email  <span class="op">=</span> <span class="st">"YOUR_VM_SERVICE_ACCOUNT_EMAIL"</span></span>
-<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    scopes <span class="op">=</span> [<span class="st">"cloud-platform"</span>]</span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  lifecycle {</span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>    ignore_changes <span class="op">=</span> [boot_disk]</span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="co"># BACKUP &amp; RECOVERY: Snapshot Policy Attachments</span></span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>resource <span class="st">"google_compute_disk_resource_policy_attachment"</span> <span class="st">"erddap_boot_snap"</span> {</span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>  name    <span class="op">=</span> <span class="st">"snap-policy"</span></span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>  disk    <span class="op">=</span> google_compute_instance.erddap_vm.name</span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>  project <span class="op">=</span> var.project<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>  zone    <span class="op">=</span> var.zone1</span>
-<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>resource <span class="st">"google_compute_disk_resource_policy_attachment"</span> <span class="st">"erddap_data_snap"</span> {</span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>  name    <span class="op">=</span> <span class="st">"snap-policy"</span></span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>  disk    <span class="op">=</span> google_compute_disk.erddap_data_disk.name</span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>  project <span class="op">=</span> var.project<span class="op">-</span><span class="bu">id</span></span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>  zone    <span class="op">=</span> var.zone1</span>
-<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Key configuration notes:</p>
-<ul>
-<li><code>c4-highmem-*</code> instances are recommended for ERDDAP workloads — ERDDAP benefits from additional memory for dataset caching and large NetCDF access.</li>
-<li><code>hyperdisk-balanced</code> storage is used for high-throughput NetCDF access and rclone VFS caching.</li>
-<li>GVNIC networking is required for C4-series instances.</li>
-<li>The attached data disk is separated from the boot disk to simplify upgrades, rebuilds, and recovery.</li>
-<li>Snapshot policies are recommended for automated backup and recovery.</li>
-</ul>
-</section>
-<section id="deploy-infrastructure" class="level3">
-<h3 class="anchored" data-anchor-id="deploy-infrastructure">3. Deploy Infrastructure</h3>
-<p>After reviewing and editing the Terraform configuration, preview the proposed changes:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">terraform</span> plan    <span class="co"># Review resources that will be created, modified, or destroyed</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Carefully review the output before applying, especially in existing environments where resources may already be in use. Once the plan looks correct, apply:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">terraform</span> apply   <span class="co"># Create or update VMs, disks, buckets, IAM permissions, and related resources</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>In some environments, <code>terraform apply</code> may need to be run more than once if dependent resources are still initializing.</p>
-<hr>
-<hr>
-</section>
-</section>
-<section id="accessing-vms" class="level2">
-<h2 class="anchored" data-anchor-id="accessing-vms">Accessing VMs</h2>
-<p>Once infrastructure is deployed, you can connect to any VM using either the <code>gcloud</code> CLI or the GCP Console browser-based SSH. Both methods use <a href="https://cloud.google.com/iap/docs/concepts-overview">Identity-Aware Proxy (IAP)</a> tunneling, so no public IP address or open firewall ports are required.</p>
-<section id="prerequisites" class="level3">
-<h3 class="anchored" data-anchor-id="prerequisites">Prerequisites</h3>
-<p>Before connecting to a VM for the first time, complete the following setup steps.</p>
-<section id="install-the-google-cloud-sdk" class="level4">
-<h4 class="anchored" data-anchor-id="install-the-google-cloud-sdk">1. Install the Google Cloud SDK</h4>
-<p>Download and install the <a href="https://cloud.google.com/sdk/docs/install">Google Cloud SDK</a> for your operating system. The SDK provides the <code>gcloud</code> command-line tool used throughout this documentation.</p>
-<p>After installation, initialize the SDK:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> init</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This walks you through selecting a Google account and default project.</p>
-</section>
-<section id="authenticate" class="level4">
-<h4 class="anchored" data-anchor-id="authenticate">2. Authenticate</h4>
-<p>Log in with your Google account:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> auth login</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This opens a browser window to complete authentication. Once done, confirm the active account and project:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> config list</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="confirm-iap-access" class="level4">
-<h4 class="anchored" data-anchor-id="confirm-iap-access">3. Confirm IAP Access</h4>
-<p>Connecting to VMs through the CLI requires the <code>IAP-secured Tunnel User</code> (<code>roles/iap.tunnelResourceAccessor</code>) IAM role on the project. In this setup, that role is managed by IT through a centralized <code>roles.tf</code> Terraform configuration — you will need to request access from whoever administers that if you don’t have it yet.</p>
-<p>Once access has been granted, confirm the role is assigned to your account:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> projects get-iam-policy YOUR_GCP_PROJECT_ID <span class="dt">\</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--flatten</span><span class="op">=</span><span class="st">"bindings[].members"</span> <span class="dt">\</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--filter</span><span class="op">=</span><span class="st">"bindings.members:YOUR_EMAIL@noaa.gov"</span> <span class="dt">\</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--format</span><span class="op">=</span><span class="st">"table(bindings.role)"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>roles/iap.tunnelResourceAccessor</code> should appear in the output. If it does not, follow up with your IT team or project admin.</p>
-</section>
-</section>
-<section id="via-the-gcloud-cli" class="level3">
-<h3 class="anchored" data-anchor-id="via-the-gcloud-cli">Via the gcloud CLI</h3>
-<p>The general pattern for connecting to a VM is:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> compute ssh YOUR_VM_NAME <span class="dt">\</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--project</span><span class="op">=</span>YOUR_GCP_PROJECT_ID <span class="dt">\</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--zone</span><span class="op">=</span>YOUR_GCP_ZONE <span class="dt">\</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--tunnel-through-iap</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Port forwarding is added via <code>--ssh-flag</code> to make local services on the VM accessible in your browser. The <code>-4</code> flag forces IPv4, which avoids common IAP tunneling issues.</p>
-<p><strong>ERDDAP VM</strong> — forwards both the ERDDAP web interface (port 8080) and JupyterLab (port 8888):</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> compute ssh YOUR_ERDDAP_VM_NAME <span class="dt">\</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--project</span><span class="op">=</span>YOUR_GCP_PROJECT_ID <span class="dt">\</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--zone</span><span class="op">=</span>YOUR_GCP_ZONE <span class="dt">\</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--tunnel-through-iap</span> <span class="dt">\</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ssh-flag</span><span class="op">=</span><span class="st">"-4 -L 8080:localhost:8080 -L 8888:localhost:8888"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Once connected, the ERDDAP interface is accessible at <code>http://localhost:8080/erddap</code> in your local browser (ERDDAP runs continuously via Tomcat). To use JupyterLab, start it on the VM first:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> lab <span class="at">--no-browser</span> <span class="at">--port</span><span class="op">=</span>8888</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Jupyter will print a URL with a token to the terminal — copy and paste the <code>http://localhost:8888/lab?token=...</code> URL into your local browser.</p>
-<p><strong>Dataproc / processing VM</strong> — forwards JupyterLab (port 8081 to avoid conflicts if the ERDDAP VM tunnel is already open):</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> compute ssh YOUR_DATAPROC_VM_NAME <span class="dt">\</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--project</span><span class="op">=</span>YOUR_GCP_PROJECT_ID <span class="dt">\</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--zone</span><span class="op">=</span>YOUR_GCP_ZONE <span class="dt">\</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--tunnel-through-iap</span> <span class="dt">\</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--ssh-flag</span><span class="op">=</span><span class="st">"-4 -L 8081:localhost:8081"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Once connected, start JupyterLab on the VM:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> lab <span class="at">--no-browser</span> <span class="at">--port</span><span class="op">=</span>8081</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Jupyter will print a URL with a token to the terminal — copy and paste the <code>http://localhost:8081/lab?token=...</code> URL into your local browser.</p>
-</section>
-<section id="via-the-gcp-console" class="level3">
-<h3 class="anchored" data-anchor-id="via-the-gcp-console">Via the GCP Console</h3>
-<p>For quick access without the CLI:</p>
-<ol type="1">
-<li>Go to the <a href="https://console.cloud.google.com/compute/instances">Compute Engine VM instances</a> page in the GCP Console.</li>
-<li>Find your VM in the list.</li>
-<li>Click the <strong>SSH</strong> button in the Connect column.</li>
-</ol>
-<p>The console opens a browser-based terminal connected to the VM through IAP. This is convenient for quick checks but does not support port forwarding or persistent sessions.</p>
-</section>
-</section>
-<section id="erddap-vm-setup" class="level2">
-<h2 class="anchored" data-anchor-id="erddap-vm-setup">ERDDAP VM Setup</h2>
-<p>This section describes the initialization and configuration of the dedicated ERDDAP serving environment after infrastructure has been deployed. The ERDDAP VM uses C4 high-memory instances (for example, <code>c4-highmem-16</code>) together with Hyperdisk Balanced storage, rclone-mounted GCS buckets for dataset access, and Tomcat-hosted ERDDAP for data distribution.</p>
-<section id="configure-the-operating-system-environment" class="level3">
-<h3 class="anchored" data-anchor-id="configure-the-operating-system-environment">1. Configure the Operating System Environment</h3>
-<section id="configure-shared-user-group-permissions" class="level4">
-<h4 class="anchored" data-anchor-id="configure-shared-user-group-permissions">1.1 Configure Shared User Group Permissions</h4>
-<p>Create a shared group for operational data access and add the required users:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd cwatch                              <span class="co"># Create the cwatch group if it does not already exist</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> cwatch <span class="va">$USER</span>                     <span class="co"># Add your current user</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> cwatch YOUR_OPERATIONAL_USERNAME <span class="co"># Add the operational/service account (e.g. erd)</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="ex">newgrp</span> cwatch                                     <span class="co"># Refresh group membership (or log out and back in)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="initialize-and-mount-the-persistent-data-disk" class="level4">
-<h4 class="anchored" data-anchor-id="initialize-and-mount-the-persistent-data-disk">1.2 Initialize and Mount the Persistent Data Disk</h4>
-<p>Before formatting or mounting the persistent data disk, determine whether the disk is new or reattached from an existing deployment. <strong>If the disk was attached from a previous VM, do not reformat it.</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify the attached disk</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /dev/disk/by-id/</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check whether the disk already contains a filesystem</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> blkid /dev/disk/by-id/google-erddap-data</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># If no filesystem exists, create one</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkfs.ext4 <span class="at">-m</span> 0 <span class="at">-E</span> lazy_itable_init=0,lazy_journal_init=0,discard <span class="dt">\</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    /dev/disk/by-id/google-erddap-data</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create mount point and mount the disk</span></span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /mnt/disks/erddap-data</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mount <span class="at">-o</span> discard,defaults <span class="dt">\</span></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    /dev/disk/by-id/google-erddap-data <span class="dt">\</span></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    /mnt/disks/erddap-data</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Set permissions for the shared cwatch group</span></span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chown <span class="at">-R</span> root:cwatch /mnt/disks/erddap-data</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod <span class="at">-R</span> 2775 /mnt/disks/erddap-data</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: standard symlink used by operational workflows</span></span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /mnt/disks/erddap-data /data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="sec-rclone" class="level4">
-<h4 class="anchored" data-anchor-id="sec-rclone">1.3 Configure GCS Connectivity with Rclone</h4>
-<p>Rclone is used to mount GCS buckets directly into the ERDDAP VM filesystem using a Virtual File System (VFS) mount. The persistent high-speed data disk acts as a local VFS cache to improve ERDDAP performance when serving large NetCDF datasets from cloud storage.</p>
-<p>Install rclone:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> curl https://rclone.org/install.sh <span class="kw">|</span> <span class="fu">sudo</span> bash</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Create a shared rclone configuration:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /home/YOUR_OPERATIONAL_USERNAME/rclone/</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /home/YOUR_OPERATIONAL_USERNAME/rclone/rclone.conf <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;EOF</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="st">[gcs-remote]</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="st">type = google cloud storage</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="st">env_auth = true</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="st">project_number = YOUR_GCP_PROJECT_NUMBER</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="st">location = YOUR_GCP_REGION</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chown <span class="at">-R</span> root:cwatch /home/YOUR_OPERATIONAL_USERNAME/rclone/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Create the local cache and mount directories, then create the systemd persistence service:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> tee /etc/systemd/system/rclone-mount.service <span class="op">&gt;</span> /dev/null <span class="op">&lt;&lt;EOF</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="st">[Unit]</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="st">Description=Rclone High-Performance GCS Mount</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="st">After=network-online.target mnt-disks-erddap</span><span class="dt">\x</span><span class="st">2ddata.mount</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="st">Wants=network-online.target</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="st">[Service]</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="st">Type=notify</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="st">User=root</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="st">ExecStart=/usr/bin/rclone mount gcs-remote:YOUR_ERDDAP_BUCKET_NAME /mnt/gcs/erd </span><span class="dt">\</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="st">    --config /home/YOUR_OPERATIONAL_USERNAME/rclone/rclone.conf </span><span class="dt">\</span></span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="st">    --allow-other </span><span class="dt">\</span></span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="st">    --read-only </span><span class="dt">\</span></span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="st">    --dir-cache-time 1h </span><span class="dt">\</span></span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="st">    --attr-timeout 1m </span><span class="dt">\</span></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="st">    --vfs-cache-mode full </span><span class="dt">\</span></span>
-<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="st">    --vfs-cache-max-age 48h </span><span class="dt">\</span></span>
-<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="st">    --vfs-cache-max-size 2000G </span><span class="dt">\</span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="st">    --vfs-cache-poll-interval 1m </span><span class="dt">\</span></span>
-<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="st">    --cache-dir /mnt/disks/erddap-data/rclone-cache </span><span class="dt">\</span></span>
-<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="st">    --buffer-size 128M </span><span class="dt">\</span></span>
-<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="st">    --vfs-read-ahead 256M </span><span class="dt">\</span></span>
-<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="st">    --vfs-read-chunk-size 64M </span><span class="dt">\</span></span>
-<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="st">    --vfs-read-chunk-size-limit 2G </span><span class="dt">\</span></span>
-<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="st">    --dir-perms 0775 </span><span class="dt">\</span></span>
-<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="st">    --file-perms 0775 </span><span class="dt">\</span></span>
-<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a><span class="st">    --gid </span><span class="va">$(</span><span class="fu">getent</span> group cwatch <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d:</span> <span class="at">-f3</span><span class="va">)</span><span class="st"> </span><span class="dt">\</span></span>
-<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a><span class="st">    --umask 002 </span><span class="dt">\</span></span>
-<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="st">    --rc </span><span class="dt">\</span></span>
-<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="st">    --rc-no-auth</span></span>
-<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a><span class="st">ExecStop=/usr/bin/fusermount -u /mnt/gcs/erd</span></span>
-<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="st">Restart=on-failure</span></span>
-<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a><span class="st">RestartSec=10</span></span>
-<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a><span class="st">[Install]</span></span>
-<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="st">WantedBy=multi-user.target</span></span>
-<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Key rclone mount notes:</p>
-<ul>
-<li><code>--read-only</code> prevents accidental modification of cloud-hosted datasets.</li>
-<li><code>--vfs-cache-mode full</code> enables local caching on the persistent disk.</li>
-<li><code>--vfs-read-ahead</code> improves sequential read performance for ERDDAP requests.</li>
-<li><code>--attr-timeout 1m</code> helps rclone detect when NRT files are replaced by science-quality versions in GCS.</li>
-</ul>
-<p>Enable and start the service:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl daemon-reload</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable rclone-mount.service</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start rclone-mount.service</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Verify the mount and cache status:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /mnt/gcs/erd       <span class="co"># Confirm GCS bucket contents are visible</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">rclone</span> rc vfs/stats       <span class="co"># Monitor cache usage and read-ahead status</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>This section documents the Google Cloud Platform (GCP) infrastructure and system setup used to support the SWFSC CoastWatch West Coast Node cloud environment.</p>
+<p>The setup documentation is split into smaller pages so each phase of the migration can be read independently. Together, these pages cover Terraform-managed infrastructure, VM access, the ERDDAP serving environment, processing VM configuration, migration/recovery notes, and reusable workflow deployment templates.</p>
+<div class="file-grid">
+
+  <div class="file-card">
+    <h3 class="anchored">Cloud Infrastructure Setup</h3>
+    <p>Terraform-managed VMs, buckets, service accounts, IAM bindings, disks, labels, and snapshot policies.</p>
+    <ul>
+      <li><a href="gcp-infrastructure.html">Open cloud infrastructure setup</a></li>
+    </ul>
+  </div>
+
+  <div class="file-card">
+    <h3 class="anchored">Accessing VMs</h3>
+    <p>Connecting to ERDDAP and processing VMs with gcloud SSH, IAP tunneling, browser SSH, and local port forwarding.</p>
+    <ul>
+      <li><a href="gcp-vm-access.html">Open VM access guide</a></li>
+    </ul>
+  </div>
+
+  <div class="file-card">
+    <h3 class="anchored">ERDDAP VM Setup</h3>
+    <p>Operating-system setup, persistent disk initialization, rclone-mounted GCS access, Tomcat, and ERDDAP installation.</p>
+    <ul>
+      <li><a href="gcp-erddap-vm.html">Open ERDDAP VM setup</a></li>
+    </ul>
+  </div>
+
+  <div class="file-card">
+    <h3 class="anchored">Processing VM Setup</h3>
+    <p>Processing VM setup for development, testing, reprocessing, Python environments, Earthdata access, and external tools.</p>
+    <ul>
+      <li><a href="gcp-processing-vm.html">Open processing VM setup</a></li>
+    </ul>
+  </div>
+
+  <div class="file-card">
+    <h3 class="anchored">Migration, Upgrade, and Recovery</h3>
+    <p>Optional data-preservation snapshots, rebuild notes, upgrade workflows, and cleanup steps used during cloud migration work.</p>
+    <ul>
+      <li><a href="gcp-migration-recovery.html">Open migration and recovery notes</a></li>
+    </ul>
+  </div>
+
+  <div class="file-card">
+    <h3 class="anchored">GCP Data Processing Templates</h3>
+    <p>Reusable Cloud Run and processing VM project structures used to standardize workflow repositories and deployments.</p>
+    <ul>
+      <li><a href="gcp-templates.html">Open processing templates</a></li>
+    </ul>
+  </div>
+
 </div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><strong>Storage capacity:</strong> The 2 TB cache is a managed ceiling — rclone will automatically purge the oldest data if it hits this limit, ensuring the disk never fills up.</p>
-<p><strong>NRT updates:</strong> By checking attributes once per minute, the system will automatically fetch the updated science-quality version of a file even if the filename has not changed.</p>
-</div>
-</div>
-</section>
-</section>
-<section id="install-and-configure-erddap" class="level3">
-<h3 class="anchored" data-anchor-id="install-and-configure-erddap">2. Install and Configure ERDDAP</h3>
-<section id="run-the-coastwatch-erddap-installation-script" class="level4">
-<h4 class="anchored" data-anchor-id="run-the-coastwatch-erddap-installation-script">2.1 Run the CoastWatch ERDDAP Installation Script</h4>
-<p>This setup uses the <a href="https://github.com/erd-coastwatch/cloud-erddap-setup/blob/main/setup_scripts/erddap_setup.sh">CoastWatch ERDDAP installation script</a> to install Tomcat, ERDDAP, Java dependencies, and supporting system configuration.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://raw.githubusercontent.com/erd-coastwatch/cloud-erddap-setup/main/setup_scripts/erddap_setup.sh</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x erddap_setup.sh</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./erddap_setup.sh</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If reinstalling, remove the previous Tomcat installation first</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> rm <span class="at">-rf</span> /usr/local/apache-tomcat-10.1.44/</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="ex">./erddap_setup.sh</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="configure-tomcat-and-erddap" class="level4">
-<h4 class="anchored" data-anchor-id="configure-tomcat-and-erddap">2.2 Configure Tomcat and ERDDAP</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> su <span class="at">-s</span> /bin/bash tomcat</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /usr/local/tomcat_erddap/conf</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vi</span> server.xml</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /usr/local/tomcat_erddap/content/erddap</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">vi</span> setup.xml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="start-and-verify-erddap" class="level4">
-<h4 class="anchored" data-anchor-id="start-and-verify-erddap">2.3 Start and Verify ERDDAP</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start ERDDAP</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> su <span class="at">-s</span> /bin/bash tomcat</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /usr/local/tomcat_erddap/bin</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./startup.sh</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Stop ERDDAP</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="ex">./shutdown.sh</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify installation</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> http://localhost:8080</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Install additional dependencies</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> fontconfig</span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> lynx</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<hr>
-</section>
-</section>
-</section>
-<section id="dataproc-vm-setup" class="level2">
-<h2 class="anchored" data-anchor-id="dataproc-vm-setup">Dataproc VM Setup</h2>
-<p>This section describes the initialization and configuration of processing environments used for operational workflows, testing, reprocessing, and data generation. Unlike the ERDDAP VM, which is optimized for data serving, processing VMs are intended for workflow execution, algorithm development, backfills, and validation tasks.</p>
-<p>Processing environments typically use C4 standard instances (for example, <code>c4-standard-16</code>) together with Hyperdisk Balanced storage, prioritizing compute performance over the additional memory used by ERDDAP serving environments.</p>
-<section id="configure-the-operating-system-environment-1" class="level3">
-<h3 class="anchored" data-anchor-id="configure-the-operating-system-environment-1">1. Configure the Operating System Environment</h3>
-<section id="configure-shared-user-group-permissions-1" class="level4">
-<h4 class="anchored" data-anchor-id="configure-shared-user-group-permissions-1">1.1 Configure Shared User Group Permissions</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd cwatch                              <span class="co"># Create the cwatch group if it does not already exist</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> cwatch <span class="va">$USER</span>                     <span class="co"># Add your current user</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> usermod <span class="at">-aG</span> cwatch YOUR_OPERATIONAL_USERNAME <span class="co"># Add the operational/service account (e.g. erd)</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="ex">newgrp</span> cwatch                                     <span class="co"># Refresh group membership (or log out and back in)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="initialize-and-mount-persistent-storage" class="level4">
-<h4 class="anchored" data-anchor-id="initialize-and-mount-persistent-storage">1.2 Initialize and Mount Persistent Storage</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> /dev/disk/by-id/</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> blkid /dev/disk/by-id/google-processing-data</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkfs.ext4 <span class="at">-m</span> 0 <span class="at">-E</span> lazy_itable_init=0,lazy_journal_init=0,discard <span class="dt">\</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    /dev/disk/by-id/google-processing-data</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /mnt/disks/processing-data</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mount <span class="at">-o</span> discard,defaults <span class="dt">\</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    /dev/disk/by-id/google-processing-data <span class="dt">\</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    /mnt/disks/processing-data</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chown <span class="at">-R</span> root:cwatch /mnt/disks/processing-data</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod <span class="at">-R</span> 2775 /mnt/disks/processing-data</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /mnt/disks/processing-data /data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-</section>
-<section id="configure-the-data-processing-environment" class="level3">
-<h3 class="anchored" data-anchor-id="configure-the-data-processing-environment">2. Configure the Data Processing Environment</h3>
-<section id="install-conda-package-manager" class="level4">
-<h4 class="anchored" data-anchor-id="install-conda-package-manager">2.1 Install Conda Package Manager</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-O</span> https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> Miniconda3-latest-Linux-x86_64.sh</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels conda-forge</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create and activate a project environment</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">--name</span> ENV_NAME</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate ENV_NAME</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Install common scientific and workflow dependencies</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install numpy pandas netCDF4 python-dateutil</span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install <span class="at">-c</span> conda-forge nco</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install <span class="at">-c</span> conda-forge podaac-data-subscriber</span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean up</span></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> Miniconda3-latest-Linux-x86_64.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="configure-nasa-earthdata-authentication" class="level4">
-<h4 class="anchored" data-anchor-id="configure-nasa-earthdata-authentication">2.2 Configure NASA Earthdata Authentication</h4>
-<p>Many satellite workflows require NASA Earthdata authentication. Create a <code>.netrc</code> file in the user home directory:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"machine urs.earthdata.nasa.gov login YOUR_EARTHDATA_USERNAME password YOUR_EARTHDATA_PASSWORD"</span> <span class="op">&gt;&gt;</span> ~/.netrc</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> 600 ~/.netrc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Do not commit <code>.netrc</code>, cookies, passwords, or credentials to Git repositories.</p>
-</div>
-</div>
-</section>
-<section id="test-external-data-access" class="level4">
-<h4 class="anchored" data-anchor-id="test-external-data-access">2.3 Test External Data Access</h4>
-<p>This example uses MUR4.2 as a test dataset — the files are small and the workflow validates NASA authentication, external data access, local storage, and the processing environment.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /data/podaac/data</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="ex">podaac-data-downloader</span> <span class="dt">\</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">-c</span> MUR25-JPL-L4-GLOB-v04.2 <span class="dt">\</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">-d</span> /data/podaac/data <span class="dt">\</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--start-date</span> 2025-08-01T21:00:00Z <span class="dt">\</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--end-date</span> 2025-08-10T21:00:00Z</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="install-external-processing-software" class="level4">
-<h4 class="anchored" data-anchor-id="install-external-processing-software">2.4 Install External Processing Software</h4>
-<p>Some workflows require additional compiled tools. Two common examples:</p>
-<p><strong>DINEOF</strong> — for gap-filling satellite data:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install <span class="at">-y</span> gfortran make libarpack2-dev libnetcdf-dev libnetcdff-dev git</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/Aida-Alvera/DINEOF</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> DINEOF/</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> config.mk.template config.mk</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>CoastWatch Utilities (cwutils)</strong> — download the appropriate Linux package from the <a href="https://coastwatch.noaa.gov/cwn/tools.html">CoastWatch Utilities distribution site</a> and transfer it to the processing VM:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transfer from local machine</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> compute scp <span class="dt">\</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    /path/to/cwutils-4_1_0_397-linux-x86_64.tar.gz <span class="dt">\</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    YOUR_USERNAME@YOUR_PROCESSING_VM_NAME:~/</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Unpack on the VM</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tar</span> <span class="at">-zxf</span> cwutils-4_1_0_397-linux-x86_64.tar.gz</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> cwutils-4_1_0_397-linux-x86_64.tar.gz</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-</section>
-<section id="configure-project-workspace" class="level3">
-<h3 class="anchored" data-anchor-id="configure-project-workspace">3. Configure Project Workspace</h3>
-<p>Processing VMs maintain one directory per workflow or project using a standardized template that provides a consistent structure across workflows. See the <a href="gcp-templates.html">GCP Data Processing Templates</a> page for the full template reference.</p>
-<p>Project template repository: <a href="https://github.com/erd-coastwatch/vm-dataproc-template">erd-coastwatch/vm-dataproc-template</a></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/erd-coastwatch/vm-dataproc-template.git</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-R</span> vm-dataproc-template YOUR_PROJECT_NAME   <span class="co"># Example: viirs_netpp</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> YOUR_PROJECT_NAME</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Create a persistent storage directory for the project and replace the template data directory with a symlink:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /data/projects/YOUR_PROJECT_NAME</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> data</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> /data/projects/YOUR_PROJECT_NAME data</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This keeps large datasets, temporary products, downloads, and workflow outputs separated from the VM boot disk while maintaining a lightweight project workspace. Code, configuration, notebooks, templates, and documentation remain in the user workspace; the <code>data/</code> directory points to persistent external storage on the mounted Hyperdisk.</p>
-<hr>
-</section>
-</section>
-<section id="migration-upgrade-and-recovery" class="level2">
-<h2 class="anchored" data-anchor-id="migration-upgrade-and-recovery">Migration, Upgrade, and Recovery</h2>
-<section id="optional-data-preservation-snapshot" class="level3">
-<h3 class="anchored" data-anchor-id="optional-data-preservation-snapshot">Optional: Data Preservation Snapshot</h3>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Required only when rebuilding, migrating, or cloning an existing VM rather than deploying from a fresh image — for example, during machine family changes or environment rebuilds where the existing data and configuration need to be preserved.</p>
-</div>
-</div>
-<p>Before creating a snapshot, stop any active services writing to the disk to ensure filesystem consistency:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl stop tomcat</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Create a persistent disk snapshot from Cloud Shell or another authenticated terminal:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> compute disks snapshot YOUR_INSTANCE_NAME <span class="dt">\</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--project</span><span class="op">=</span>YOUR_GCP_PROJECT_ID <span class="dt">\</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--zone</span><span class="op">=</span>YOUR_GCP_ZONE <span class="dt">\</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--snapshot-names</span><span class="op">=</span>YOUR_INSTANCE_NAME-migration-backup</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="optional-migration-snapshot-cleanup" class="level3">
-<h3 class="anchored" data-anchor-id="optional-migration-snapshot-cleanup">Optional: Migration Snapshot Cleanup</h3>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Required only when rebuilding or migrating an existing VM using temporary manual snapshots. In many environments, temporary migration snapshots are retained for at least 24 hours before cleanup.</p>
-</div>
-</div>
-<p>After the new environment has been validated and operating normally, delete the migration snapshot:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> compute snapshots delete YOUR_INSTANCE_NAME-migration-backup <span class="at">--quiet</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
-</section>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1645,8 +1066,8 @@ Note
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./gcp-templates.html" class="pagination-link" aria-label="GCP Data Processing Templates">
-        <span class="nav-page-text"><span class="chapter-title">GCP Data Processing Templates</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./gcp-infrastructure.html" class="pagination-link" aria-label="Cloud Infrastructure Setup">
+        <span class="nav-page-text"><span class="chapter-title">Cloud Infrastructure Setup</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

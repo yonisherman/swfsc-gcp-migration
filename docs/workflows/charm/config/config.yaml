@@ -87,8 +87,8 @@ st_3:
 # GCP bucket + publish configuration
 # ------------------------------------------------------------
 ---
-ERDWORK_BUCKET: "data-swfsc-erd"
-ERDPROD_BUCKET: "erddap-swfsc-erd"
+ERDWORK_BUCKET: "YOUR_WORK_BUCKET"
+ERDPROD_BUCKET: "YOUR_PRODUCTION_BUCKET"
 
 WORK_L2_PREFIX: "edge/c-harm/processed_nasa_data"
 CHARM_WORK_PREFIX: "c-harm"
@@ -101,7 +101,7 @@ CHARM_HISTORY_DAYS_REQUIRED: 180
 
 PUBLISH_TARGETS:
   prod:
-    bucket: "erddap-swfsc-erd"
+    bucket: "YOUR_PRODUCTION_BUCKET"
     root: "edge/charm_v4"
     interval_fmt: "{interval}day"
 

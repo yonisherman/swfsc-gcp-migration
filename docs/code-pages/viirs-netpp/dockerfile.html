@@ -156,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Setup</span></a>
+ <span class="menu-text">Cloud Setup</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -164,7 +164,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GCP Environment Setup</span></a>
+  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setup Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-infrastructure.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Cloud Infrastructure Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-vm-access.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Accessing VMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-erddap-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ERDDAP VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-processing-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Processing VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-migration-recovery.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Migration, Upgrade, and Recovery</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -262,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../code-pages/charm/delpoy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">delpoy_job.sh</span></a>
+  <a href="../../code-pages/charm/deploy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">deploy_job.sh</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -612,7 +637,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Container environment for the VIIRS NetPP workflow.</p>
 <div class="code-shell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode dockerfile code-with-copy"><code class="sourceCode dockerfile"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># =============================================================================</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Dockerfile - VIIRS primary productivity Cloud Run job</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Dockerfile — VIIRS primary productivity Cloud Run job</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Builds a single image used by two Cloud Run jobs:</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   viirs-netpp-nrt-daily   (JOB_MODE=nrt_daily)</span></span>

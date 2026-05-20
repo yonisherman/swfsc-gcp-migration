@@ -118,6 +118,7 @@ def run_one(
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line options for the daily VIIRS NetPP orchestrator."""
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -170,6 +171,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Resolve requested sensors/dtypes/date ranges and run all jobs."""
     args = parse_args()
 
     cfg = load_config(args.config)
@@ -184,6 +186,7 @@ def main() -> None:
     if not enabled_sensors:
         sys.exit("No enabled sensors found in config.")
 
+    # Expand the user-facing "all" option only after checking config-enabled sensors.
     if args.sensor == "all":
         sensors = enabled_sensors
     else:
@@ -193,6 +196,7 @@ def main() -> None:
         if args.sensor not in enabled_sensors:
             sys.exit(f"Sensor '{args.sensor}' is disabled in config.")
 
+    # Expand "both" into the two concrete product streams consumed by the make script.
     dtypes = ["nrt", "sq"] if args.dtype == "both" else [args.dtype]
 
     failures = []

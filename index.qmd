@@ -1,4 +1,6 @@
-# SWFSC ERDDAP Cloud Migration
+---
+title: "Overview"
+---
 
 This book documents the migration of NOAA CoastWatch West Coast Node / SWFSC ERDDAP services and associated data processing workflows to Google Cloud Platform (GCP). The documentation is intended to serve as a practical technical record of the cloud architecture, serving environment, reusable deployment patterns, and operational workflows developed during the migration.
 
@@ -15,7 +17,7 @@ The main goals are to:
 - standardize workflow structure across projects
 - reduce hard-coded paths, credentials, and hidden system assumptions
 - support reproducible infrastructure and containerized processing
-- document enough operational detail for review, handoff, maintenance, and future workflow development
+- document operational details for review, handoff, maintenance, and future workflow development
 
 ## Cloud architecture
 
@@ -39,30 +41,33 @@ For the shared project structures and deployment patterns used across workflows,
 
 This book is organized into three main sections.
 
-### Setup
+### Cloud setup
 
-The setup chapters document the shared cloud infrastructure and reusable deployment patterns used across the migration.
+The cloud setup chapters document the shared infrastructure, VM access patterns, ERDDAP serving environment, processing VM setup, migration/recovery notes, and reusable deployment templates.
 
-- [GCP Environment Setup](gcp-setup.qmd) describes VM access, ERDDAP serving environment setup, processing VM setup, storage configuration, rclone-mounted GCS access, user permissions, and migration/recovery steps.
+- [Setup Overview](gcp-setup.qmd) provides a high-level map of the setup documentation.
+- [Cloud Infrastructure Setup](gcp-infrastructure.qmd) documents Terraform-managed VMs, buckets, disks, IAM, and snapshot policies.
+- [Accessing VMs](gcp-vm-access.qmd) documents SSH, IAP tunneling, browser SSH, and port forwarding.
+- [ERDDAP VM Setup](gcp-erddap-vm.qmd) documents the dedicated ERDDAP serving environment.
+- [Processing VM Setup](gcp-processing-vm.qmd) documents processing and development VM configuration.
+- [Migration, Upgrade, and Recovery](gcp-migration-recovery.qmd) documents snapshot and cleanup steps used during rebuilds or migrations.
 - [GCP Data Processing Templates](gcp-templates.qmd) describes the Cloud Run and processing VM template repositories used to standardize workflow structure across projects.
 
 ### Workflows
 
 The workflow chapters document individual operational pipelines migrated or adapted for cloud-based processing.
 
-- [MH1 / MPOC / MPIC Processor](mh1-processor.qmd) documents the Cloud Run workflow for retrieving and distributing MODIS-Aqua ocean color, SST, particulate organic carbon, and particulate inorganic carbon products.
-- [VIIRS Net Primary Productivity](viirs-netpp.qmd) documents the Cloud Run workflow for generating daily and monthly VIIRS productivity products.
-- [MUR SST](mur-sst.qmd) documents the MUR SST workflow, including download logic, NRT-to-final upgrade handling, anomaly generation, frontal edge detection, and monthly composites.
-- [CHARM](charm.qmd) documents the CHARM workflow, including VIIRS input handling, DINEOF gap-filling, model processing, template use, and ERDDAP-ready output generation.
-
-Each workflow chapter includes a processing overview, repository structure, cloud deployment pattern, operational logic, and links to rendered code pages for scripts, configuration files, Dockerfiles, templates, and deployment assets.
+- [MH1 / MPOC / MPIC Processor](mh1-processor.qmd) documents the Cloud Run workflow for retrieving and publishing MODIS-Aqua MH1 ocean color, MH1 SST, MPIC, and MPOC products.
+- [VIIRS Net Primary Productivity](viirs-netpp.qmd) documents the daily and monthly VIIRS NetPP workflow for SNPP and NOAA-20.
+- [MUR SST](mur-sst.qmd) documents the MUR SST, anomaly, frontal, and monthly-processing workflows.
+- [C-HARM](charm.qmd) documents the containerized C-HARM processing workflow.
 
 ### Presentations
 
-The [ERDDAP Cloud Migration Presentations](erddap-cloud-migration-presentations.qmd) chapter collects slide materials used for project updates, architecture discussions, and stakeholder briefings.
+The presentations section collects project update slides and status material used during the migration.
+
+- [Presentations and Project Updates](erddap-cloud-migration-presentations.qmd) provides access to the ERDDAP cloud migration presentation materials.
 
 ## Status
 
-This book is a working technical record of an active migration. Some sections are polished operational documentation, while others capture implementation details and lessons learned as the system evolves.
-
-The broader objective is a cloud-based ERDDAP ecosystem that preserves existing services while making the underlying infrastructure and workflows more reproducible, transparent, and maintainable.
+This documentation is a living technical record. It is intended to capture both the final cloud architecture and the practical operational details needed to maintain, troubleshoot, and extend the migrated workflows.

@@ -1,0 +1,140 @@
+---
+title: "Processing VM Setup"
+---
+
+This section describes the initialization and configuration of processing environments used for operational workflows, testing, reprocessing, and data generation. Unlike the ERDDAP VM, which is optimized for data serving, processing VMs are intended for workflow execution, algorithm development, backfills, and validation tasks.
+
+Processing environments typically use C4 standard instances (for example, `c4-standard-16`) together with Hyperdisk Balanced storage, prioritizing compute performance over the additional memory used by ERDDAP serving environments.
+
+### 1. Configure the Operating System Environment
+
+#### 1.1 Configure Shared User Group Permissions
+
+```{.bash}
+sudo groupadd cwatch                              # Create the cwatch group if it does not already exist
+sudo usermod -aG cwatch $USER                     # Add your current user
+sudo usermod -aG cwatch YOUR_OPERATIONAL_USERNAME # Add the operational/service account (e.g. erd)
+newgrp cwatch                                     # Refresh group membership (or log out and back in)
+```
+
+#### 1.2 Initialize and Mount Persistent Storage
+
+```{.bash}
+ls -l /dev/disk/by-id/
+sudo blkid /dev/disk/by-id/google-processing-data
+
+sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard \
+    /dev/disk/by-id/google-processing-data
+
+sudo mkdir -p /mnt/disks/processing-data
+sudo mount -o discard,defaults \
+    /dev/disk/by-id/google-processing-data \
+    /mnt/disks/processing-data
+
+sudo chown -R root:cwatch /mnt/disks/processing-data
+sudo chmod -R 2775 /mnt/disks/processing-data
+sudo ln -s /mnt/disks/processing-data /data
+```
+
+### 2. Configure the Data Processing Environment
+
+#### 2.1 Install Conda Package Manager
+
+```{.bash}
+curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+conda config --add channels conda-forge
+
+# Create and activate a project environment
+conda create --name ENV_NAME
+conda activate ENV_NAME
+
+# Install common scientific and workflow dependencies
+conda install numpy pandas netCDF4 python-dateutil
+conda install -c conda-forge nco
+conda install -c conda-forge podaac-data-subscriber
+
+# Clean up
+rm Miniconda3-latest-Linux-x86_64.sh
+```
+
+#### 2.2 Configure NASA Earthdata Authentication
+
+Many satellite workflows require NASA Earthdata authentication. Create a `.netrc` file in the user home directory:
+
+```{.bash}
+echo "machine urs.earthdata.nasa.gov login YOUR_EARTHDATA_USERNAME password YOUR_EARTHDATA_PASSWORD" >> ~/.netrc
+chmod 600 ~/.netrc
+```
+
+::: {.callout-warning}
+Do not commit `.netrc`, cookies, passwords, or credentials to Git repositories.
+:::
+
+#### 2.3 Test External Data Access
+
+This example uses MUR4.2 as a test dataset — the files are small and the workflow validates NASA authentication, external data access, local storage, and the processing environment.
+
+```{.bash}
+mkdir -p /data/podaac/data
+
+podaac-data-downloader \
+    -c MUR25-JPL-L4-GLOB-v04.2 \
+    -d /data/podaac/data \
+    --start-date 2025-08-01T21:00:00Z \
+    --end-date 2025-08-10T21:00:00Z
+```
+
+#### 2.4 Install External Processing Software
+
+Some workflows require additional compiled tools. Two common examples:
+
+**DINEOF** — for gap-filling satellite data:
+
+```{.bash}
+sudo apt-get update
+sudo apt-get install -y gfortran make libarpack2-dev libnetcdf-dev libnetcdff-dev git
+
+git clone https://github.com/Aida-Alvera/DINEOF
+cd DINEOF/
+cp config.mk.template config.mk
+make
+```
+
+**CoastWatch Utilities (cwutils)** — download the appropriate Linux package from the [CoastWatch Utilities distribution site](https://coastwatch.noaa.gov/cwn/tools.html) and transfer it to the processing VM:
+
+```{.bash}
+# Transfer from local machine
+gcloud compute scp \
+    /path/to/cwutils-4_1_0_397-linux-x86_64.tar.gz \
+    YOUR_USERNAME@YOUR_PROCESSING_VM_NAME:~/
+
+# Unpack on the VM
+tar -zxf cwutils-4_1_0_397-linux-x86_64.tar.gz
+rm cwutils-4_1_0_397-linux-x86_64.tar.gz
+```
+
+### 3. Configure Project Workspace
+
+Processing VMs maintain one directory per workflow or project using a standardized template that provides a consistent structure across workflows. See the [GCP Data Processing Templates](gcp-templates.html) page for the full template reference.
+
+Project template repository: [erd-coastwatch/vm-dataproc-template](https://github.com/erd-coastwatch/vm-dataproc-template)
+
+```{.bash}
+cd ~
+git clone https://github.com/erd-coastwatch/vm-dataproc-template.git
+cp -R vm-dataproc-template YOUR_PROJECT_NAME   # Example: viirs_netpp
+cd YOUR_PROJECT_NAME
+```
+
+Create a persistent storage directory for the project and replace the template data directory with a symlink:
+
+```{.bash}
+mkdir -p /data/projects/YOUR_PROJECT_NAME
+rm -rf data
+ln -s /data/projects/YOUR_PROJECT_NAME data
+```
+
+This keeps large datasets, temporary products, downloads, and workflow outputs separated from the VM boot disk while maintaining a lightweight project workspace. Code, configuration, notebooks, templates, and documentation remain in the user workspace; the `data/` directory points to persistent external storage on the mounted Hyperdisk.
+
+---

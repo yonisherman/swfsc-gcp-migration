@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>delpoy_job.sh – SWFSC ERDDAP Cloud Migration</title>
+<title>deploy_job.sh – SWFSC ERDDAP Cloud Migration</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../code-pages/charm/charm_data_process_functions.html">Code: charm</a></li><li class="breadcrumb-item"><a href="../../code-pages/charm/delpoy_job.html"><span class="chapter-title">delpoy_job.sh</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../code-pages/charm/charm_data_process_functions.html">Code: charm</a></li><li class="breadcrumb-item"><a href="../../code-pages/charm/deploy_job.html"><span class="chapter-title">deploy_job.sh</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -156,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Setup</span></a>
+ <span class="menu-text">Cloud Setup</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -164,7 +164,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GCP Environment Setup</span></a>
+  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setup Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-infrastructure.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Cloud Infrastructure Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-vm-access.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Accessing VMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-erddap-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ERDDAP VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-processing-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Processing VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-migration-recovery.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Migration, Upgrade, and Recovery</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -262,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../code-pages/charm/delpoy_job.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">delpoy_job.sh</span></a>
+  <a href="../../code-pages/charm/deploy_job.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">deploy_job.sh</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -589,9 +614,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content column-page-right" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../code-pages/charm/charm_data_process_functions.html">Code: charm</a></li><li class="breadcrumb-item"><a href="../../code-pages/charm/delpoy_job.html"><span class="chapter-title">delpoy_job.sh</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../code-pages/charm/charm_data_process_functions.html">Code: charm</a></li><li class="breadcrumb-item"><a href="../../code-pages/charm/deploy_job.html"><span class="chapter-title">deploy_job.sh</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-title">delpoy_job.sh</span></h1>
+<h1 class="title"><span class="chapter-title">deploy_job.sh</span></h1>
 </div>
 
 
@@ -617,15 +642,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ----------------------------</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># SETTINGS</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ----------------------------</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="va">PROJECT_ID</span><span class="op">=</span><span class="st">"YOUR_GCP_PROJECT_ID"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="va">REGION</span><span class="op">=</span><span class="st">"YOUR_GCP_REGION"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="va">PROJECT_ID</span><span class="op">=</span><span class="st">"YOUR_PROJECT_ID"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="va">REGION</span><span class="op">=</span><span class="st">"us-east4"</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># IMPORTANT: Changed to match your C-HARM naming convention</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">REPO_NAME</span><span class="op">=</span><span class="st">"YOUR_ARTIFACT_REGISTRY_REPO"</span>              </span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">IMAGE_NAME</span><span class="op">=</span><span class="st">"YOUR_ARTIFACT_REGISTRY_REPO-cloud-run"</span>   </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="va">REPO_NAME</span><span class="op">=</span><span class="st">"edge-charm"</span>              </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="va">IMAGE_NAME</span><span class="op">=</span><span class="st">"edge-charm-cloud-run"</span>   </span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="va">TAG</span><span class="op">=</span><span class="st">"v1"</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">SERVICE_ACCOUNT</span><span class="op">=</span><span class="st">"YOUR_CLOUD_RUN_SERVICE_ACCOUNT@</span><span class="va">${PROJECT_ID}</span><span class="st">.iam.gserviceaccount.com"</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="va">SERVICE_ACCOUNT</span><span class="op">=</span><span class="st">"YOUR_SERVICE_ACCOUNT@</span><span class="va">${PROJECT_ID}</span><span class="st">.iam.gserviceaccount.com"</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="va">PLATFORM</span><span class="op">=</span><span class="st">"</span><span class="va">${PLATFORM</span><span class="op">:-</span>linux/amd64<span class="va">}</span><span class="st">"</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Full image path</span></span>
@@ -684,10 +709,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="co"># ----------------------------</span></span>
 <span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="co"># 4) Deploy Cloud Run Job</span></span>
 <span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="co"># ----------------------------</span></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Deploying Cloud Run Job: YOUR_CLOUD_RUN_JOB"</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Deploying Cloud Run Job: edge-charm-daily"</span></span>
 <span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="co"># We use 'deploy' but for jobs it's specifically 'gcloud run jobs deploy'</span></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> run jobs deploy <span class="st">"YOUR_CLOUD_RUN_JOB"</span> <span class="dt">\</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> run jobs deploy <span class="st">"edge-charm-daily"</span> <span class="dt">\</span></span>
 <span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>  <span class="at">--image</span> <span class="st">"</span><span class="va">${IMAGE_PATH}</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>  <span class="at">--service-account</span> <span class="st">"</span><span class="va">${SERVICE_ACCOUNT}</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">--tasks</span> 1 <span class="dt">\</span></span>
@@ -708,14 +733,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="va">PROJECT_NUMBER</span><span class="op">=</span><span class="st">"</span><span class="va">$(</span><span class="ex">gcloud</span> projects describe <span class="st">"</span><span class="va">${PROJECT_ID}</span><span class="st">"</span> <span class="at">--format</span><span class="op">=</span><span class="st">'value(projectNumber)'</span><span class="va">)</span><span class="st">"</span></span>
 <span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="co"># Run at 09:00 AM PST (adjust as needed for NASA data availability)</span></span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="va">SCHEDULER_NAME</span><span class="op">=</span><span class="st">"YOUR_CLOUD_RUN_JOB-sync"</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="va">SCHEDULER_NAME</span><span class="op">=</span><span class="st">"edge-charm-daily-sync"</span></span>
 <span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> scheduler jobs delete <span class="st">"</span><span class="va">${SCHEDULER_NAME}</span><span class="st">"</span> <span class="at">--location</span> <span class="st">"</span><span class="va">${REGION}</span><span class="st">"</span> <span class="at">--quiet</span> <span class="kw">||</span> <span class="fu">true</span></span>
 <span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a><span class="ex">gcloud</span> scheduler jobs create http <span class="st">"</span><span class="va">${SCHEDULER_NAME}</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">--location</span> <span class="st">"</span><span class="va">${REGION}</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>  <span class="at">--schedule</span> <span class="st">"0 9 * * *"</span> <span class="dt">\</span></span>
 <span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>  <span class="at">--time-zone</span> <span class="st">"America/Los_Angeles"</span> <span class="dt">\</span></span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>  <span class="at">--uri</span> <span class="st">"https://</span><span class="va">${REGION}</span><span class="st">-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/</span><span class="va">${PROJECT_NUMBER}</span><span class="st">/jobs/YOUR_CLOUD_RUN_JOB:run"</span> <span class="dt">\</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>  <span class="at">--uri</span> <span class="st">"https://</span><span class="va">${REGION}</span><span class="st">-run.googleapis.com/apis/run.googleapis.com/v1/namespaces/</span><span class="va">${PROJECT_NUMBER}</span><span class="st">/jobs/edge-charm-daily:run"</span> <span class="dt">\</span></span>
 <span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>  <span class="at">--http-method</span> POST <span class="dt">\</span></span>
 <span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>  <span class="at">--oauth-service-account-email</span> <span class="st">"</span><span class="va">${SERVICE_ACCOUNT}</span><span class="st">"</span> <span class="dt">\</span></span>
 <span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>  <span class="at">--oauth-token-scope</span> <span class="st">"https://www.googleapis.com/auth/cloud-platform"</span></span>

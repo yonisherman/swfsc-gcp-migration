@@ -62,7 +62,7 @@ def _pnmodel(
     Args:
         Rrs_488 (NDArray[np.float64]): Remote-sensing reflectance at 488 nm.
         Rrs_555 (NDArray[np.float64]): Remote-sensing reflectance at 555 nm.
-        month (Sequence[int]): Month number(s) (1-12). Must have length `T` if
+        month (Sequence[int]): Month number(s) (1–12). Must have length `T` if
             3-D inputs; a single value applies to all time steps.
 
     Returns:

@@ -1,0 +1,7 @@
+# Credentials (CRITICAL)
+.netrc
+.urs_cookies
+
+  # Python artifacts
+**/__pycache__/
+*.pyc

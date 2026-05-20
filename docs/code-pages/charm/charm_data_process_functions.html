@@ -156,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Setup</span></a>
+ <span class="menu-text">Cloud Setup</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -164,7 +164,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">GCP Environment Setup</span></a>
+  <a href="../../gcp-setup.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setup Overview</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-infrastructure.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Cloud Infrastructure Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-vm-access.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Accessing VMs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-erddap-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ERDDAP VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-processing-vm.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Processing VM Setup</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../gcp-migration-recovery.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Migration, Upgrade, and Recovery</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -262,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../code-pages/charm/delpoy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">delpoy_job.sh</span></a>
+  <a href="../../code-pages/charm/deploy_job.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">deploy_job.sh</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -783,7 +808,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="co">    Notes:</span></span>
 <span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a><span class="co">        * Algorithm: Vincenty's forward formula (ellipsoidal geodesics).</span></span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="co">        * Output longitude is wrapped into the ``0-360°`` range.</span></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="co">        * Output longitude is wrapped into the ``0–360°`` range.</span></span>
 <span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a><span class="co">        * This function converges for the vast majority of Earth geodesics but,</span></span>
 <span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="co">          like all Vincenty-based formulas, may fail for nearly antipodal points.</span></span>
 <span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a></span>
@@ -913,9 +938,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
 <span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a><span class="co">        tuple:</span></span>
-<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a><span class="co">            np.ndarray: ``LonPerCM`` - change in longitude (degrees) for 1 cm</span></span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a><span class="co">            np.ndarray: ``LonPerCM`` — change in longitude (degrees) for 1 cm</span></span>
 <span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a><span class="co">            east-west displacement at each grid point.</span></span>
-<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a><span class="co">            np.ndarray: ``LatPerCM`` - change in latitude (degrees) for 1 cm</span></span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a><span class="co">            np.ndarray: ``LatPerCM`` — change in latitude (degrees) for 1 cm</span></span>
 <span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a><span class="co">            north-south displacement at each grid point.</span></span>
 <span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
@@ -969,15 +994,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a><span class="co">        time: 1D sequence of times (same units as returned - typically days as</span></span>
 <span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a><span class="co">            ordinal+fraction, e.g. `date.toordinal() + hour/24`). Length `nt`.</span></span>
 <span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a><span class="co">        x_pos: 1D array of longitudes (size `nx`) OR 2D grid of longitudes</span></span>
-<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a><span class="co">            (shape `ny,nx`) - used to derive the lon axis.</span></span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a><span class="co">            (shape `ny,nx`) — used to derive the lon axis.</span></span>
 <span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a><span class="co">        y_pos: 1D array of latitudes (size `ny`) OR 2D grid of latitudes</span></span>
-<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a><span class="co">            (shape `ny,nx`) - used to derive the lat axis.</span></span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a><span class="co">            (shape `ny,nx`) — used to derive the lat axis.</span></span>
 <span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a><span class="co">        xarr: 2D longitude grid (`ny, nx`) (usually `np.meshgrid(mylonm, mylatm)[1]`).</span></span>
 <span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a><span class="co">        yarr: 2D latitude grid (`ny, nx`)  (usually `np.meshgrid(mylonm, mylatm)[0]`).</span></span>
 <span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a><span class="co">        modelu: 3D u-velocity array with shape `(nt, ny, nx)` (degrees/day).</span></span>
 <span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a><span class="co">        modelv: 3D v-velocity array with shape `(nt, ny, nx)` (degrees/day).</span></span>
 <span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a><span class="co">        t0: initial reference time (kept for signature compatibility; not used</span></span>
-<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a><span class="co">            internally here - `time` controls the integration).</span></span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a><span class="co">            internally here — `time` controls the integration).</span></span>
 <span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a><span class="co">        themask: 2D mask array (`ny, nx`) where `1` means ocean/valid and `0`</span></span>
 <span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a><span class="co">            means land/invalid.</span></span>
 <span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a></span>
@@ -1298,7 +1323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-685"><a href="#cb1-685" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-686"><a href="#cb1-686" aria-hidden="true" tabindex="-1"></a><span class="co">    Notes:</span></span>
 <span id="cb1-687"><a href="#cb1-687" aria-hidden="true" tabindex="-1"></a><span class="co">        * ``ocean_time`` is assumed to be seconds since ``2016-01-01``.</span></span>
-<span id="cb1-688"><a href="#cb1-688" aria-hidden="true" tabindex="-1"></a><span class="co">        * ROMS longitudes are converted to ``0-360`` format.</span></span>
+<span id="cb1-688"><a href="#cb1-688" aria-hidden="true" tabindex="-1"></a><span class="co">        * ROMS longitudes are converted to ``0–360`` format.</span></span>
 <span id="cb1-689"><a href="#cb1-689" aria-hidden="true" tabindex="-1"></a><span class="co">        * The interpolation function ``regrid_irr_2_reg`` must be available.</span></span>
 <span id="cb1-690"><a href="#cb1-690" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-691"><a href="#cb1-691" aria-hidden="true" tabindex="-1"></a><span class="co">    Example:</span></span>
@@ -1430,11 +1455,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-817"><a href="#cb1-817" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-818"><a href="#cb1-818" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
 <span id="cb1-819"><a href="#cb1-819" aria-hidden="true" tabindex="-1"></a><span class="co">        tuple[ma.MaskedArray, ma.MaskedArray, list[datetime]]:</span></span>
-<span id="cb1-820"><a href="#cb1-820" aria-hidden="true" tabindex="-1"></a><span class="co">            * **us** - Masked array of regridded U-component velocities</span></span>
+<span id="cb1-820"><a href="#cb1-820" aria-hidden="true" tabindex="-1"></a><span class="co">            * **us** – Masked array of regridded U-component velocities</span></span>
 <span id="cb1-821"><a href="#cb1-821" aria-hidden="true" tabindex="-1"></a><span class="co">              with shape `(ntime, ny, nx)`.</span></span>
-<span id="cb1-822"><a href="#cb1-822" aria-hidden="true" tabindex="-1"></a><span class="co">            * **vs** - Masked array of regridded V-component velocities</span></span>
+<span id="cb1-822"><a href="#cb1-822" aria-hidden="true" tabindex="-1"></a><span class="co">            * **vs** – Masked array of regridded V-component velocities</span></span>
 <span id="cb1-823"><a href="#cb1-823" aria-hidden="true" tabindex="-1"></a><span class="co">              with shape `(ntime, ny, nx)`.</span></span>
-<span id="cb1-824"><a href="#cb1-824" aria-hidden="true" tabindex="-1"></a><span class="co">            * **o_time** - List of corresponding Python `datetime` objects.</span></span>
+<span id="cb1-824"><a href="#cb1-824" aria-hidden="true" tabindex="-1"></a><span class="co">            * **o_time** – List of corresponding Python `datetime` objects.</span></span>
 <span id="cb1-825"><a href="#cb1-825" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-826"><a href="#cb1-826" aria-hidden="true" tabindex="-1"></a><span class="co">    Example:</span></span>
 <span id="cb1-827"><a href="#cb1-827" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; us, vs, times = regrid_uv_aws(</span></span>
@@ -1571,7 +1596,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-958"><a href="#cb1-958" aria-hidden="true" tabindex="-1"></a>    work_dir.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-959"><a href="#cb1-959" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-960"><a href="#cb1-960" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> forecast:</span>
-<span id="cb1-961"><a href="#cb1-961" aria-hidden="true" tabindex="-1"></a>        logging.info(<span class="st">"Nowcast mode selected - adjusting date to previous day."</span>)</span>
+<span id="cb1-961"><a href="#cb1-961" aria-hidden="true" tabindex="-1"></a>        logging.info(<span class="st">"Nowcast mode selected — adjusting date to previous day."</span>)</span>
 <span id="cb1-962"><a href="#cb1-962" aria-hidden="true" tabindex="-1"></a>        for_now <span class="op">=</span> <span class="st">"n"</span></span>
 <span id="cb1-963"><a href="#cb1-963" aria-hidden="true" tabindex="-1"></a>        charm_date <span class="op">-=</span> timedelta(days<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb1-964"><a href="#cb1-964" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
@@ -1646,7 +1671,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-1033"><a href="#cb1-1033" aria-hidden="true" tabindex="-1"></a><span class="co">    correspond to nowcasts vs. forecasts using ``overflight_offset``.</span></span>
 <span id="cb1-1034"><a href="#cb1-1034" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-1035"><a href="#cb1-1035" aria-hidden="true" tabindex="-1"></a><span class="co">    File download order:</span></span>
-<span id="cb1-1036"><a href="#cb1-1036" aria-hidden="true" tabindex="-1"></a><span class="co">        * Nowcast hours: last ``overflight_offset`` hours of ``1-24``</span></span>
+<span id="cb1-1036"><a href="#cb1-1036" aria-hidden="true" tabindex="-1"></a><span class="co">        * Nowcast hours: last ``overflight_offset`` hours of ``1–24``</span></span>
 <span id="cb1-1037"><a href="#cb1-1037" aria-hidden="true" tabindex="-1"></a><span class="co">        * Forecast hours: all forecast hours except the overlapping offset</span></span>
 <span id="cb1-1038"><a href="#cb1-1038" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-1039"><a href="#cb1-1039" aria-hidden="true" tabindex="-1"></a><span class="co">    A legacy (``nos.wcofs``) filename is attempted first; if unavailable,</span></span>
@@ -1689,8 +1714,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-1076"><a href="#cb1-1076" aria-hidden="true" tabindex="-1"></a>    work_dir.mkdir(parents<span class="op">=</span><span class="va">True</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-1077"><a href="#cb1-1077" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-1078"><a href="#cb1-1078" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define sequences for nowcast and forecast hours</span></span>
-<span id="cb1-1079"><a href="#cb1-1079" aria-hidden="true" tabindex="-1"></a>    forecast_hours <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">73</span>))   <span class="co"># 1-72</span></span>
-<span id="cb1-1080"><a href="#cb1-1080" aria-hidden="true" tabindex="-1"></a>    nowcast_hours <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">25</span>))    <span class="co"># 1-24</span></span>
+<span id="cb1-1079"><a href="#cb1-1079" aria-hidden="true" tabindex="-1"></a>    forecast_hours <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">73</span>))   <span class="co"># 1–72</span></span>
+<span id="cb1-1080"><a href="#cb1-1080" aria-hidden="true" tabindex="-1"></a>    nowcast_hours <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">25</span>))    <span class="co"># 1–24</span></span>
 <span id="cb1-1081"><a href="#cb1-1081" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-1082"><a href="#cb1-1082" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Combine series based on offset rule</span></span>
 <span id="cb1-1083"><a href="#cb1-1083" aria-hidden="true" tabindex="-1"></a>    hrange <span class="op">=</span> nowcast_hours[<span class="op">-</span>overflight_offset:] <span class="op">+</span> forecast_hours[:<span class="op">-</span>overflight_offset]</span>
@@ -2068,556 +2093,558 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-1455"><a href="#cb1-1455" aria-hidden="true" tabindex="-1"></a>    results <span class="op">=</span> {}</span>
 <span id="cb1-1456"><a href="#cb1-1456" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-1457"><a href="#cb1-1457" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _run_one(cmd):</span>
-<span id="cb1-1458"><a href="#cb1-1458" aria-hidden="true" tabindex="-1"></a>        cmd_str <span class="op">=</span> cmd <span class="cf">if</span> <span class="bu">isinstance</span>(cmd, <span class="bu">str</span>) <span class="cf">else</span> <span class="st">" "</span>.join(cmd)</span>
-<span id="cb1-1459"><a href="#cb1-1459" aria-hidden="true" tabindex="-1"></a>        logging.info(<span class="st">"START: </span><span class="sc">%s</span><span class="st">"</span>, cmd_str)</span>
-<span id="cb1-1460"><a href="#cb1-1460" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1461"><a href="#cb1-1461" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> run_cmd(cmd, msg<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>msg <span class="kw">or</span> <span class="st">'parallel'</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>cmd_str<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-1462"><a href="#cb1-1462" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1463"><a href="#cb1-1463" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Normalize return fields</span></span>
-<span id="cb1-1464"><a href="#cb1-1464" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">hasattr</span>(result, <span class="st">"returncode"</span>):</span>
-<span id="cb1-1465"><a href="#cb1-1465" aria-hidden="true" tabindex="-1"></a>            rc <span class="op">=</span> result.returncode</span>
-<span id="cb1-1466"><a href="#cb1-1466" aria-hidden="true" tabindex="-1"></a>            out <span class="op">=</span> <span class="bu">getattr</span>(result, <span class="st">"stdout"</span>, <span class="st">""</span>) <span class="kw">or</span> <span class="st">""</span></span>
-<span id="cb1-1467"><a href="#cb1-1467" aria-hidden="true" tabindex="-1"></a>            err <span class="op">=</span> <span class="bu">getattr</span>(result, <span class="st">"stderr"</span>, <span class="st">""</span>) <span class="kw">or</span> <span class="st">""</span></span>
-<span id="cb1-1468"><a href="#cb1-1468" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="bu">isinstance</span>(result, <span class="bu">tuple</span>) <span class="kw">and</span> <span class="bu">len</span>(result) <span class="op">==</span> <span class="dv">3</span>:</span>
-<span id="cb1-1469"><a href="#cb1-1469" aria-hidden="true" tabindex="-1"></a>            rc, out, err <span class="op">=</span> result</span>
-<span id="cb1-1470"><a href="#cb1-1470" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb1-1471"><a href="#cb1-1471" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="ss">f"Unexpected return type from run_cmd(): </span><span class="sc">{</span><span class="bu">type</span>(result)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-1472"><a href="#cb1-1472" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1473"><a href="#cb1-1473" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> print_output:</span>
-<span id="cb1-1474"><a href="#cb1-1474" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> out.strip():</span>
-<span id="cb1-1475"><a href="#cb1-1475" aria-hidden="true" tabindex="-1"></a>                logging.debug(<span class="st">"[OUT] </span><span class="sc">%s</span><span class="st">:</span><span class="ch">\n</span><span class="sc">%s</span><span class="st">"</span>, cmd_str, out.strip())</span>
-<span id="cb1-1476"><a href="#cb1-1476" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> err.strip():</span>
-<span id="cb1-1477"><a href="#cb1-1477" aria-hidden="true" tabindex="-1"></a>                logging.warning(<span class="st">"[ERR] </span><span class="sc">%s</span><span class="st">:</span><span class="ch">\n</span><span class="sc">%s</span><span class="st">"</span>, cmd_str, err.strip())</span>
-<span id="cb1-1478"><a href="#cb1-1478" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1479"><a href="#cb1-1479" aria-hidden="true" tabindex="-1"></a>        logging.info(<span class="st">"END: </span><span class="sc">%s</span><span class="st"> rc=</span><span class="sc">%s</span><span class="st">"</span>, cmd_str, rc)</span>
-<span id="cb1-1480"><a href="#cb1-1480" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1481"><a href="#cb1-1481" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cmd_str, {<span class="st">"returncode"</span>: rc, <span class="st">"stdout"</span>: out, <span class="st">"stderr"</span>: err}</span>
-<span id="cb1-1482"><a href="#cb1-1482" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1483"><a href="#cb1-1483" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parallel execution</span></span>
-<span id="cb1-1484"><a href="#cb1-1484" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> concurrent.futures.ThreadPoolExecutor(max_workers<span class="op">=</span>max_workers) <span class="im">as</span> ex:</span>
-<span id="cb1-1485"><a href="#cb1-1485" aria-hidden="true" tabindex="-1"></a>        futures <span class="op">=</span> [ex.submit(_run_one, cmd) <span class="cf">for</span> cmd <span class="kw">in</span> cmd_list]</span>
-<span id="cb1-1486"><a href="#cb1-1486" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> fut <span class="kw">in</span> concurrent.futures.as_completed(futures):</span>
-<span id="cb1-1487"><a href="#cb1-1487" aria-hidden="true" tabindex="-1"></a>            cmd_str, result <span class="op">=</span> fut.result()</span>
-<span id="cb1-1488"><a href="#cb1-1488" aria-hidden="true" tabindex="-1"></a>            results[cmd_str] <span class="op">=</span> result</span>
-<span id="cb1-1489"><a href="#cb1-1489" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1490"><a href="#cb1-1490" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check failures</span></span>
-<span id="cb1-1491"><a href="#cb1-1491" aria-hidden="true" tabindex="-1"></a>    failed <span class="op">=</span> {k: v <span class="cf">for</span> k, v <span class="kw">in</span> results.items() <span class="cf">if</span> v[<span class="st">"returncode"</span>] <span class="op">!=</span> <span class="dv">0</span>}</span>
-<span id="cb1-1492"><a href="#cb1-1492" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> failed:</span>
-<span id="cb1-1493"><a href="#cb1-1493" aria-hidden="true" tabindex="-1"></a>        logging.error(<span class="st">"Some commands failed:"</span>)</span>
-<span id="cb1-1494"><a href="#cb1-1494" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> cmd, res <span class="kw">in</span> failed.items():</span>
-<span id="cb1-1495"><a href="#cb1-1495" aria-hidden="true" tabindex="-1"></a>            logging.error(<span class="st">"  - </span><span class="sc">%s</span><span class="st">: rc=</span><span class="sc">%s</span><span class="st">"</span>, cmd, res[<span class="st">"returncode"</span>])</span>
-<span id="cb1-1496"><a href="#cb1-1496" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="dv">1</span>)</span>
-<span id="cb1-1497"><a href="#cb1-1497" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1498"><a href="#cb1-1498" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"All commands completed successfully."</span>)</span>
-<span id="cb1-1499"><a href="#cb1-1499" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
-<span id="cb1-1500"><a href="#cb1-1500" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1458"><a href="#cb1-1458" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Execute one command for the surrounding parallel command runner."""</span></span>
+<span id="cb1-1459"><a href="#cb1-1459" aria-hidden="true" tabindex="-1"></a>        cmd_str <span class="op">=</span> cmd <span class="cf">if</span> <span class="bu">isinstance</span>(cmd, <span class="bu">str</span>) <span class="cf">else</span> <span class="st">" "</span>.join(cmd)</span>
+<span id="cb1-1460"><a href="#cb1-1460" aria-hidden="true" tabindex="-1"></a>        logging.info(<span class="st">"START: </span><span class="sc">%s</span><span class="st">"</span>, cmd_str)</span>
+<span id="cb1-1461"><a href="#cb1-1461" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1462"><a href="#cb1-1462" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> run_cmd(cmd, msg<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span>msg <span class="kw">or</span> <span class="st">'parallel'</span><span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>cmd_str<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-1463"><a href="#cb1-1463" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1464"><a href="#cb1-1464" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Normalize return fields</span></span>
+<span id="cb1-1465"><a href="#cb1-1465" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">hasattr</span>(result, <span class="st">"returncode"</span>):</span>
+<span id="cb1-1466"><a href="#cb1-1466" aria-hidden="true" tabindex="-1"></a>            rc <span class="op">=</span> result.returncode</span>
+<span id="cb1-1467"><a href="#cb1-1467" aria-hidden="true" tabindex="-1"></a>            out <span class="op">=</span> <span class="bu">getattr</span>(result, <span class="st">"stdout"</span>, <span class="st">""</span>) <span class="kw">or</span> <span class="st">""</span></span>
+<span id="cb1-1468"><a href="#cb1-1468" aria-hidden="true" tabindex="-1"></a>            err <span class="op">=</span> <span class="bu">getattr</span>(result, <span class="st">"stderr"</span>, <span class="st">""</span>) <span class="kw">or</span> <span class="st">""</span></span>
+<span id="cb1-1469"><a href="#cb1-1469" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="bu">isinstance</span>(result, <span class="bu">tuple</span>) <span class="kw">and</span> <span class="bu">len</span>(result) <span class="op">==</span> <span class="dv">3</span>:</span>
+<span id="cb1-1470"><a href="#cb1-1470" aria-hidden="true" tabindex="-1"></a>            rc, out, err <span class="op">=</span> result</span>
+<span id="cb1-1471"><a href="#cb1-1471" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb1-1472"><a href="#cb1-1472" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="ss">f"Unexpected return type from run_cmd(): </span><span class="sc">{</span><span class="bu">type</span>(result)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-1473"><a href="#cb1-1473" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1474"><a href="#cb1-1474" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> print_output:</span>
+<span id="cb1-1475"><a href="#cb1-1475" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> out.strip():</span>
+<span id="cb1-1476"><a href="#cb1-1476" aria-hidden="true" tabindex="-1"></a>                logging.debug(<span class="st">"[OUT] </span><span class="sc">%s</span><span class="st">:</span><span class="ch">\n</span><span class="sc">%s</span><span class="st">"</span>, cmd_str, out.strip())</span>
+<span id="cb1-1477"><a href="#cb1-1477" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> err.strip():</span>
+<span id="cb1-1478"><a href="#cb1-1478" aria-hidden="true" tabindex="-1"></a>                logging.warning(<span class="st">"[ERR] </span><span class="sc">%s</span><span class="st">:</span><span class="ch">\n</span><span class="sc">%s</span><span class="st">"</span>, cmd_str, err.strip())</span>
+<span id="cb1-1479"><a href="#cb1-1479" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1480"><a href="#cb1-1480" aria-hidden="true" tabindex="-1"></a>        logging.info(<span class="st">"END: </span><span class="sc">%s</span><span class="st"> rc=</span><span class="sc">%s</span><span class="st">"</span>, cmd_str, rc)</span>
+<span id="cb1-1481"><a href="#cb1-1481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1482"><a href="#cb1-1482" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> cmd_str, {<span class="st">"returncode"</span>: rc, <span class="st">"stdout"</span>: out, <span class="st">"stderr"</span>: err}</span>
+<span id="cb1-1483"><a href="#cb1-1483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1484"><a href="#cb1-1484" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Parallel execution</span></span>
+<span id="cb1-1485"><a href="#cb1-1485" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> concurrent.futures.ThreadPoolExecutor(max_workers<span class="op">=</span>max_workers) <span class="im">as</span> ex:</span>
+<span id="cb1-1486"><a href="#cb1-1486" aria-hidden="true" tabindex="-1"></a>        futures <span class="op">=</span> [ex.submit(_run_one, cmd) <span class="cf">for</span> cmd <span class="kw">in</span> cmd_list]</span>
+<span id="cb1-1487"><a href="#cb1-1487" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> fut <span class="kw">in</span> concurrent.futures.as_completed(futures):</span>
+<span id="cb1-1488"><a href="#cb1-1488" aria-hidden="true" tabindex="-1"></a>            cmd_str, result <span class="op">=</span> fut.result()</span>
+<span id="cb1-1489"><a href="#cb1-1489" aria-hidden="true" tabindex="-1"></a>            results[cmd_str] <span class="op">=</span> result</span>
+<span id="cb1-1490"><a href="#cb1-1490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1491"><a href="#cb1-1491" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check failures</span></span>
+<span id="cb1-1492"><a href="#cb1-1492" aria-hidden="true" tabindex="-1"></a>    failed <span class="op">=</span> {k: v <span class="cf">for</span> k, v <span class="kw">in</span> results.items() <span class="cf">if</span> v[<span class="st">"returncode"</span>] <span class="op">!=</span> <span class="dv">0</span>}</span>
+<span id="cb1-1493"><a href="#cb1-1493" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> failed:</span>
+<span id="cb1-1494"><a href="#cb1-1494" aria-hidden="true" tabindex="-1"></a>        logging.error(<span class="st">"Some commands failed:"</span>)</span>
+<span id="cb1-1495"><a href="#cb1-1495" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> cmd, res <span class="kw">in</span> failed.items():</span>
+<span id="cb1-1496"><a href="#cb1-1496" aria-hidden="true" tabindex="-1"></a>            logging.error(<span class="st">"  - </span><span class="sc">%s</span><span class="st">: rc=</span><span class="sc">%s</span><span class="st">"</span>, cmd, res[<span class="st">"returncode"</span>])</span>
+<span id="cb1-1497"><a href="#cb1-1497" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">SystemExit</span>(<span class="dv">1</span>)</span>
+<span id="cb1-1498"><a href="#cb1-1498" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1499"><a href="#cb1-1499" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"All commands completed successfully."</span>)</span>
+<span id="cb1-1500"><a href="#cb1-1500" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> results</span>
 <span id="cb1-1501"><a href="#cb1-1501" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1502"><a href="#cb1-1502" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> regrid_stack_wcofs_st(</span>
-<span id="cb1-1503"><a href="#cb1-1503" aria-hidden="true" tabindex="-1"></a>    now_time: datetime,</span>
-<span id="cb1-1504"><a href="#cb1-1504" aria-hidden="true" tabindex="-1"></a>    wk_dir: Path,</span>
-<span id="cb1-1505"><a href="#cb1-1505" aria-hidden="true" tabindex="-1"></a>    res_dir: Path,</span>
-<span id="cb1-1506"><a href="#cb1-1506" aria-hidden="true" tabindex="-1"></a>    model_lon: np.ndarray,</span>
-<span id="cb1-1507"><a href="#cb1-1507" aria-hidden="true" tabindex="-1"></a>    model_lat: np.ndarray,</span>
-<span id="cb1-1508"><a href="#cb1-1508" aria-hidden="true" tabindex="-1"></a>    wcofs_inputs: Dict[<span class="bu">str</span>, Dict[<span class="bu">str</span>, Any]],</span>
-<span id="cb1-1509"><a href="#cb1-1509" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Dict[<span class="bu">str</span>, Any]:</span>
-<span id="cb1-1510"><a href="#cb1-1510" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Regrid and stack WCOFS salinity/temperature outputs for multiple time windows.</span></span>
-<span id="cb1-1511"><a href="#cb1-1511" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1512"><a href="#cb1-1512" aria-hidden="true" tabindex="-1"></a><span class="co">    This function loops over a dictionary of WCOFS configuration blocks</span></span>
-<span id="cb1-1513"><a href="#cb1-1513" aria-hidden="true" tabindex="-1"></a><span class="co">    (``wcofs_inputs``), each specifying start/end timesteps and whether the</span></span>
-<span id="cb1-1514"><a href="#cb1-1514" aria-hidden="true" tabindex="-1"></a><span class="co">    block represents forecast or nowcast data. For each block, it calls</span></span>
-<span id="cb1-1515"><a href="#cb1-1515" aria-hidden="true" tabindex="-1"></a><span class="co">    ``merge_wcofs_and_regrid()`` to download WCOFS salinity/temperature</span></span>
-<span id="cb1-1516"><a href="#cb1-1516" aria-hidden="true" tabindex="-1"></a><span class="co">    NetCDF files and regrid them to the CHARM model grid. The resulting</span></span>
-<span id="cb1-1517"><a href="#cb1-1517" aria-hidden="true" tabindex="-1"></a><span class="co">    regridded arrays are collected and stacked into unified multi-day arrays</span></span>
-<span id="cb1-1518"><a href="#cb1-1518" aria-hidden="true" tabindex="-1"></a><span class="co">    for salinity and temperature.</span></span>
-<span id="cb1-1519"><a href="#cb1-1519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1520"><a href="#cb1-1520" aria-hidden="true" tabindex="-1"></a><span class="co">    The function returns:</span></span>
-<span id="cb1-1521"><a href="#cb1-1521" aria-hidden="true" tabindex="-1"></a><span class="co">      * A 3-D salinity array with shape ``(4, ny, nx)``</span></span>
-<span id="cb1-1522"><a href="#cb1-1522" aria-hidden="true" tabindex="-1"></a><span class="co">      * A 3-D temperature array with shape ``(4, ny, nx)``</span></span>
-<span id="cb1-1523"><a href="#cb1-1523" aria-hidden="true" tabindex="-1"></a><span class="co">      * Lists of minimum salinity and temperature values for each day</span></span>
-<span id="cb1-1524"><a href="#cb1-1524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1525"><a href="#cb1-1525" aria-hidden="true" tabindex="-1"></a><span class="co">    All directory inputs must be ``Path`` objects (not strings).</span></span>
-<span id="cb1-1526"><a href="#cb1-1526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1527"><a href="#cb1-1527" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb1-1528"><a href="#cb1-1528" aria-hidden="true" tabindex="-1"></a><span class="co">        now_time (datetime):</span></span>
-<span id="cb1-1529"><a href="#cb1-1529" aria-hidden="true" tabindex="-1"></a><span class="co">            Timestamp associated with the current WCOFS model run.</span></span>
-<span id="cb1-1530"><a href="#cb1-1530" aria-hidden="true" tabindex="-1"></a><span class="co">        wk_dir (Path):</span></span>
-<span id="cb1-1531"><a href="#cb1-1531" aria-hidden="true" tabindex="-1"></a><span class="co">            Working directory where intermediate files are written.</span></span>
-<span id="cb1-1532"><a href="#cb1-1532" aria-hidden="true" tabindex="-1"></a><span class="co">        res_dir (Path):</span></span>
-<span id="cb1-1533"><a href="#cb1-1533" aria-hidden="true" tabindex="-1"></a><span class="co">            Results directory where regridded outputs are stored.</span></span>
-<span id="cb1-1534"><a href="#cb1-1534" aria-hidden="true" tabindex="-1"></a><span class="co">        model_lon (np.ndarray):</span></span>
-<span id="cb1-1535"><a href="#cb1-1535" aria-hidden="true" tabindex="-1"></a><span class="co">            2-D longitude array of the CHARM target grid.</span></span>
-<span id="cb1-1536"><a href="#cb1-1536" aria-hidden="true" tabindex="-1"></a><span class="co">        model_lat (np.ndarray):</span></span>
-<span id="cb1-1537"><a href="#cb1-1537" aria-hidden="true" tabindex="-1"></a><span class="co">            2-D latitude array of the CHARM target grid.</span></span>
-<span id="cb1-1538"><a href="#cb1-1538" aria-hidden="true" tabindex="-1"></a><span class="co">        wcofs_inputs (dict[str, dict]):</span></span>
-<span id="cb1-1539"><a href="#cb1-1539" aria-hidden="true" tabindex="-1"></a><span class="co">            Configuration dictionary of the form:</span></span>
-<span id="cb1-1540"><a href="#cb1-1540" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1541"><a href="#cb1-1541" aria-hidden="true" tabindex="-1"></a><span class="co">                {</span></span>
-<span id="cb1-1542"><a href="#cb1-1542" aria-hidden="true" tabindex="-1"></a><span class="co">                    "st_0": {"st_day": 1, "ed_day": 7, "forecast": True},</span></span>
-<span id="cb1-1543"><a href="#cb1-1543" aria-hidden="true" tabindex="-1"></a><span class="co">                    "st_1": {"st_day": 2, "ed_day": 8, "forecast": True},</span></span>
-<span id="cb1-1544"><a href="#cb1-1544" aria-hidden="true" tabindex="-1"></a><span class="co">                    ...</span></span>
-<span id="cb1-1545"><a href="#cb1-1545" aria-hidden="true" tabindex="-1"></a><span class="co">                }</span></span>
-<span id="cb1-1546"><a href="#cb1-1546" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1547"><a href="#cb1-1547" aria-hidden="true" tabindex="-1"></a><span class="co">            Each block is passed to ``merge_wcofs_and_regrid()``.</span></span>
-<span id="cb1-1548"><a href="#cb1-1548" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1549"><a href="#cb1-1549" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb1-1550"><a href="#cb1-1550" aria-hidden="true" tabindex="-1"></a><span class="co">        dict[str, Any]:</span></span>
-<span id="cb1-1551"><a href="#cb1-1551" aria-hidden="true" tabindex="-1"></a><span class="co">            Dictionary containing:</span></span>
-<span id="cb1-1552"><a href="#cb1-1552" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1553"><a href="#cb1-1553" aria-hidden="true" tabindex="-1"></a><span class="co">            {</span></span>
-<span id="cb1-1554"><a href="#cb1-1554" aria-hidden="true" tabindex="-1"></a><span class="co">                "thesalt": np.ndarray (4, ny, nx),</span></span>
-<span id="cb1-1555"><a href="#cb1-1555" aria-hidden="true" tabindex="-1"></a><span class="co">                "thetemp": np.ndarray (4, ny, nx),</span></span>
-<span id="cb1-1556"><a href="#cb1-1556" aria-hidden="true" tabindex="-1"></a><span class="co">                "salt_mins": list[float],</span></span>
-<span id="cb1-1557"><a href="#cb1-1557" aria-hidden="true" tabindex="-1"></a><span class="co">                "temp_mins": list[float],</span></span>
-<span id="cb1-1558"><a href="#cb1-1558" aria-hidden="true" tabindex="-1"></a><span class="co">            }</span></span>
-<span id="cb1-1559"><a href="#cb1-1559" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1560"><a href="#cb1-1560" aria-hidden="true" tabindex="-1"></a><span class="co">            where index 0-3 correspond to the four configured ``st_i`` blocks.</span></span>
-<span id="cb1-1561"><a href="#cb1-1561" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1562"><a href="#cb1-1562" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
-<span id="cb1-1563"><a href="#cb1-1563" aria-hidden="true" tabindex="-1"></a><span class="co">        KeyError:</span></span>
-<span id="cb1-1564"><a href="#cb1-1564" aria-hidden="true" tabindex="-1"></a><span class="co">            If expected keys (e.g., ``st_0`` … ``st_3`` or regridding outputs)</span></span>
-<span id="cb1-1565"><a href="#cb1-1565" aria-hidden="true" tabindex="-1"></a><span class="co">            are missing from the input dictionaries.</span></span>
-<span id="cb1-1566"><a href="#cb1-1566" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1567"><a href="#cb1-1567" aria-hidden="true" tabindex="-1"></a><span class="co">    Example:</span></span>
-<span id="cb1-1568"><a href="#cb1-1568" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; outputs = regrid_stack_wcofs_st(</span></span>
-<span id="cb1-1569"><a href="#cb1-1569" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     now_time=datetime(2025, 1, 3, 3),</span></span>
-<span id="cb1-1570"><a href="#cb1-1570" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     wk_dir=Path("/tmp/work"),</span></span>
-<span id="cb1-1571"><a href="#cb1-1571" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     res_dir=Path("/tmp/results"),</span></span>
-<span id="cb1-1572"><a href="#cb1-1572" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     model_lon=lon_grid,</span></span>
-<span id="cb1-1573"><a href="#cb1-1573" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     model_lat=lat_grid,</span></span>
-<span id="cb1-1574"><a href="#cb1-1574" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     wcofs_inputs={</span></span>
-<span id="cb1-1575"><a href="#cb1-1575" aria-hidden="true" tabindex="-1"></a><span class="co">        ...         "st_0": {"st_day": 1, "ed_day": 7, "forecast": True},</span></span>
-<span id="cb1-1576"><a href="#cb1-1576" aria-hidden="true" tabindex="-1"></a><span class="co">        ...         "st_1": {"st_day": 2, "ed_day": 8, "forecast": True},</span></span>
-<span id="cb1-1577"><a href="#cb1-1577" aria-hidden="true" tabindex="-1"></a><span class="co">        ...         "st_2": {"st_day": 3, "ed_day": 9, "forecast": True},</span></span>
-<span id="cb1-1578"><a href="#cb1-1578" aria-hidden="true" tabindex="-1"></a><span class="co">        ...         "st_3": {"st_day": 4, "ed_day": 10, "forecast": True},</span></span>
-<span id="cb1-1579"><a href="#cb1-1579" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     },</span></span>
-<span id="cb1-1580"><a href="#cb1-1580" aria-hidden="true" tabindex="-1"></a><span class="co">        ... )</span></span>
-<span id="cb1-1581"><a href="#cb1-1581" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; outputs["thesalt"].shape</span></span>
-<span id="cb1-1582"><a href="#cb1-1582" aria-hidden="true" tabindex="-1"></a><span class="co">        (4, ny, nx)</span></span>
-<span id="cb1-1583"><a href="#cb1-1583" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb1-1584"><a href="#cb1-1584" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Beginning WCOFS salinity/temperature merge + regrid stack."</span>)</span>
-<span id="cb1-1585"><a href="#cb1-1585" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1586"><a href="#cb1-1586" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run merge/regrid for each time block</span></span>
-<span id="cb1-1587"><a href="#cb1-1587" aria-hidden="true" tabindex="-1"></a>    wcofs_st_out <span class="op">=</span> {}</span>
-<span id="cb1-1588"><a href="#cb1-1588" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key, val <span class="kw">in</span> wcofs_inputs.items():</span>
-<span id="cb1-1589"><a href="#cb1-1589" aria-hidden="true" tabindex="-1"></a>        logging.info(</span>
-<span id="cb1-1590"><a href="#cb1-1590" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Processing </span><span class="sc">%s</span><span class="st"> (st_day=</span><span class="sc">%s</span><span class="st">, ed_day=</span><span class="sc">%s</span><span class="st">, forecast=</span><span class="sc">%s</span><span class="st">)"</span>,</span>
-<span id="cb1-1591"><a href="#cb1-1591" aria-hidden="true" tabindex="-1"></a>            key, val[<span class="st">"st_day"</span>], val[<span class="st">"ed_day"</span>], val[<span class="st">"forecast"</span>]</span>
-<span id="cb1-1592"><a href="#cb1-1592" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb1-1593"><a href="#cb1-1593" aria-hidden="true" tabindex="-1"></a>        wcofs_st_out[key] <span class="op">=</span> merge_wcofs_and_regrid(</span>
-<span id="cb1-1594"><a href="#cb1-1594" aria-hidden="true" tabindex="-1"></a>            now_time,</span>
-<span id="cb1-1595"><a href="#cb1-1595" aria-hidden="true" tabindex="-1"></a>            <span class="bu">int</span>(val[<span class="st">"st_day"</span>]),</span>
-<span id="cb1-1596"><a href="#cb1-1596" aria-hidden="true" tabindex="-1"></a>            <span class="bu">int</span>(val[<span class="st">"ed_day"</span>]),</span>
-<span id="cb1-1597"><a href="#cb1-1597" aria-hidden="true" tabindex="-1"></a>            val[<span class="st">"forecast"</span>],</span>
-<span id="cb1-1598"><a href="#cb1-1598" aria-hidden="true" tabindex="-1"></a>            wk_dir,</span>
-<span id="cb1-1599"><a href="#cb1-1599" aria-hidden="true" tabindex="-1"></a>            res_dir,</span>
-<span id="cb1-1600"><a href="#cb1-1600" aria-hidden="true" tabindex="-1"></a>            model_lon,</span>
-<span id="cb1-1601"><a href="#cb1-1601" aria-hidden="true" tabindex="-1"></a>            model_lat,</span>
-<span id="cb1-1602"><a href="#cb1-1602" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb1-1603"><a href="#cb1-1603" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1604"><a href="#cb1-1604" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stack outputs - expects keys st_0, st_1, st_2, st_3</span></span>
-<span id="cb1-1605"><a href="#cb1-1605" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Stacking regridded salinity and temperature arrays."</span>)</span>
-<span id="cb1-1606"><a href="#cb1-1606" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1607"><a href="#cb1-1607" aria-hidden="true" tabindex="-1"></a>    thesalt <span class="op">=</span> np.stack(</span>
-<span id="cb1-1608"><a href="#cb1-1608" aria-hidden="true" tabindex="-1"></a>        [wcofs_st_out[<span class="ss">f"st_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>][<span class="st">"salt_day"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)], axis<span class="op">=</span><span class="dv">0</span></span>
-<span id="cb1-1609"><a href="#cb1-1609" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1610"><a href="#cb1-1610" aria-hidden="true" tabindex="-1"></a>    thetemp <span class="op">=</span> np.stack(</span>
-<span id="cb1-1611"><a href="#cb1-1611" aria-hidden="true" tabindex="-1"></a>        [wcofs_st_out[<span class="ss">f"st_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>][<span class="st">"temp_day"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)], axis<span class="op">=</span><span class="dv">0</span></span>
-<span id="cb1-1612"><a href="#cb1-1612" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1613"><a href="#cb1-1613" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1614"><a href="#cb1-1614" aria-hidden="true" tabindex="-1"></a>    salt_mins <span class="op">=</span> [wcofs_st_out[<span class="ss">f"st_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>][<span class="st">"salt_min"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)]</span>
-<span id="cb1-1615"><a href="#cb1-1615" aria-hidden="true" tabindex="-1"></a>    temp_mins <span class="op">=</span> [wcofs_st_out[<span class="ss">f"st_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>][<span class="st">"temp_min"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)]</span>
-<span id="cb1-1616"><a href="#cb1-1616" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1617"><a href="#cb1-1617" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Completed WCOFS salinity/temperature stack."</span>)</span>
-<span id="cb1-1618"><a href="#cb1-1618" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1619"><a href="#cb1-1619" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
-<span id="cb1-1620"><a href="#cb1-1620" aria-hidden="true" tabindex="-1"></a>        <span class="st">"thesalt"</span>: thesalt,</span>
-<span id="cb1-1621"><a href="#cb1-1621" aria-hidden="true" tabindex="-1"></a>        <span class="st">"thetemp"</span>: thetemp,</span>
-<span id="cb1-1622"><a href="#cb1-1622" aria-hidden="true" tabindex="-1"></a>        <span class="st">"salt_mins"</span>: salt_mins,</span>
-<span id="cb1-1623"><a href="#cb1-1623" aria-hidden="true" tabindex="-1"></a>        <span class="st">"temp_mins"</span>: temp_mins,</span>
-<span id="cb1-1624"><a href="#cb1-1624" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb1-1625"><a href="#cb1-1625" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1502"><a href="#cb1-1502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1503"><a href="#cb1-1503" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> regrid_stack_wcofs_st(</span>
+<span id="cb1-1504"><a href="#cb1-1504" aria-hidden="true" tabindex="-1"></a>    now_time: datetime,</span>
+<span id="cb1-1505"><a href="#cb1-1505" aria-hidden="true" tabindex="-1"></a>    wk_dir: Path,</span>
+<span id="cb1-1506"><a href="#cb1-1506" aria-hidden="true" tabindex="-1"></a>    res_dir: Path,</span>
+<span id="cb1-1507"><a href="#cb1-1507" aria-hidden="true" tabindex="-1"></a>    model_lon: np.ndarray,</span>
+<span id="cb1-1508"><a href="#cb1-1508" aria-hidden="true" tabindex="-1"></a>    model_lat: np.ndarray,</span>
+<span id="cb1-1509"><a href="#cb1-1509" aria-hidden="true" tabindex="-1"></a>    wcofs_inputs: Dict[<span class="bu">str</span>, Dict[<span class="bu">str</span>, Any]],</span>
+<span id="cb1-1510"><a href="#cb1-1510" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Dict[<span class="bu">str</span>, Any]:</span>
+<span id="cb1-1511"><a href="#cb1-1511" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Regrid and stack WCOFS salinity/temperature outputs for multiple time windows.</span></span>
+<span id="cb1-1512"><a href="#cb1-1512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1513"><a href="#cb1-1513" aria-hidden="true" tabindex="-1"></a><span class="co">    This function loops over a dictionary of WCOFS configuration blocks</span></span>
+<span id="cb1-1514"><a href="#cb1-1514" aria-hidden="true" tabindex="-1"></a><span class="co">    (``wcofs_inputs``), each specifying start/end timesteps and whether the</span></span>
+<span id="cb1-1515"><a href="#cb1-1515" aria-hidden="true" tabindex="-1"></a><span class="co">    block represents forecast or nowcast data. For each block, it calls</span></span>
+<span id="cb1-1516"><a href="#cb1-1516" aria-hidden="true" tabindex="-1"></a><span class="co">    ``merge_wcofs_and_regrid()`` to download WCOFS salinity/temperature</span></span>
+<span id="cb1-1517"><a href="#cb1-1517" aria-hidden="true" tabindex="-1"></a><span class="co">    NetCDF files and regrid them to the CHARM model grid. The resulting</span></span>
+<span id="cb1-1518"><a href="#cb1-1518" aria-hidden="true" tabindex="-1"></a><span class="co">    regridded arrays are collected and stacked into unified multi-day arrays</span></span>
+<span id="cb1-1519"><a href="#cb1-1519" aria-hidden="true" tabindex="-1"></a><span class="co">    for salinity and temperature.</span></span>
+<span id="cb1-1520"><a href="#cb1-1520" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1521"><a href="#cb1-1521" aria-hidden="true" tabindex="-1"></a><span class="co">    The function returns:</span></span>
+<span id="cb1-1522"><a href="#cb1-1522" aria-hidden="true" tabindex="-1"></a><span class="co">      * A 3-D salinity array with shape ``(4, ny, nx)``</span></span>
+<span id="cb1-1523"><a href="#cb1-1523" aria-hidden="true" tabindex="-1"></a><span class="co">      * A 3-D temperature array with shape ``(4, ny, nx)``</span></span>
+<span id="cb1-1524"><a href="#cb1-1524" aria-hidden="true" tabindex="-1"></a><span class="co">      * Lists of minimum salinity and temperature values for each day</span></span>
+<span id="cb1-1525"><a href="#cb1-1525" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1526"><a href="#cb1-1526" aria-hidden="true" tabindex="-1"></a><span class="co">    All directory inputs must be ``Path`` objects (not strings).</span></span>
+<span id="cb1-1527"><a href="#cb1-1527" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1528"><a href="#cb1-1528" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb1-1529"><a href="#cb1-1529" aria-hidden="true" tabindex="-1"></a><span class="co">        now_time (datetime):</span></span>
+<span id="cb1-1530"><a href="#cb1-1530" aria-hidden="true" tabindex="-1"></a><span class="co">            Timestamp associated with the current WCOFS model run.</span></span>
+<span id="cb1-1531"><a href="#cb1-1531" aria-hidden="true" tabindex="-1"></a><span class="co">        wk_dir (Path):</span></span>
+<span id="cb1-1532"><a href="#cb1-1532" aria-hidden="true" tabindex="-1"></a><span class="co">            Working directory where intermediate files are written.</span></span>
+<span id="cb1-1533"><a href="#cb1-1533" aria-hidden="true" tabindex="-1"></a><span class="co">        res_dir (Path):</span></span>
+<span id="cb1-1534"><a href="#cb1-1534" aria-hidden="true" tabindex="-1"></a><span class="co">            Results directory where regridded outputs are stored.</span></span>
+<span id="cb1-1535"><a href="#cb1-1535" aria-hidden="true" tabindex="-1"></a><span class="co">        model_lon (np.ndarray):</span></span>
+<span id="cb1-1536"><a href="#cb1-1536" aria-hidden="true" tabindex="-1"></a><span class="co">            2-D longitude array of the CHARM target grid.</span></span>
+<span id="cb1-1537"><a href="#cb1-1537" aria-hidden="true" tabindex="-1"></a><span class="co">        model_lat (np.ndarray):</span></span>
+<span id="cb1-1538"><a href="#cb1-1538" aria-hidden="true" tabindex="-1"></a><span class="co">            2-D latitude array of the CHARM target grid.</span></span>
+<span id="cb1-1539"><a href="#cb1-1539" aria-hidden="true" tabindex="-1"></a><span class="co">        wcofs_inputs (dict[str, dict]):</span></span>
+<span id="cb1-1540"><a href="#cb1-1540" aria-hidden="true" tabindex="-1"></a><span class="co">            Configuration dictionary of the form:</span></span>
+<span id="cb1-1541"><a href="#cb1-1541" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1542"><a href="#cb1-1542" aria-hidden="true" tabindex="-1"></a><span class="co">                {</span></span>
+<span id="cb1-1543"><a href="#cb1-1543" aria-hidden="true" tabindex="-1"></a><span class="co">                    "st_0": {"st_day": 1, "ed_day": 7, "forecast": True},</span></span>
+<span id="cb1-1544"><a href="#cb1-1544" aria-hidden="true" tabindex="-1"></a><span class="co">                    "st_1": {"st_day": 2, "ed_day": 8, "forecast": True},</span></span>
+<span id="cb1-1545"><a href="#cb1-1545" aria-hidden="true" tabindex="-1"></a><span class="co">                    ...</span></span>
+<span id="cb1-1546"><a href="#cb1-1546" aria-hidden="true" tabindex="-1"></a><span class="co">                }</span></span>
+<span id="cb1-1547"><a href="#cb1-1547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1548"><a href="#cb1-1548" aria-hidden="true" tabindex="-1"></a><span class="co">            Each block is passed to ``merge_wcofs_and_regrid()``.</span></span>
+<span id="cb1-1549"><a href="#cb1-1549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1550"><a href="#cb1-1550" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb1-1551"><a href="#cb1-1551" aria-hidden="true" tabindex="-1"></a><span class="co">        dict[str, Any]:</span></span>
+<span id="cb1-1552"><a href="#cb1-1552" aria-hidden="true" tabindex="-1"></a><span class="co">            Dictionary containing:</span></span>
+<span id="cb1-1553"><a href="#cb1-1553" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1554"><a href="#cb1-1554" aria-hidden="true" tabindex="-1"></a><span class="co">            {</span></span>
+<span id="cb1-1555"><a href="#cb1-1555" aria-hidden="true" tabindex="-1"></a><span class="co">                "thesalt": np.ndarray (4, ny, nx),</span></span>
+<span id="cb1-1556"><a href="#cb1-1556" aria-hidden="true" tabindex="-1"></a><span class="co">                "thetemp": np.ndarray (4, ny, nx),</span></span>
+<span id="cb1-1557"><a href="#cb1-1557" aria-hidden="true" tabindex="-1"></a><span class="co">                "salt_mins": list[float],</span></span>
+<span id="cb1-1558"><a href="#cb1-1558" aria-hidden="true" tabindex="-1"></a><span class="co">                "temp_mins": list[float],</span></span>
+<span id="cb1-1559"><a href="#cb1-1559" aria-hidden="true" tabindex="-1"></a><span class="co">            }</span></span>
+<span id="cb1-1560"><a href="#cb1-1560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1561"><a href="#cb1-1561" aria-hidden="true" tabindex="-1"></a><span class="co">            where index 0–3 correspond to the four configured ``st_i`` blocks.</span></span>
+<span id="cb1-1562"><a href="#cb1-1562" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1563"><a href="#cb1-1563" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
+<span id="cb1-1564"><a href="#cb1-1564" aria-hidden="true" tabindex="-1"></a><span class="co">        KeyError:</span></span>
+<span id="cb1-1565"><a href="#cb1-1565" aria-hidden="true" tabindex="-1"></a><span class="co">            If expected keys (e.g., ``st_0`` … ``st_3`` or regridding outputs)</span></span>
+<span id="cb1-1566"><a href="#cb1-1566" aria-hidden="true" tabindex="-1"></a><span class="co">            are missing from the input dictionaries.</span></span>
+<span id="cb1-1567"><a href="#cb1-1567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1568"><a href="#cb1-1568" aria-hidden="true" tabindex="-1"></a><span class="co">    Example:</span></span>
+<span id="cb1-1569"><a href="#cb1-1569" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; outputs = regrid_stack_wcofs_st(</span></span>
+<span id="cb1-1570"><a href="#cb1-1570" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     now_time=datetime(2025, 1, 3, 3),</span></span>
+<span id="cb1-1571"><a href="#cb1-1571" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     wk_dir=Path("/tmp/work"),</span></span>
+<span id="cb1-1572"><a href="#cb1-1572" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     res_dir=Path("/tmp/results"),</span></span>
+<span id="cb1-1573"><a href="#cb1-1573" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     model_lon=lon_grid,</span></span>
+<span id="cb1-1574"><a href="#cb1-1574" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     model_lat=lat_grid,</span></span>
+<span id="cb1-1575"><a href="#cb1-1575" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     wcofs_inputs={</span></span>
+<span id="cb1-1576"><a href="#cb1-1576" aria-hidden="true" tabindex="-1"></a><span class="co">        ...         "st_0": {"st_day": 1, "ed_day": 7, "forecast": True},</span></span>
+<span id="cb1-1577"><a href="#cb1-1577" aria-hidden="true" tabindex="-1"></a><span class="co">        ...         "st_1": {"st_day": 2, "ed_day": 8, "forecast": True},</span></span>
+<span id="cb1-1578"><a href="#cb1-1578" aria-hidden="true" tabindex="-1"></a><span class="co">        ...         "st_2": {"st_day": 3, "ed_day": 9, "forecast": True},</span></span>
+<span id="cb1-1579"><a href="#cb1-1579" aria-hidden="true" tabindex="-1"></a><span class="co">        ...         "st_3": {"st_day": 4, "ed_day": 10, "forecast": True},</span></span>
+<span id="cb1-1580"><a href="#cb1-1580" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     },</span></span>
+<span id="cb1-1581"><a href="#cb1-1581" aria-hidden="true" tabindex="-1"></a><span class="co">        ... )</span></span>
+<span id="cb1-1582"><a href="#cb1-1582" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; outputs["thesalt"].shape</span></span>
+<span id="cb1-1583"><a href="#cb1-1583" aria-hidden="true" tabindex="-1"></a><span class="co">        (4, ny, nx)</span></span>
+<span id="cb1-1584"><a href="#cb1-1584" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-1585"><a href="#cb1-1585" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Beginning WCOFS salinity/temperature merge + regrid stack."</span>)</span>
+<span id="cb1-1586"><a href="#cb1-1586" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1587"><a href="#cb1-1587" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Run merge/regrid for each time block</span></span>
+<span id="cb1-1588"><a href="#cb1-1588" aria-hidden="true" tabindex="-1"></a>    wcofs_st_out <span class="op">=</span> {}</span>
+<span id="cb1-1589"><a href="#cb1-1589" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key, val <span class="kw">in</span> wcofs_inputs.items():</span>
+<span id="cb1-1590"><a href="#cb1-1590" aria-hidden="true" tabindex="-1"></a>        logging.info(</span>
+<span id="cb1-1591"><a href="#cb1-1591" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Processing </span><span class="sc">%s</span><span class="st"> (st_day=</span><span class="sc">%s</span><span class="st">, ed_day=</span><span class="sc">%s</span><span class="st">, forecast=</span><span class="sc">%s</span><span class="st">)"</span>,</span>
+<span id="cb1-1592"><a href="#cb1-1592" aria-hidden="true" tabindex="-1"></a>            key, val[<span class="st">"st_day"</span>], val[<span class="st">"ed_day"</span>], val[<span class="st">"forecast"</span>]</span>
+<span id="cb1-1593"><a href="#cb1-1593" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-1594"><a href="#cb1-1594" aria-hidden="true" tabindex="-1"></a>        wcofs_st_out[key] <span class="op">=</span> merge_wcofs_and_regrid(</span>
+<span id="cb1-1595"><a href="#cb1-1595" aria-hidden="true" tabindex="-1"></a>            now_time,</span>
+<span id="cb1-1596"><a href="#cb1-1596" aria-hidden="true" tabindex="-1"></a>            <span class="bu">int</span>(val[<span class="st">"st_day"</span>]),</span>
+<span id="cb1-1597"><a href="#cb1-1597" aria-hidden="true" tabindex="-1"></a>            <span class="bu">int</span>(val[<span class="st">"ed_day"</span>]),</span>
+<span id="cb1-1598"><a href="#cb1-1598" aria-hidden="true" tabindex="-1"></a>            val[<span class="st">"forecast"</span>],</span>
+<span id="cb1-1599"><a href="#cb1-1599" aria-hidden="true" tabindex="-1"></a>            wk_dir,</span>
+<span id="cb1-1600"><a href="#cb1-1600" aria-hidden="true" tabindex="-1"></a>            res_dir,</span>
+<span id="cb1-1601"><a href="#cb1-1601" aria-hidden="true" tabindex="-1"></a>            model_lon,</span>
+<span id="cb1-1602"><a href="#cb1-1602" aria-hidden="true" tabindex="-1"></a>            model_lat,</span>
+<span id="cb1-1603"><a href="#cb1-1603" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-1604"><a href="#cb1-1604" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1605"><a href="#cb1-1605" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Stack outputs — expects keys st_0, st_1, st_2, st_3</span></span>
+<span id="cb1-1606"><a href="#cb1-1606" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Stacking regridded salinity and temperature arrays."</span>)</span>
+<span id="cb1-1607"><a href="#cb1-1607" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1608"><a href="#cb1-1608" aria-hidden="true" tabindex="-1"></a>    thesalt <span class="op">=</span> np.stack(</span>
+<span id="cb1-1609"><a href="#cb1-1609" aria-hidden="true" tabindex="-1"></a>        [wcofs_st_out[<span class="ss">f"st_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>][<span class="st">"salt_day"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)], axis<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb1-1610"><a href="#cb1-1610" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-1611"><a href="#cb1-1611" aria-hidden="true" tabindex="-1"></a>    thetemp <span class="op">=</span> np.stack(</span>
+<span id="cb1-1612"><a href="#cb1-1612" aria-hidden="true" tabindex="-1"></a>        [wcofs_st_out[<span class="ss">f"st_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>][<span class="st">"temp_day"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)], axis<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb1-1613"><a href="#cb1-1613" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-1614"><a href="#cb1-1614" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1615"><a href="#cb1-1615" aria-hidden="true" tabindex="-1"></a>    salt_mins <span class="op">=</span> [wcofs_st_out[<span class="ss">f"st_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>][<span class="st">"salt_min"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)]</span>
+<span id="cb1-1616"><a href="#cb1-1616" aria-hidden="true" tabindex="-1"></a>    temp_mins <span class="op">=</span> [wcofs_st_out[<span class="ss">f"st_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>][<span class="st">"temp_min"</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)]</span>
+<span id="cb1-1617"><a href="#cb1-1617" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1618"><a href="#cb1-1618" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Completed WCOFS salinity/temperature stack."</span>)</span>
+<span id="cb1-1619"><a href="#cb1-1619" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1620"><a href="#cb1-1620" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb1-1621"><a href="#cb1-1621" aria-hidden="true" tabindex="-1"></a>        <span class="st">"thesalt"</span>: thesalt,</span>
+<span id="cb1-1622"><a href="#cb1-1622" aria-hidden="true" tabindex="-1"></a>        <span class="st">"thetemp"</span>: thetemp,</span>
+<span id="cb1-1623"><a href="#cb1-1623" aria-hidden="true" tabindex="-1"></a>        <span class="st">"salt_mins"</span>: salt_mins,</span>
+<span id="cb1-1624"><a href="#cb1-1624" aria-hidden="true" tabindex="-1"></a>        <span class="st">"temp_mins"</span>: temp_mins,</span>
+<span id="cb1-1625"><a href="#cb1-1625" aria-hidden="true" tabindex="-1"></a>    }</span>
 <span id="cb1-1626"><a href="#cb1-1626" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1627"><a href="#cb1-1627" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> merge_wcofs_and_regrid(</span>
-<span id="cb1-1628"><a href="#cb1-1628" aria-hidden="true" tabindex="-1"></a>    now_wcofs_date,</span>
-<span id="cb1-1629"><a href="#cb1-1629" aria-hidden="true" tabindex="-1"></a>    start_hr: <span class="bu">int</span>,</span>
-<span id="cb1-1630"><a href="#cb1-1630" aria-hidden="true" tabindex="-1"></a>    end_hr: <span class="bu">int</span>,</span>
-<span id="cb1-1631"><a href="#cb1-1631" aria-hidden="true" tabindex="-1"></a>    cast4: <span class="bu">bool</span>,</span>
-<span id="cb1-1632"><a href="#cb1-1632" aria-hidden="true" tabindex="-1"></a>    work_dir: <span class="bu">str</span>,</span>
-<span id="cb1-1633"><a href="#cb1-1633" aria-hidden="true" tabindex="-1"></a>    res_dir: <span class="bu">str</span>,</span>
-<span id="cb1-1634"><a href="#cb1-1634" aria-hidden="true" tabindex="-1"></a>    v_2d_lon,</span>
-<span id="cb1-1635"><a href="#cb1-1635" aria-hidden="true" tabindex="-1"></a>    v_2d_lat,</span>
-<span id="cb1-1636"><a href="#cb1-1636" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb1-1637"><a href="#cb1-1637" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Retrieve WCOFS salinity/temperature fields and regrid them to the CHARM grid.</span></span>
-<span id="cb1-1638"><a href="#cb1-1638" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1639"><a href="#cb1-1639" aria-hidden="true" tabindex="-1"></a><span class="co">    This function orchestrates a two-step workflow:  </span></span>
-<span id="cb1-1640"><a href="#cb1-1640" aria-hidden="true" tabindex="-1"></a><span class="co">      (1) Retrieve WCOFS (West Coast Operational Forecast System) salinity and  </span></span>
-<span id="cb1-1641"><a href="#cb1-1641" aria-hidden="true" tabindex="-1"></a><span class="co">          temperature fields from AWS for a specified forecast window.  </span></span>
-<span id="cb1-1642"><a href="#cb1-1642" aria-hidden="true" tabindex="-1"></a><span class="co">      (2) Regrid the resulting fields onto the CHARM model grid.</span></span>
-<span id="cb1-1643"><a href="#cb1-1643" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1644"><a href="#cb1-1644" aria-hidden="true" tabindex="-1"></a><span class="co">    It acts as a wrapper around:</span></span>
-<span id="cb1-1645"><a href="#cb1-1645" aria-hidden="true" tabindex="-1"></a><span class="co">      - ``get_wcofs_salt_temp_aws()`` for data retrieval.</span></span>
-<span id="cb1-1646"><a href="#cb1-1646" aria-hidden="true" tabindex="-1"></a><span class="co">      - ``regrid_st_aws()`` for regridding to the target CHARM grid.</span></span>
-<span id="cb1-1647"><a href="#cb1-1647" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1648"><a href="#cb1-1648" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb1-1649"><a href="#cb1-1649" aria-hidden="true" tabindex="-1"></a><span class="co">        now_wcofs_date:</span></span>
-<span id="cb1-1650"><a href="#cb1-1650" aria-hidden="true" tabindex="-1"></a><span class="co">            The WCOFS analysis/forecast date for which to retrieve data.</span></span>
-<span id="cb1-1651"><a href="#cb1-1651" aria-hidden="true" tabindex="-1"></a><span class="co">            Typically a ``datetime`` or date string accepted by the retrieval function.</span></span>
-<span id="cb1-1652"><a href="#cb1-1652" aria-hidden="true" tabindex="-1"></a><span class="co">        start_hr (int):</span></span>
-<span id="cb1-1653"><a href="#cb1-1653" aria-hidden="true" tabindex="-1"></a><span class="co">            Starting forecast hour (inclusive) for the retrieval window.</span></span>
-<span id="cb1-1654"><a href="#cb1-1654" aria-hidden="true" tabindex="-1"></a><span class="co">        end_hr (int):</span></span>
-<span id="cb1-1655"><a href="#cb1-1655" aria-hidden="true" tabindex="-1"></a><span class="co">            Ending forecast hour (inclusive) for the retrieval window.</span></span>
-<span id="cb1-1656"><a href="#cb1-1656" aria-hidden="true" tabindex="-1"></a><span class="co">        cast4 (bool):</span></span>
-<span id="cb1-1657"><a href="#cb1-1657" aria-hidden="true" tabindex="-1"></a><span class="co">            Whether to retrieve the 4-cast forecast data or analysis product,</span></span>
-<span id="cb1-1658"><a href="#cb1-1658" aria-hidden="true" tabindex="-1"></a><span class="co">            depending on how ``get_wcofs_salt_temp_aws()`` interprets this flag.</span></span>
-<span id="cb1-1659"><a href="#cb1-1659" aria-hidden="true" tabindex="-1"></a><span class="co">        work_dir (str):</span></span>
-<span id="cb1-1660"><a href="#cb1-1660" aria-hidden="true" tabindex="-1"></a><span class="co">            Directory where downloaded/intermediate WCOFS files will be stored.</span></span>
-<span id="cb1-1661"><a href="#cb1-1661" aria-hidden="true" tabindex="-1"></a><span class="co">        res_dir (str):</span></span>
-<span id="cb1-1662"><a href="#cb1-1662" aria-hidden="true" tabindex="-1"></a><span class="co">            Directory where final regridded output should be stored.</span></span>
-<span id="cb1-1663"><a href="#cb1-1663" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lon:</span></span>
-<span id="cb1-1664"><a href="#cb1-1664" aria-hidden="true" tabindex="-1"></a><span class="co">            2D longitude array defining the CHARM output grid.</span></span>
-<span id="cb1-1665"><a href="#cb1-1665" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lat:</span></span>
-<span id="cb1-1666"><a href="#cb1-1666" aria-hidden="true" tabindex="-1"></a><span class="co">            2D latitude array defining the CHARM output grid.</span></span>
-<span id="cb1-1667"><a href="#cb1-1667" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1668"><a href="#cb1-1668" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb1-1669"><a href="#cb1-1669" aria-hidden="true" tabindex="-1"></a><span class="co">        None:</span></span>
-<span id="cb1-1670"><a href="#cb1-1670" aria-hidden="true" tabindex="-1"></a><span class="co">            Output files are written to ``res_dir`` by ``regrid_st_aws()``.</span></span>
-<span id="cb1-1671"><a href="#cb1-1671" aria-hidden="true" tabindex="-1"></a><span class="co">            This function returns nothing.</span></span>
-<span id="cb1-1672"><a href="#cb1-1672" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1673"><a href="#cb1-1673" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
-<span id="cb1-1674"><a href="#cb1-1674" aria-hidden="true" tabindex="-1"></a><span class="co">        FileNotFoundError:</span></span>
-<span id="cb1-1675"><a href="#cb1-1675" aria-hidden="true" tabindex="-1"></a><span class="co">            If ``work_dir`` or ``res_dir`` does not exist.</span></span>
-<span id="cb1-1676"><a href="#cb1-1676" aria-hidden="true" tabindex="-1"></a><span class="co">        RuntimeError:</span></span>
-<span id="cb1-1677"><a href="#cb1-1677" aria-hidden="true" tabindex="-1"></a><span class="co">            If no salinity/temperature files are returned by the retrieval function.</span></span>
-<span id="cb1-1678"><a href="#cb1-1678" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb1-1679"><a href="#cb1-1679" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(work_dir):</span>
-<span id="cb1-1680"><a href="#cb1-1680" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Working directory does not exist: </span><span class="sc">{</span>work_dir<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-1681"><a href="#cb1-1681" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(res_dir):</span>
-<span id="cb1-1682"><a href="#cb1-1682" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Result directory does not exist: </span><span class="sc">{</span>res_dir<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-1683"><a href="#cb1-1683" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1684"><a href="#cb1-1684" aria-hidden="true" tabindex="-1"></a>    logging.info(</span>
-<span id="cb1-1685"><a href="#cb1-1685" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Retrieving WCOFS salinity/temperature data for </span><span class="sc">%s</span><span class="st"> (hrs </span><span class="sc">%s</span><span class="st"> to </span><span class="sc">%s</span><span class="st">, cast4=</span><span class="sc">%s</span><span class="st">)"</span>,</span>
-<span id="cb1-1686"><a href="#cb1-1686" aria-hidden="true" tabindex="-1"></a>        now_wcofs_date,</span>
-<span id="cb1-1687"><a href="#cb1-1687" aria-hidden="true" tabindex="-1"></a>        start_hr,</span>
-<span id="cb1-1688"><a href="#cb1-1688" aria-hidden="true" tabindex="-1"></a>        end_hr,</span>
-<span id="cb1-1689"><a href="#cb1-1689" aria-hidden="true" tabindex="-1"></a>        cast4,</span>
-<span id="cb1-1690"><a href="#cb1-1690" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1691"><a href="#cb1-1691" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1692"><a href="#cb1-1692" aria-hidden="true" tabindex="-1"></a>    st_files <span class="op">=</span> get_wcofs_salt_temp_aws(</span>
-<span id="cb1-1693"><a href="#cb1-1693" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
-<span id="cb1-1694"><a href="#cb1-1694" aria-hidden="true" tabindex="-1"></a>        start_hr,</span>
-<span id="cb1-1695"><a href="#cb1-1695" aria-hidden="true" tabindex="-1"></a>        end_hr,</span>
-<span id="cb1-1696"><a href="#cb1-1696" aria-hidden="true" tabindex="-1"></a>        forecast<span class="op">=</span>cast4,</span>
-<span id="cb1-1697"><a href="#cb1-1697" aria-hidden="true" tabindex="-1"></a>        charm_date<span class="op">=</span>now_wcofs_date,</span>
-<span id="cb1-1698"><a href="#cb1-1698" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1699"><a href="#cb1-1699" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1700"><a href="#cb1-1700" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> st_files:</span>
-<span id="cb1-1701"><a href="#cb1-1701" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(</span>
-<span id="cb1-1702"><a href="#cb1-1702" aria-hidden="true" tabindex="-1"></a>            <span class="st">"No WCOFS salinity/temperature files returned by get_wcofs_salt_temp_aws()."</span></span>
-<span id="cb1-1703"><a href="#cb1-1703" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb1-1704"><a href="#cb1-1704" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1705"><a href="#cb1-1705" aria-hidden="true" tabindex="-1"></a>    logging.info(</span>
-<span id="cb1-1706"><a href="#cb1-1706" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Regridding </span><span class="sc">%d</span><span class="st"> salinity/temperature files to the CHARM grid."</span>,</span>
-<span id="cb1-1707"><a href="#cb1-1707" aria-hidden="true" tabindex="-1"></a>        <span class="bu">len</span>(st_files),</span>
-<span id="cb1-1708"><a href="#cb1-1708" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1709"><a href="#cb1-1709" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1710"><a href="#cb1-1710" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> regrid_st_aws(</span>
-<span id="cb1-1711"><a href="#cb1-1711" aria-hidden="true" tabindex="-1"></a>        st_files,</span>
-<span id="cb1-1712"><a href="#cb1-1712" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
-<span id="cb1-1713"><a href="#cb1-1713" aria-hidden="true" tabindex="-1"></a>        v_2d_lon,</span>
-<span id="cb1-1714"><a href="#cb1-1714" aria-hidden="true" tabindex="-1"></a>        v_2d_lat,</span>
-<span id="cb1-1715"><a href="#cb1-1715" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1716"><a href="#cb1-1716" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1627"><a href="#cb1-1627" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1628"><a href="#cb1-1628" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> merge_wcofs_and_regrid(</span>
+<span id="cb1-1629"><a href="#cb1-1629" aria-hidden="true" tabindex="-1"></a>    now_wcofs_date,</span>
+<span id="cb1-1630"><a href="#cb1-1630" aria-hidden="true" tabindex="-1"></a>    start_hr: <span class="bu">int</span>,</span>
+<span id="cb1-1631"><a href="#cb1-1631" aria-hidden="true" tabindex="-1"></a>    end_hr: <span class="bu">int</span>,</span>
+<span id="cb1-1632"><a href="#cb1-1632" aria-hidden="true" tabindex="-1"></a>    cast4: <span class="bu">bool</span>,</span>
+<span id="cb1-1633"><a href="#cb1-1633" aria-hidden="true" tabindex="-1"></a>    work_dir: <span class="bu">str</span>,</span>
+<span id="cb1-1634"><a href="#cb1-1634" aria-hidden="true" tabindex="-1"></a>    res_dir: <span class="bu">str</span>,</span>
+<span id="cb1-1635"><a href="#cb1-1635" aria-hidden="true" tabindex="-1"></a>    v_2d_lon,</span>
+<span id="cb1-1636"><a href="#cb1-1636" aria-hidden="true" tabindex="-1"></a>    v_2d_lat,</span>
+<span id="cb1-1637"><a href="#cb1-1637" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-1638"><a href="#cb1-1638" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Retrieve WCOFS salinity/temperature fields and regrid them to the CHARM grid.</span></span>
+<span id="cb1-1639"><a href="#cb1-1639" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1640"><a href="#cb1-1640" aria-hidden="true" tabindex="-1"></a><span class="co">    This function orchestrates a two-step workflow:  </span></span>
+<span id="cb1-1641"><a href="#cb1-1641" aria-hidden="true" tabindex="-1"></a><span class="co">      (1) Retrieve WCOFS (West Coast Operational Forecast System) salinity and  </span></span>
+<span id="cb1-1642"><a href="#cb1-1642" aria-hidden="true" tabindex="-1"></a><span class="co">          temperature fields from AWS for a specified forecast window.  </span></span>
+<span id="cb1-1643"><a href="#cb1-1643" aria-hidden="true" tabindex="-1"></a><span class="co">      (2) Regrid the resulting fields onto the CHARM model grid.</span></span>
+<span id="cb1-1644"><a href="#cb1-1644" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1645"><a href="#cb1-1645" aria-hidden="true" tabindex="-1"></a><span class="co">    It acts as a wrapper around:</span></span>
+<span id="cb1-1646"><a href="#cb1-1646" aria-hidden="true" tabindex="-1"></a><span class="co">      - ``get_wcofs_salt_temp_aws()`` for data retrieval.</span></span>
+<span id="cb1-1647"><a href="#cb1-1647" aria-hidden="true" tabindex="-1"></a><span class="co">      - ``regrid_st_aws()`` for regridding to the target CHARM grid.</span></span>
+<span id="cb1-1648"><a href="#cb1-1648" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1649"><a href="#cb1-1649" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb1-1650"><a href="#cb1-1650" aria-hidden="true" tabindex="-1"></a><span class="co">        now_wcofs_date:</span></span>
+<span id="cb1-1651"><a href="#cb1-1651" aria-hidden="true" tabindex="-1"></a><span class="co">            The WCOFS analysis/forecast date for which to retrieve data.</span></span>
+<span id="cb1-1652"><a href="#cb1-1652" aria-hidden="true" tabindex="-1"></a><span class="co">            Typically a ``datetime`` or date string accepted by the retrieval function.</span></span>
+<span id="cb1-1653"><a href="#cb1-1653" aria-hidden="true" tabindex="-1"></a><span class="co">        start_hr (int):</span></span>
+<span id="cb1-1654"><a href="#cb1-1654" aria-hidden="true" tabindex="-1"></a><span class="co">            Starting forecast hour (inclusive) for the retrieval window.</span></span>
+<span id="cb1-1655"><a href="#cb1-1655" aria-hidden="true" tabindex="-1"></a><span class="co">        end_hr (int):</span></span>
+<span id="cb1-1656"><a href="#cb1-1656" aria-hidden="true" tabindex="-1"></a><span class="co">            Ending forecast hour (inclusive) for the retrieval window.</span></span>
+<span id="cb1-1657"><a href="#cb1-1657" aria-hidden="true" tabindex="-1"></a><span class="co">        cast4 (bool):</span></span>
+<span id="cb1-1658"><a href="#cb1-1658" aria-hidden="true" tabindex="-1"></a><span class="co">            Whether to retrieve the 4-cast forecast data or analysis product,</span></span>
+<span id="cb1-1659"><a href="#cb1-1659" aria-hidden="true" tabindex="-1"></a><span class="co">            depending on how ``get_wcofs_salt_temp_aws()`` interprets this flag.</span></span>
+<span id="cb1-1660"><a href="#cb1-1660" aria-hidden="true" tabindex="-1"></a><span class="co">        work_dir (str):</span></span>
+<span id="cb1-1661"><a href="#cb1-1661" aria-hidden="true" tabindex="-1"></a><span class="co">            Directory where downloaded/intermediate WCOFS files will be stored.</span></span>
+<span id="cb1-1662"><a href="#cb1-1662" aria-hidden="true" tabindex="-1"></a><span class="co">        res_dir (str):</span></span>
+<span id="cb1-1663"><a href="#cb1-1663" aria-hidden="true" tabindex="-1"></a><span class="co">            Directory where final regridded output should be stored.</span></span>
+<span id="cb1-1664"><a href="#cb1-1664" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lon:</span></span>
+<span id="cb1-1665"><a href="#cb1-1665" aria-hidden="true" tabindex="-1"></a><span class="co">            2D longitude array defining the CHARM output grid.</span></span>
+<span id="cb1-1666"><a href="#cb1-1666" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lat:</span></span>
+<span id="cb1-1667"><a href="#cb1-1667" aria-hidden="true" tabindex="-1"></a><span class="co">            2D latitude array defining the CHARM output grid.</span></span>
+<span id="cb1-1668"><a href="#cb1-1668" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1669"><a href="#cb1-1669" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb1-1670"><a href="#cb1-1670" aria-hidden="true" tabindex="-1"></a><span class="co">        None:</span></span>
+<span id="cb1-1671"><a href="#cb1-1671" aria-hidden="true" tabindex="-1"></a><span class="co">            Output files are written to ``res_dir`` by ``regrid_st_aws()``.</span></span>
+<span id="cb1-1672"><a href="#cb1-1672" aria-hidden="true" tabindex="-1"></a><span class="co">            This function returns nothing.</span></span>
+<span id="cb1-1673"><a href="#cb1-1673" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1674"><a href="#cb1-1674" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
+<span id="cb1-1675"><a href="#cb1-1675" aria-hidden="true" tabindex="-1"></a><span class="co">        FileNotFoundError:</span></span>
+<span id="cb1-1676"><a href="#cb1-1676" aria-hidden="true" tabindex="-1"></a><span class="co">            If ``work_dir`` or ``res_dir`` does not exist.</span></span>
+<span id="cb1-1677"><a href="#cb1-1677" aria-hidden="true" tabindex="-1"></a><span class="co">        RuntimeError:</span></span>
+<span id="cb1-1678"><a href="#cb1-1678" aria-hidden="true" tabindex="-1"></a><span class="co">            If no salinity/temperature files are returned by the retrieval function.</span></span>
+<span id="cb1-1679"><a href="#cb1-1679" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-1680"><a href="#cb1-1680" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(work_dir):</span>
+<span id="cb1-1681"><a href="#cb1-1681" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Working directory does not exist: </span><span class="sc">{</span>work_dir<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-1682"><a href="#cb1-1682" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(res_dir):</span>
+<span id="cb1-1683"><a href="#cb1-1683" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Result directory does not exist: </span><span class="sc">{</span>res_dir<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-1684"><a href="#cb1-1684" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1685"><a href="#cb1-1685" aria-hidden="true" tabindex="-1"></a>    logging.info(</span>
+<span id="cb1-1686"><a href="#cb1-1686" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Retrieving WCOFS salinity/temperature data for </span><span class="sc">%s</span><span class="st"> (hrs </span><span class="sc">%s</span><span class="st"> to </span><span class="sc">%s</span><span class="st">, cast4=</span><span class="sc">%s</span><span class="st">)"</span>,</span>
+<span id="cb1-1687"><a href="#cb1-1687" aria-hidden="true" tabindex="-1"></a>        now_wcofs_date,</span>
+<span id="cb1-1688"><a href="#cb1-1688" aria-hidden="true" tabindex="-1"></a>        start_hr,</span>
+<span id="cb1-1689"><a href="#cb1-1689" aria-hidden="true" tabindex="-1"></a>        end_hr,</span>
+<span id="cb1-1690"><a href="#cb1-1690" aria-hidden="true" tabindex="-1"></a>        cast4,</span>
+<span id="cb1-1691"><a href="#cb1-1691" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-1692"><a href="#cb1-1692" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1693"><a href="#cb1-1693" aria-hidden="true" tabindex="-1"></a>    st_files <span class="op">=</span> get_wcofs_salt_temp_aws(</span>
+<span id="cb1-1694"><a href="#cb1-1694" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
+<span id="cb1-1695"><a href="#cb1-1695" aria-hidden="true" tabindex="-1"></a>        start_hr,</span>
+<span id="cb1-1696"><a href="#cb1-1696" aria-hidden="true" tabindex="-1"></a>        end_hr,</span>
+<span id="cb1-1697"><a href="#cb1-1697" aria-hidden="true" tabindex="-1"></a>        forecast<span class="op">=</span>cast4,</span>
+<span id="cb1-1698"><a href="#cb1-1698" aria-hidden="true" tabindex="-1"></a>        charm_date<span class="op">=</span>now_wcofs_date,</span>
+<span id="cb1-1699"><a href="#cb1-1699" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-1700"><a href="#cb1-1700" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1701"><a href="#cb1-1701" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> st_files:</span>
+<span id="cb1-1702"><a href="#cb1-1702" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(</span>
+<span id="cb1-1703"><a href="#cb1-1703" aria-hidden="true" tabindex="-1"></a>            <span class="st">"No WCOFS salinity/temperature files returned by get_wcofs_salt_temp_aws()."</span></span>
+<span id="cb1-1704"><a href="#cb1-1704" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb1-1705"><a href="#cb1-1705" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1706"><a href="#cb1-1706" aria-hidden="true" tabindex="-1"></a>    logging.info(</span>
+<span id="cb1-1707"><a href="#cb1-1707" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Regridding </span><span class="sc">%d</span><span class="st"> salinity/temperature files to the CHARM grid."</span>,</span>
+<span id="cb1-1708"><a href="#cb1-1708" aria-hidden="true" tabindex="-1"></a>        <span class="bu">len</span>(st_files),</span>
+<span id="cb1-1709"><a href="#cb1-1709" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-1710"><a href="#cb1-1710" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1711"><a href="#cb1-1711" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> regrid_st_aws(</span>
+<span id="cb1-1712"><a href="#cb1-1712" aria-hidden="true" tabindex="-1"></a>        st_files,</span>
+<span id="cb1-1713"><a href="#cb1-1713" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
+<span id="cb1-1714"><a href="#cb1-1714" aria-hidden="true" tabindex="-1"></a>        v_2d_lon,</span>
+<span id="cb1-1715"><a href="#cb1-1715" aria-hidden="true" tabindex="-1"></a>        v_2d_lat,</span>
+<span id="cb1-1716"><a href="#cb1-1716" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb1-1717"><a href="#cb1-1717" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1718"><a href="#cb1-1718" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_advection_step(</span>
-<span id="cb1-1719"><a href="#cb1-1719" aria-hidden="true" tabindex="-1"></a>        now_wcofs, timezone_offset, work_dir, mylonm, mylatm,</span>
-<span id="cb1-1720"><a href="#cb1-1720" aria-hidden="true" tabindex="-1"></a>        model_lon_grid, model_lat_grid, themask</span>
-<span id="cb1-1721"><a href="#cb1-1721" aria-hidden="true" tabindex="-1"></a>):</span>
-<span id="cb1-1722"><a href="#cb1-1722" aria-hidden="true" tabindex="-1"></a>    foreu1, forev1, foretime <span class="op">=</span> merge_uv_wcofs_and_regrid(</span>
-<span id="cb1-1723"><a href="#cb1-1723" aria-hidden="true" tabindex="-1"></a>        now_wcofs, timezone_offset, work_dir, model_lon_grid, model_lat_grid</span>
-<span id="cb1-1724"><a href="#cb1-1724" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1725"><a href="#cb1-1725" aria-hidden="true" tabindex="-1"></a>    t_init <span class="op">=</span> foretime[<span class="dv">0</span>] <span class="op">-</span> timedelta(hours<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-1726"><a href="#cb1-1726" aria-hidden="true" tabindex="-1"></a>    foretime_or <span class="op">=</span> [ln.toordinal() <span class="op">+</span> ln.hour <span class="op">/</span> <span class="dv">24</span> <span class="cf">for</span> ln <span class="kw">in</span> foretime]</span>
-<span id="cb1-1727"><a href="#cb1-1727" aria-hidden="true" tabindex="-1"></a>    t_init_or <span class="op">=</span> t_init.toordinal() <span class="op">+</span> t_init.hour <span class="op">/</span> <span class="dv">24</span></span>
-<span id="cb1-1728"><a href="#cb1-1728" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1729"><a href="#cb1-1729" aria-hidden="true" tabindex="-1"></a>    foreu <span class="op">=</span> ma.masked_where(foreu1 <span class="op">&gt;</span> <span class="dv">100</span>, foreu1) <span class="op">*</span> <span class="fl">100.0</span></span>
-<span id="cb1-1730"><a href="#cb1-1730" aria-hidden="true" tabindex="-1"></a>    forev <span class="op">=</span> ma.masked_where(forev1 <span class="op">&gt;</span> <span class="dv">100</span>, forev1) <span class="op">*</span> <span class="fl">100.0</span></span>
-<span id="cb1-1731"><a href="#cb1-1731" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1732"><a href="#cb1-1732" aria-hidden="true" tabindex="-1"></a>    lonpercm, latpercm <span class="op">=</span> LonLatPerCM(model_lon_grid, model_lat_grid)</span>
-<span id="cb1-1733"><a href="#cb1-1733" aria-hidden="true" tabindex="-1"></a>    foreu <span class="op">*=</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">24</span> <span class="op">*</span> lonpercm</span>
-<span id="cb1-1734"><a href="#cb1-1734" aria-hidden="true" tabindex="-1"></a>    forev <span class="op">*=</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">24</span> <span class="op">*</span> latpercm</span>
-<span id="cb1-1735"><a href="#cb1-1735" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1736"><a href="#cb1-1736" aria-hidden="true" tabindex="-1"></a>    x, y, rtime <span class="op">=</span> mymove1(</span>
-<span id="cb1-1737"><a href="#cb1-1737" aria-hidden="true" tabindex="-1"></a>        foretime_or, mylonm, mylatm, model_lon_grid, model_lat_grid,</span>
-<span id="cb1-1738"><a href="#cb1-1738" aria-hidden="true" tabindex="-1"></a>        foreu, forev, t_init_or, themask</span>
-<span id="cb1-1739"><a href="#cb1-1739" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1740"><a href="#cb1-1740" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1741"><a href="#cb1-1741" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x, y, rtime</span>
+<span id="cb1-1718"><a href="#cb1-1718" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1719"><a href="#cb1-1719" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_advection_step(</span>
+<span id="cb1-1720"><a href="#cb1-1720" aria-hidden="true" tabindex="-1"></a>        now_wcofs, timezone_offset, work_dir, mylonm, mylatm,</span>
+<span id="cb1-1721"><a href="#cb1-1721" aria-hidden="true" tabindex="-1"></a>        model_lon_grid, model_lat_grid, themask</span>
+<span id="cb1-1722"><a href="#cb1-1722" aria-hidden="true" tabindex="-1"></a>):</span>
+<span id="cb1-1723"><a href="#cb1-1723" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Build trajectory fields used to advect DINEOF-filled variables forward."""</span></span>
+<span id="cb1-1724"><a href="#cb1-1724" aria-hidden="true" tabindex="-1"></a>    foreu1, forev1, foretime <span class="op">=</span> merge_uv_wcofs_and_regrid(</span>
+<span id="cb1-1725"><a href="#cb1-1725" aria-hidden="true" tabindex="-1"></a>        now_wcofs, timezone_offset, work_dir, model_lon_grid, model_lat_grid</span>
+<span id="cb1-1726"><a href="#cb1-1726" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-1727"><a href="#cb1-1727" aria-hidden="true" tabindex="-1"></a>    t_init <span class="op">=</span> foretime[<span class="dv">0</span>] <span class="op">-</span> timedelta(hours<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-1728"><a href="#cb1-1728" aria-hidden="true" tabindex="-1"></a>    foretime_or <span class="op">=</span> [ln.toordinal() <span class="op">+</span> ln.hour <span class="op">/</span> <span class="dv">24</span> <span class="cf">for</span> ln <span class="kw">in</span> foretime]</span>
+<span id="cb1-1729"><a href="#cb1-1729" aria-hidden="true" tabindex="-1"></a>    t_init_or <span class="op">=</span> t_init.toordinal() <span class="op">+</span> t_init.hour <span class="op">/</span> <span class="dv">24</span></span>
+<span id="cb1-1730"><a href="#cb1-1730" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1731"><a href="#cb1-1731" aria-hidden="true" tabindex="-1"></a>    foreu <span class="op">=</span> ma.masked_where(foreu1 <span class="op">&gt;</span> <span class="dv">100</span>, foreu1) <span class="op">*</span> <span class="fl">100.0</span></span>
+<span id="cb1-1732"><a href="#cb1-1732" aria-hidden="true" tabindex="-1"></a>    forev <span class="op">=</span> ma.masked_where(forev1 <span class="op">&gt;</span> <span class="dv">100</span>, forev1) <span class="op">*</span> <span class="fl">100.0</span></span>
+<span id="cb1-1733"><a href="#cb1-1733" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1734"><a href="#cb1-1734" aria-hidden="true" tabindex="-1"></a>    lonpercm, latpercm <span class="op">=</span> LonLatPerCM(model_lon_grid, model_lat_grid)</span>
+<span id="cb1-1735"><a href="#cb1-1735" aria-hidden="true" tabindex="-1"></a>    foreu <span class="op">*=</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">24</span> <span class="op">*</span> lonpercm</span>
+<span id="cb1-1736"><a href="#cb1-1736" aria-hidden="true" tabindex="-1"></a>    forev <span class="op">*=</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">24</span> <span class="op">*</span> latpercm</span>
+<span id="cb1-1737"><a href="#cb1-1737" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1738"><a href="#cb1-1738" aria-hidden="true" tabindex="-1"></a>    x, y, rtime <span class="op">=</span> mymove1(</span>
+<span id="cb1-1739"><a href="#cb1-1739" aria-hidden="true" tabindex="-1"></a>        foretime_or, mylonm, mylatm, model_lon_grid, model_lat_grid,</span>
+<span id="cb1-1740"><a href="#cb1-1740" aria-hidden="true" tabindex="-1"></a>        foreu, forev, t_init_or, themask</span>
+<span id="cb1-1741"><a href="#cb1-1741" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb1-1742"><a href="#cb1-1742" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1743"><a href="#cb1-1743" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1744"><a href="#cb1-1744" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> merge_uv_wcofs_and_regrid(</span>
-<span id="cb1-1745"><a href="#cb1-1745" aria-hidden="true" tabindex="-1"></a>    now_wcofs_date,</span>
-<span id="cb1-1746"><a href="#cb1-1746" aria-hidden="true" tabindex="-1"></a>    offset: <span class="bu">int</span>,</span>
-<span id="cb1-1747"><a href="#cb1-1747" aria-hidden="true" tabindex="-1"></a>    work_dir: <span class="bu">str</span>,</span>
-<span id="cb1-1748"><a href="#cb1-1748" aria-hidden="true" tabindex="-1"></a>    v_2d_lon,</span>
-<span id="cb1-1749"><a href="#cb1-1749" aria-hidden="true" tabindex="-1"></a>    v_2d_lat,</span>
-<span id="cb1-1750"><a href="#cb1-1750" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb1-1751"><a href="#cb1-1751" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Retrieve WCOFS surface current data and regrid to the CHARM grid.</span></span>
-<span id="cb1-1752"><a href="#cb1-1752" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1753"><a href="#cb1-1753" aria-hidden="true" tabindex="-1"></a><span class="co">    This function retrieves WCOFS (West Coast Operational Forecast System)</span></span>
-<span id="cb1-1754"><a href="#cb1-1754" aria-hidden="true" tabindex="-1"></a><span class="co">    U/V current fields for a specified date and overflight offset, and then</span></span>
-<span id="cb1-1755"><a href="#cb1-1755" aria-hidden="true" tabindex="-1"></a><span class="co">    regrids the resulting files onto the CHARM grid using a parallelized</span></span>
-<span id="cb1-1756"><a href="#cb1-1756" aria-hidden="true" tabindex="-1"></a><span class="co">    regridding workflow.</span></span>
-<span id="cb1-1757"><a href="#cb1-1757" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1758"><a href="#cb1-1758" aria-hidden="true" tabindex="-1"></a><span class="co">    It is a workflow wrapper around:</span></span>
-<span id="cb1-1759"><a href="#cb1-1759" aria-hidden="true" tabindex="-1"></a><span class="co">      - ``get_wcofs_uv_aws()``: Downloads or retrieves U/V current files.</span></span>
-<span id="cb1-1760"><a href="#cb1-1760" aria-hidden="true" tabindex="-1"></a><span class="co">      - ``regrid_uv_aws_parallel()``: Regrids the current fields to the target grid.</span></span>
-<span id="cb1-1761"><a href="#cb1-1761" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1762"><a href="#cb1-1762" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb1-1763"><a href="#cb1-1763" aria-hidden="true" tabindex="-1"></a><span class="co">        now_wcofs_date:</span></span>
-<span id="cb1-1764"><a href="#cb1-1764" aria-hidden="true" tabindex="-1"></a><span class="co">            The target WCOFS model date for which data should be retrieved.</span></span>
-<span id="cb1-1765"><a href="#cb1-1765" aria-hidden="true" tabindex="-1"></a><span class="co">            Typically a ``datetime`` or a date-formatted string, depending on</span></span>
-<span id="cb1-1766"><a href="#cb1-1766" aria-hidden="true" tabindex="-1"></a><span class="co">            the expected input of ``get_wcofs_uv_aws()``.</span></span>
-<span id="cb1-1767"><a href="#cb1-1767" aria-hidden="true" tabindex="-1"></a><span class="co">        offset (int):</span></span>
-<span id="cb1-1768"><a href="#cb1-1768" aria-hidden="true" tabindex="-1"></a><span class="co">            Overflight time offset (hours) used to determine which WCOFS cycle</span></span>
-<span id="cb1-1769"><a href="#cb1-1769" aria-hidden="true" tabindex="-1"></a><span class="co">            to retrieve.</span></span>
-<span id="cb1-1770"><a href="#cb1-1770" aria-hidden="true" tabindex="-1"></a><span class="co">        work_dir (str):</span></span>
-<span id="cb1-1771"><a href="#cb1-1771" aria-hidden="true" tabindex="-1"></a><span class="co">            Path to a working directory where temporary or output files</span></span>
-<span id="cb1-1772"><a href="#cb1-1772" aria-hidden="true" tabindex="-1"></a><span class="co">            will be stored.</span></span>
-<span id="cb1-1773"><a href="#cb1-1773" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lon:</span></span>
-<span id="cb1-1774"><a href="#cb1-1774" aria-hidden="true" tabindex="-1"></a><span class="co">            2D longitude array defining the target CHARM grid.</span></span>
-<span id="cb1-1775"><a href="#cb1-1775" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lat:</span></span>
-<span id="cb1-1776"><a href="#cb1-1776" aria-hidden="true" tabindex="-1"></a><span class="co">            2D latitude array defining the target CHARM grid.</span></span>
-<span id="cb1-1777"><a href="#cb1-1777" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1778"><a href="#cb1-1778" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb1-1779"><a href="#cb1-1779" aria-hidden="true" tabindex="-1"></a><span class="co">        None:</span></span>
-<span id="cb1-1780"><a href="#cb1-1780" aria-hidden="true" tabindex="-1"></a><span class="co">            The function returns None, but writes output files to ``work_dir``</span></span>
-<span id="cb1-1781"><a href="#cb1-1781" aria-hidden="true" tabindex="-1"></a><span class="co">            as produced by ``regrid_uv_aws_parallel()``.</span></span>
-<span id="cb1-1782"><a href="#cb1-1782" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1783"><a href="#cb1-1783" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
-<span id="cb1-1784"><a href="#cb1-1784" aria-hidden="true" tabindex="-1"></a><span class="co">        FileNotFoundError:</span></span>
-<span id="cb1-1785"><a href="#cb1-1785" aria-hidden="true" tabindex="-1"></a><span class="co">            If ``work_dir`` does not exist.</span></span>
-<span id="cb1-1786"><a href="#cb1-1786" aria-hidden="true" tabindex="-1"></a><span class="co">        RuntimeError:</span></span>
-<span id="cb1-1787"><a href="#cb1-1787" aria-hidden="true" tabindex="-1"></a><span class="co">            If no U/V files are returned by ``get_wcofs_uv_aws()``.</span></span>
-<span id="cb1-1788"><a href="#cb1-1788" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb1-1789"><a href="#cb1-1789" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(work_dir):</span>
-<span id="cb1-1790"><a href="#cb1-1790" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Working directory does not exist: </span><span class="sc">{</span>work_dir<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb1-1791"><a href="#cb1-1791" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1792"><a href="#cb1-1792" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Retrieving WCOFS U/V current data for date </span><span class="sc">%s</span><span class="st"> with offset </span><span class="sc">%s</span><span class="st">"</span>,</span>
-<span id="cb1-1793"><a href="#cb1-1793" aria-hidden="true" tabindex="-1"></a>                 now_wcofs_date, offset)</span>
-<span id="cb1-1794"><a href="#cb1-1794" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1795"><a href="#cb1-1795" aria-hidden="true" tabindex="-1"></a>    uv_files_to_regrid <span class="op">=</span> get_wcofs_uv_aws(</span>
-<span id="cb1-1796"><a href="#cb1-1796" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
-<span id="cb1-1797"><a href="#cb1-1797" aria-hidden="true" tabindex="-1"></a>        overflight_offset<span class="op">=</span>offset,</span>
-<span id="cb1-1798"><a href="#cb1-1798" aria-hidden="true" tabindex="-1"></a>        charm_date<span class="op">=</span>now_wcofs_date,</span>
-<span id="cb1-1799"><a href="#cb1-1799" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1800"><a href="#cb1-1800" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1801"><a href="#cb1-1801" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> uv_files_to_regrid:</span>
-<span id="cb1-1802"><a href="#cb1-1802" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="st">"No WCOFS U/V files returned by get_wcofs_uv_aws()."</span>)</span>
-<span id="cb1-1803"><a href="#cb1-1803" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1804"><a href="#cb1-1804" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Regridding </span><span class="sc">%d</span><span class="st"> U/V current files onto the CHARM grid."</span>,</span>
-<span id="cb1-1805"><a href="#cb1-1805" aria-hidden="true" tabindex="-1"></a>                 <span class="bu">len</span>(uv_files_to_regrid))</span>
-<span id="cb1-1806"><a href="#cb1-1806" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1807"><a href="#cb1-1807" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> regrid_uv_aws_parallel(</span>
-<span id="cb1-1808"><a href="#cb1-1808" aria-hidden="true" tabindex="-1"></a>        uv_files_to_regrid,</span>
-<span id="cb1-1809"><a href="#cb1-1809" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
-<span id="cb1-1810"><a href="#cb1-1810" aria-hidden="true" tabindex="-1"></a>        v_2d_lon,</span>
-<span id="cb1-1811"><a href="#cb1-1811" aria-hidden="true" tabindex="-1"></a>        v_2d_lat,</span>
-<span id="cb1-1812"><a href="#cb1-1812" aria-hidden="true" tabindex="-1"></a>        <span class="dv">7</span>,    <span class="co"># hard-coded workers, assuming original intent</span></span>
-<span id="cb1-1813"><a href="#cb1-1813" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-1814"><a href="#cb1-1814" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1815"><a href="#cb1-1815" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1816"><a href="#cb1-1816" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_eof_files(</span>
-<span id="cb1-1817"><a href="#cb1-1817" aria-hidden="true" tabindex="-1"></a>    eof_work_dir: <span class="bu">str</span> <span class="op">|</span> Path, first_eof_nc: <span class="bu">str</span>, second_eof_nc: <span class="bu">str</span>,</span>
-<span id="cb1-1818"><a href="#cb1-1818" aria-hidden="true" tabindex="-1"></a>    filled_vars: <span class="bu">list</span>[<span class="bu">str</span>], gap_vars: <span class="bu">list</span>[<span class="bu">str</span>], x: np.ndarray, y: np.ndarray,</span>
-<span id="cb1-1819"><a href="#cb1-1819" aria-hidden="true" tabindex="-1"></a>    model_lon_grid: np.ndarray, model_lat_grid: np.ndarray, themask: np.ndarray,</span>
-<span id="cb1-1820"><a href="#cb1-1820" aria-hidden="true" tabindex="-1"></a>    rtime: np.ndarray, advect_func,</span>
-<span id="cb1-1821"><a href="#cb1-1821" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
-<span id="cb1-1822"><a href="#cb1-1822" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Update EOF NetCDF files with advected fields.</span></span>
-<span id="cb1-1823"><a href="#cb1-1823" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1824"><a href="#cb1-1824" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb1-1825"><a href="#cb1-1825" aria-hidden="true" tabindex="-1"></a><span class="co">        eof_work_dir: Directory containing input/output NetCDF files.</span></span>
-<span id="cb1-1826"><a href="#cb1-1826" aria-hidden="true" tabindex="-1"></a><span class="co">        first_eof_nc: Filename of the first EOF NetCDF (read-only).</span></span>
-<span id="cb1-1827"><a href="#cb1-1827" aria-hidden="true" tabindex="-1"></a><span class="co">        second_eof_nc: Filename of the second EOF NetCDF (append mode).</span></span>
-<span id="cb1-1828"><a href="#cb1-1828" aria-hidden="true" tabindex="-1"></a><span class="co">        idx: Array of time indices; the first element selects the time slice.</span></span>
-<span id="cb1-1829"><a href="#cb1-1829" aria-hidden="true" tabindex="-1"></a><span class="co">        filled_vars: Variable names to read from the first EOF file.</span></span>
-<span id="cb1-1830"><a href="#cb1-1830" aria-hidden="true" tabindex="-1"></a><span class="co">        eof2_vars: Variable names to update in the second EOF file.</span></span>
-<span id="cb1-1831"><a href="#cb1-1831" aria-hidden="true" tabindex="-1"></a><span class="co">        x, y: Coordinate arrays for advection.</span></span>
-<span id="cb1-1832"><a href="#cb1-1832" aria-hidden="true" tabindex="-1"></a><span class="co">        model_lon_grid, model_lat_grid: Model longitude/latitude grids.</span></span>
-<span id="cb1-1833"><a href="#cb1-1833" aria-hidden="true" tabindex="-1"></a><span class="co">        themask: Mask to apply during advection.</span></span>
-<span id="cb1-1834"><a href="#cb1-1834" aria-hidden="true" tabindex="-1"></a><span class="co">        rtime: Reference time array for advection.</span></span>
-<span id="cb1-1835"><a href="#cb1-1835" aria-hidden="true" tabindex="-1"></a><span class="co">        time_last: Array of last time values (use time_last[0]).</span></span>
-<span id="cb1-1836"><a href="#cb1-1836" aria-hidden="true" tabindex="-1"></a><span class="co">        advect_func: Function to run advection, must return (band_var, longtime).</span></span>
-<span id="cb1-1837"><a href="#cb1-1837" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1838"><a href="#cb1-1838" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb1-1839"><a href="#cb1-1839" aria-hidden="true" tabindex="-1"></a><span class="co">        None. Updates the second EOF NetCDF file in place.</span></span>
-<span id="cb1-1840"><a href="#cb1-1840" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb1-1841"><a href="#cb1-1841" aria-hidden="true" tabindex="-1"></a>    oirange <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">3</span>)</span>
-<span id="cb1-1842"><a href="#cb1-1842" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1843"><a href="#cb1-1843" aria-hidden="true" tabindex="-1"></a>    cntr <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-1844"><a href="#cb1-1844" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cntr, gvar <span class="kw">in</span> <span class="bu">enumerate</span>(gap_vars):</span>
-<span id="cb1-1845"><a href="#cb1-1845" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> Dataset(eof_work_dir <span class="op">/</span> gvar <span class="op">/</span> first_eof_nc.<span class="bu">format</span>(gvar), <span class="st">"r"</span>) <span class="im">as</span> nc_eof1, <span class="op">\</span></span>
-<span id="cb1-1846"><a href="#cb1-1846" aria-hidden="true" tabindex="-1"></a>             Dataset(eof_work_dir <span class="op">/</span> gvar <span class="op">/</span> second_eof_nc.<span class="bu">format</span>(gvar), <span class="st">"a"</span>) <span class="im">as</span> nc_eof2:</span>
-<span id="cb1-1847"><a href="#cb1-1847" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1848"><a href="#cb1-1848" aria-hidden="true" tabindex="-1"></a>            time_eof1 <span class="op">=</span> nc_eof1[<span class="st">'time'</span>][:]</span>
-<span id="cb1-1849"><a href="#cb1-1849" aria-hidden="true" tabindex="-1"></a>            idx, <span class="op">=</span> np.where(time_eof1 <span class="op">==</span> time_eof1.<span class="bu">max</span>())</span>
-<span id="cb1-1850"><a href="#cb1-1850" aria-hidden="true" tabindex="-1"></a>            time_last <span class="op">=</span> time_eof1[idx[<span class="dv">0</span>]:idx[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>]</span>
-<span id="cb1-1851"><a href="#cb1-1851" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1852"><a href="#cb1-1852" aria-hidden="true" tabindex="-1"></a>            var_eof1 <span class="op">=</span> nc_eof1[filled_vars[cntr]][idx[<span class="dv">0</span>]:idx[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>, :, :]</span>
+<span id="cb1-1743"><a href="#cb1-1743" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x, y, rtime</span>
+<span id="cb1-1744"><a href="#cb1-1744" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1745"><a href="#cb1-1745" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1746"><a href="#cb1-1746" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> merge_uv_wcofs_and_regrid(</span>
+<span id="cb1-1747"><a href="#cb1-1747" aria-hidden="true" tabindex="-1"></a>    now_wcofs_date,</span>
+<span id="cb1-1748"><a href="#cb1-1748" aria-hidden="true" tabindex="-1"></a>    offset: <span class="bu">int</span>,</span>
+<span id="cb1-1749"><a href="#cb1-1749" aria-hidden="true" tabindex="-1"></a>    work_dir: <span class="bu">str</span>,</span>
+<span id="cb1-1750"><a href="#cb1-1750" aria-hidden="true" tabindex="-1"></a>    v_2d_lon,</span>
+<span id="cb1-1751"><a href="#cb1-1751" aria-hidden="true" tabindex="-1"></a>    v_2d_lat,</span>
+<span id="cb1-1752"><a href="#cb1-1752" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-1753"><a href="#cb1-1753" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Retrieve WCOFS surface current data and regrid to the CHARM grid.</span></span>
+<span id="cb1-1754"><a href="#cb1-1754" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1755"><a href="#cb1-1755" aria-hidden="true" tabindex="-1"></a><span class="co">    This function retrieves WCOFS (West Coast Operational Forecast System)</span></span>
+<span id="cb1-1756"><a href="#cb1-1756" aria-hidden="true" tabindex="-1"></a><span class="co">    U/V current fields for a specified date and overflight offset, and then</span></span>
+<span id="cb1-1757"><a href="#cb1-1757" aria-hidden="true" tabindex="-1"></a><span class="co">    regrids the resulting files onto the CHARM grid using a parallelized</span></span>
+<span id="cb1-1758"><a href="#cb1-1758" aria-hidden="true" tabindex="-1"></a><span class="co">    regridding workflow.</span></span>
+<span id="cb1-1759"><a href="#cb1-1759" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1760"><a href="#cb1-1760" aria-hidden="true" tabindex="-1"></a><span class="co">    It is a workflow wrapper around:</span></span>
+<span id="cb1-1761"><a href="#cb1-1761" aria-hidden="true" tabindex="-1"></a><span class="co">      - ``get_wcofs_uv_aws()``: Downloads or retrieves U/V current files.</span></span>
+<span id="cb1-1762"><a href="#cb1-1762" aria-hidden="true" tabindex="-1"></a><span class="co">      - ``regrid_uv_aws_parallel()``: Regrids the current fields to the target grid.</span></span>
+<span id="cb1-1763"><a href="#cb1-1763" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1764"><a href="#cb1-1764" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb1-1765"><a href="#cb1-1765" aria-hidden="true" tabindex="-1"></a><span class="co">        now_wcofs_date:</span></span>
+<span id="cb1-1766"><a href="#cb1-1766" aria-hidden="true" tabindex="-1"></a><span class="co">            The target WCOFS model date for which data should be retrieved.</span></span>
+<span id="cb1-1767"><a href="#cb1-1767" aria-hidden="true" tabindex="-1"></a><span class="co">            Typically a ``datetime`` or a date-formatted string, depending on</span></span>
+<span id="cb1-1768"><a href="#cb1-1768" aria-hidden="true" tabindex="-1"></a><span class="co">            the expected input of ``get_wcofs_uv_aws()``.</span></span>
+<span id="cb1-1769"><a href="#cb1-1769" aria-hidden="true" tabindex="-1"></a><span class="co">        offset (int):</span></span>
+<span id="cb1-1770"><a href="#cb1-1770" aria-hidden="true" tabindex="-1"></a><span class="co">            Overflight time offset (hours) used to determine which WCOFS cycle</span></span>
+<span id="cb1-1771"><a href="#cb1-1771" aria-hidden="true" tabindex="-1"></a><span class="co">            to retrieve.</span></span>
+<span id="cb1-1772"><a href="#cb1-1772" aria-hidden="true" tabindex="-1"></a><span class="co">        work_dir (str):</span></span>
+<span id="cb1-1773"><a href="#cb1-1773" aria-hidden="true" tabindex="-1"></a><span class="co">            Path to a working directory where temporary or output files</span></span>
+<span id="cb1-1774"><a href="#cb1-1774" aria-hidden="true" tabindex="-1"></a><span class="co">            will be stored.</span></span>
+<span id="cb1-1775"><a href="#cb1-1775" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lon:</span></span>
+<span id="cb1-1776"><a href="#cb1-1776" aria-hidden="true" tabindex="-1"></a><span class="co">            2D longitude array defining the target CHARM grid.</span></span>
+<span id="cb1-1777"><a href="#cb1-1777" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lat:</span></span>
+<span id="cb1-1778"><a href="#cb1-1778" aria-hidden="true" tabindex="-1"></a><span class="co">            2D latitude array defining the target CHARM grid.</span></span>
+<span id="cb1-1779"><a href="#cb1-1779" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1780"><a href="#cb1-1780" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb1-1781"><a href="#cb1-1781" aria-hidden="true" tabindex="-1"></a><span class="co">        None:</span></span>
+<span id="cb1-1782"><a href="#cb1-1782" aria-hidden="true" tabindex="-1"></a><span class="co">            The function returns None, but writes output files to ``work_dir``</span></span>
+<span id="cb1-1783"><a href="#cb1-1783" aria-hidden="true" tabindex="-1"></a><span class="co">            as produced by ``regrid_uv_aws_parallel()``.</span></span>
+<span id="cb1-1784"><a href="#cb1-1784" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1785"><a href="#cb1-1785" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
+<span id="cb1-1786"><a href="#cb1-1786" aria-hidden="true" tabindex="-1"></a><span class="co">        FileNotFoundError:</span></span>
+<span id="cb1-1787"><a href="#cb1-1787" aria-hidden="true" tabindex="-1"></a><span class="co">            If ``work_dir`` does not exist.</span></span>
+<span id="cb1-1788"><a href="#cb1-1788" aria-hidden="true" tabindex="-1"></a><span class="co">        RuntimeError:</span></span>
+<span id="cb1-1789"><a href="#cb1-1789" aria-hidden="true" tabindex="-1"></a><span class="co">            If no U/V files are returned by ``get_wcofs_uv_aws()``.</span></span>
+<span id="cb1-1790"><a href="#cb1-1790" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-1791"><a href="#cb1-1791" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> os.path.isdir(work_dir):</span>
+<span id="cb1-1792"><a href="#cb1-1792" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">FileNotFoundError</span>(<span class="ss">f"Working directory does not exist: </span><span class="sc">{</span>work_dir<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb1-1793"><a href="#cb1-1793" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1794"><a href="#cb1-1794" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Retrieving WCOFS U/V current data for date </span><span class="sc">%s</span><span class="st"> with offset </span><span class="sc">%s</span><span class="st">"</span>,</span>
+<span id="cb1-1795"><a href="#cb1-1795" aria-hidden="true" tabindex="-1"></a>                 now_wcofs_date, offset)</span>
+<span id="cb1-1796"><a href="#cb1-1796" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1797"><a href="#cb1-1797" aria-hidden="true" tabindex="-1"></a>    uv_files_to_regrid <span class="op">=</span> get_wcofs_uv_aws(</span>
+<span id="cb1-1798"><a href="#cb1-1798" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
+<span id="cb1-1799"><a href="#cb1-1799" aria-hidden="true" tabindex="-1"></a>        overflight_offset<span class="op">=</span>offset,</span>
+<span id="cb1-1800"><a href="#cb1-1800" aria-hidden="true" tabindex="-1"></a>        charm_date<span class="op">=</span>now_wcofs_date,</span>
+<span id="cb1-1801"><a href="#cb1-1801" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-1802"><a href="#cb1-1802" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1803"><a href="#cb1-1803" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> uv_files_to_regrid:</span>
+<span id="cb1-1804"><a href="#cb1-1804" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="st">"No WCOFS U/V files returned by get_wcofs_uv_aws()."</span>)</span>
+<span id="cb1-1805"><a href="#cb1-1805" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1806"><a href="#cb1-1806" aria-hidden="true" tabindex="-1"></a>    logging.info(<span class="st">"Regridding </span><span class="sc">%d</span><span class="st"> U/V current files onto the CHARM grid."</span>,</span>
+<span id="cb1-1807"><a href="#cb1-1807" aria-hidden="true" tabindex="-1"></a>                 <span class="bu">len</span>(uv_files_to_regrid))</span>
+<span id="cb1-1808"><a href="#cb1-1808" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1809"><a href="#cb1-1809" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> regrid_uv_aws_parallel(</span>
+<span id="cb1-1810"><a href="#cb1-1810" aria-hidden="true" tabindex="-1"></a>        uv_files_to_regrid,</span>
+<span id="cb1-1811"><a href="#cb1-1811" aria-hidden="true" tabindex="-1"></a>        work_dir,</span>
+<span id="cb1-1812"><a href="#cb1-1812" aria-hidden="true" tabindex="-1"></a>        v_2d_lon,</span>
+<span id="cb1-1813"><a href="#cb1-1813" aria-hidden="true" tabindex="-1"></a>        v_2d_lat,</span>
+<span id="cb1-1814"><a href="#cb1-1814" aria-hidden="true" tabindex="-1"></a>        <span class="dv">7</span>,    <span class="co"># hard-coded workers, assuming original intent</span></span>
+<span id="cb1-1815"><a href="#cb1-1815" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-1816"><a href="#cb1-1816" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1817"><a href="#cb1-1817" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1818"><a href="#cb1-1818" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> update_eof_files(</span>
+<span id="cb1-1819"><a href="#cb1-1819" aria-hidden="true" tabindex="-1"></a>    eof_work_dir: <span class="bu">str</span> <span class="op">|</span> Path, first_eof_nc: <span class="bu">str</span>, second_eof_nc: <span class="bu">str</span>,</span>
+<span id="cb1-1820"><a href="#cb1-1820" aria-hidden="true" tabindex="-1"></a>    filled_vars: <span class="bu">list</span>[<span class="bu">str</span>], gap_vars: <span class="bu">list</span>[<span class="bu">str</span>], x: np.ndarray, y: np.ndarray,</span>
+<span id="cb1-1821"><a href="#cb1-1821" aria-hidden="true" tabindex="-1"></a>    model_lon_grid: np.ndarray, model_lat_grid: np.ndarray, themask: np.ndarray,</span>
+<span id="cb1-1822"><a href="#cb1-1822" aria-hidden="true" tabindex="-1"></a>    rtime: np.ndarray, advect_func,</span>
+<span id="cb1-1823"><a href="#cb1-1823" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-1824"><a href="#cb1-1824" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Update EOF NetCDF files with advected fields.</span></span>
+<span id="cb1-1825"><a href="#cb1-1825" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1826"><a href="#cb1-1826" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb1-1827"><a href="#cb1-1827" aria-hidden="true" tabindex="-1"></a><span class="co">        eof_work_dir: Directory containing input/output NetCDF files.</span></span>
+<span id="cb1-1828"><a href="#cb1-1828" aria-hidden="true" tabindex="-1"></a><span class="co">        first_eof_nc: Filename of the first EOF NetCDF (read-only).</span></span>
+<span id="cb1-1829"><a href="#cb1-1829" aria-hidden="true" tabindex="-1"></a><span class="co">        second_eof_nc: Filename of the second EOF NetCDF (append mode).</span></span>
+<span id="cb1-1830"><a href="#cb1-1830" aria-hidden="true" tabindex="-1"></a><span class="co">        idx: Array of time indices; the first element selects the time slice.</span></span>
+<span id="cb1-1831"><a href="#cb1-1831" aria-hidden="true" tabindex="-1"></a><span class="co">        filled_vars: Variable names to read from the first EOF file.</span></span>
+<span id="cb1-1832"><a href="#cb1-1832" aria-hidden="true" tabindex="-1"></a><span class="co">        eof2_vars: Variable names to update in the second EOF file.</span></span>
+<span id="cb1-1833"><a href="#cb1-1833" aria-hidden="true" tabindex="-1"></a><span class="co">        x, y: Coordinate arrays for advection.</span></span>
+<span id="cb1-1834"><a href="#cb1-1834" aria-hidden="true" tabindex="-1"></a><span class="co">        model_lon_grid, model_lat_grid: Model longitude/latitude grids.</span></span>
+<span id="cb1-1835"><a href="#cb1-1835" aria-hidden="true" tabindex="-1"></a><span class="co">        themask: Mask to apply during advection.</span></span>
+<span id="cb1-1836"><a href="#cb1-1836" aria-hidden="true" tabindex="-1"></a><span class="co">        rtime: Reference time array for advection.</span></span>
+<span id="cb1-1837"><a href="#cb1-1837" aria-hidden="true" tabindex="-1"></a><span class="co">        time_last: Array of last time values (use time_last[0]).</span></span>
+<span id="cb1-1838"><a href="#cb1-1838" aria-hidden="true" tabindex="-1"></a><span class="co">        advect_func: Function to run advection, must return (band_var, longtime).</span></span>
+<span id="cb1-1839"><a href="#cb1-1839" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1840"><a href="#cb1-1840" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb1-1841"><a href="#cb1-1841" aria-hidden="true" tabindex="-1"></a><span class="co">        None. Updates the second EOF NetCDF file in place.</span></span>
+<span id="cb1-1842"><a href="#cb1-1842" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-1843"><a href="#cb1-1843" aria-hidden="true" tabindex="-1"></a>    oirange <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">3</span>)</span>
+<span id="cb1-1844"><a href="#cb1-1844" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1845"><a href="#cb1-1845" aria-hidden="true" tabindex="-1"></a>    cntr <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-1846"><a href="#cb1-1846" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cntr, gvar <span class="kw">in</span> <span class="bu">enumerate</span>(gap_vars):</span>
+<span id="cb1-1847"><a href="#cb1-1847" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> Dataset(eof_work_dir <span class="op">/</span> gvar <span class="op">/</span> first_eof_nc.<span class="bu">format</span>(gvar), <span class="st">"r"</span>) <span class="im">as</span> nc_eof1, <span class="op">\</span></span>
+<span id="cb1-1848"><a href="#cb1-1848" aria-hidden="true" tabindex="-1"></a>             Dataset(eof_work_dir <span class="op">/</span> gvar <span class="op">/</span> second_eof_nc.<span class="bu">format</span>(gvar), <span class="st">"a"</span>) <span class="im">as</span> nc_eof2:</span>
+<span id="cb1-1849"><a href="#cb1-1849" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1850"><a href="#cb1-1850" aria-hidden="true" tabindex="-1"></a>            time_eof1 <span class="op">=</span> nc_eof1[<span class="st">'time'</span>][:]</span>
+<span id="cb1-1851"><a href="#cb1-1851" aria-hidden="true" tabindex="-1"></a>            idx, <span class="op">=</span> np.where(time_eof1 <span class="op">==</span> time_eof1.<span class="bu">max</span>())</span>
+<span id="cb1-1852"><a href="#cb1-1852" aria-hidden="true" tabindex="-1"></a>            time_last <span class="op">=</span> time_eof1[idx[<span class="dv">0</span>]:idx[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>]</span>
 <span id="cb1-1853"><a href="#cb1-1853" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1854"><a href="#cb1-1854" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Run advection</span></span>
-<span id="cb1-1855"><a href="#cb1-1855" aria-hidden="true" tabindex="-1"></a>            band_var2, longtime <span class="op">=</span> advect_func(</span>
-<span id="cb1-1856"><a href="#cb1-1856" aria-hidden="true" tabindex="-1"></a>                x, y,</span>
-<span id="cb1-1857"><a href="#cb1-1857" aria-hidden="true" tabindex="-1"></a>                model_lon_grid, model_lat_grid,</span>
-<span id="cb1-1858"><a href="#cb1-1858" aria-hidden="true" tabindex="-1"></a>                np.flip(var_eof1, axis<span class="op">=</span><span class="dv">1</span>),</span>
-<span id="cb1-1859"><a href="#cb1-1859" aria-hidden="true" tabindex="-1"></a>                oirange, themask,</span>
-<span id="cb1-1860"><a href="#cb1-1860" aria-hidden="true" tabindex="-1"></a>                rtime, time_last[<span class="dv">0</span>]</span>
-<span id="cb1-1861"><a href="#cb1-1861" aria-hidden="true" tabindex="-1"></a>            )</span>
-<span id="cb1-1862"><a href="#cb1-1862" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1863"><a href="#cb1-1863" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Update time variable (only on first variable loop)</span></span>
-<span id="cb1-1864"><a href="#cb1-1864" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> cntr <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb1-1865"><a href="#cb1-1865" aria-hidden="true" tabindex="-1"></a>                eof2_time <span class="op">=</span> nc_eof2.variables[<span class="st">"time"</span>][:]</span>
-<span id="cb1-1866"><a href="#cb1-1866" aria-hidden="true" tabindex="-1"></a>                new_time <span class="op">=</span> np.append(eof2_time, longtime[<span class="dv">1</span>:])</span>
-<span id="cb1-1867"><a href="#cb1-1867" aria-hidden="true" tabindex="-1"></a>                nc_eof2.variables[<span class="st">"time"</span>][:] <span class="op">=</span> new_time</span>
-<span id="cb1-1868"><a href="#cb1-1868" aria-hidden="true" tabindex="-1"></a>                cntr <span class="op">=</span> <span class="dv">1</span></span>
-<span id="cb1-1869"><a href="#cb1-1869" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
-<span id="cb1-1870"><a href="#cb1-1870" aria-hidden="true" tabindex="-1"></a>                nc_eof2.variables[<span class="st">"time"</span>][:] <span class="op">=</span> new_time</span>
-<span id="cb1-1871"><a href="#cb1-1871" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1872"><a href="#cb1-1872" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Insert new data into last 3 time slots</span></span>
-<span id="cb1-1873"><a href="#cb1-1873" aria-hidden="true" tabindex="-1"></a>            eof2_var <span class="op">=</span> nc_eof2.variables[gvar][:, :, :]</span>
-<span id="cb1-1874"><a href="#cb1-1874" aria-hidden="true" tabindex="-1"></a>            eof2_var[<span class="op">-</span><span class="dv">3</span>:, :, :] <span class="op">=</span> np.flip(band_var2, axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-1875"><a href="#cb1-1875" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1876"><a href="#cb1-1876" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Vectorized masking in one step</span></span>
-<span id="cb1-1877"><a href="#cb1-1877" aria-hidden="true" tabindex="-1"></a>            data <span class="op">=</span> np.array(eof2_var, copy<span class="op">=</span><span class="va">False</span>)  <span class="co"># avoid extra copy</span></span>
-<span id="cb1-1878"><a href="#cb1-1878" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> np.isnan(data) <span class="op">|</span> (data <span class="op">&gt;</span> <span class="dv">9000</span>)</span>
-<span id="cb1-1879"><a href="#cb1-1879" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> gvar <span class="op">==</span> <span class="st">'Rrs_489'</span> <span class="kw">or</span> gvar <span class="op">==</span> <span class="st">'Rrs_556'</span>:</span>
-<span id="cb1-1880"><a href="#cb1-1880" aria-hidden="true" tabindex="-1"></a>                mask <span class="op">|=</span> (data <span class="op">&lt;=</span> <span class="fl">0.0</span>)</span>
-<span id="cb1-1881"><a href="#cb1-1881" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1882"><a href="#cb1-1882" aria-hidden="true" tabindex="-1"></a>            eof2_var_masked <span class="op">=</span> ma.array(data, mask<span class="op">=</span>mask)</span>
+<span id="cb1-1854"><a href="#cb1-1854" aria-hidden="true" tabindex="-1"></a>            var_eof1 <span class="op">=</span> nc_eof1[filled_vars[cntr]][idx[<span class="dv">0</span>]:idx[<span class="dv">0</span>]<span class="op">+</span><span class="dv">1</span>, :, :]</span>
+<span id="cb1-1855"><a href="#cb1-1855" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1856"><a href="#cb1-1856" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Run advection</span></span>
+<span id="cb1-1857"><a href="#cb1-1857" aria-hidden="true" tabindex="-1"></a>            band_var2, longtime <span class="op">=</span> advect_func(</span>
+<span id="cb1-1858"><a href="#cb1-1858" aria-hidden="true" tabindex="-1"></a>                x, y,</span>
+<span id="cb1-1859"><a href="#cb1-1859" aria-hidden="true" tabindex="-1"></a>                model_lon_grid, model_lat_grid,</span>
+<span id="cb1-1860"><a href="#cb1-1860" aria-hidden="true" tabindex="-1"></a>                np.flip(var_eof1, axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb1-1861"><a href="#cb1-1861" aria-hidden="true" tabindex="-1"></a>                oirange, themask,</span>
+<span id="cb1-1862"><a href="#cb1-1862" aria-hidden="true" tabindex="-1"></a>                rtime, time_last[<span class="dv">0</span>]</span>
+<span id="cb1-1863"><a href="#cb1-1863" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb1-1864"><a href="#cb1-1864" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1865"><a href="#cb1-1865" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Update time variable (only on first variable loop)</span></span>
+<span id="cb1-1866"><a href="#cb1-1866" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> cntr <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-1867"><a href="#cb1-1867" aria-hidden="true" tabindex="-1"></a>                eof2_time <span class="op">=</span> nc_eof2.variables[<span class="st">"time"</span>][:]</span>
+<span id="cb1-1868"><a href="#cb1-1868" aria-hidden="true" tabindex="-1"></a>                new_time <span class="op">=</span> np.append(eof2_time, longtime[<span class="dv">1</span>:])</span>
+<span id="cb1-1869"><a href="#cb1-1869" aria-hidden="true" tabindex="-1"></a>                nc_eof2.variables[<span class="st">"time"</span>][:] <span class="op">=</span> new_time</span>
+<span id="cb1-1870"><a href="#cb1-1870" aria-hidden="true" tabindex="-1"></a>                cntr <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-1871"><a href="#cb1-1871" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb1-1872"><a href="#cb1-1872" aria-hidden="true" tabindex="-1"></a>                nc_eof2.variables[<span class="st">"time"</span>][:] <span class="op">=</span> new_time</span>
+<span id="cb1-1873"><a href="#cb1-1873" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1874"><a href="#cb1-1874" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Insert new data into last 3 time slots</span></span>
+<span id="cb1-1875"><a href="#cb1-1875" aria-hidden="true" tabindex="-1"></a>            eof2_var <span class="op">=</span> nc_eof2.variables[gvar][:, :, :]</span>
+<span id="cb1-1876"><a href="#cb1-1876" aria-hidden="true" tabindex="-1"></a>            eof2_var[<span class="op">-</span><span class="dv">3</span>:, :, :] <span class="op">=</span> np.flip(band_var2, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-1877"><a href="#cb1-1877" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1878"><a href="#cb1-1878" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Vectorized masking in one step</span></span>
+<span id="cb1-1879"><a href="#cb1-1879" aria-hidden="true" tabindex="-1"></a>            data <span class="op">=</span> np.array(eof2_var, copy<span class="op">=</span><span class="va">False</span>)  <span class="co"># avoid extra copy</span></span>
+<span id="cb1-1880"><a href="#cb1-1880" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> np.isnan(data) <span class="op">|</span> (data <span class="op">&gt;</span> <span class="dv">9000</span>)</span>
+<span id="cb1-1881"><a href="#cb1-1881" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> gvar <span class="op">==</span> <span class="st">'Rrs_489'</span> <span class="kw">or</span> gvar <span class="op">==</span> <span class="st">'Rrs_556'</span>:</span>
+<span id="cb1-1882"><a href="#cb1-1882" aria-hidden="true" tabindex="-1"></a>                mask <span class="op">|=</span> (data <span class="op">&lt;=</span> <span class="fl">0.0</span>)</span>
 <span id="cb1-1883"><a href="#cb1-1883" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1884"><a href="#cb1-1884" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Write back to file</span></span>
-<span id="cb1-1885"><a href="#cb1-1885" aria-hidden="true" tabindex="-1"></a>            nc_eof2.variables[gvar][:, :, :] <span class="op">=</span> eof2_var_masked</span>
-<span id="cb1-1886"><a href="#cb1-1886" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1887"><a href="#cb1-1887" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> time_last[<span class="dv">0</span>]</span>
+<span id="cb1-1884"><a href="#cb1-1884" aria-hidden="true" tabindex="-1"></a>            eof2_var_masked <span class="op">=</span> ma.array(data, mask<span class="op">=</span>mask)</span>
+<span id="cb1-1885"><a href="#cb1-1885" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1886"><a href="#cb1-1886" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Write back to file</span></span>
+<span id="cb1-1887"><a href="#cb1-1887" aria-hidden="true" tabindex="-1"></a>            nc_eof2.variables[gvar][:, :, :] <span class="op">=</span> eof2_var_masked</span>
 <span id="cb1-1888"><a href="#cb1-1888" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1889"><a href="#cb1-1889" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1890"><a href="#cb1-1890" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _regrid_single_uv(</span>
-<span id="cb1-1891"><a href="#cb1-1891" aria-hidden="true" tabindex="-1"></a>    fl: Path, v_2d_lon: np.ndarray, v_2d_lat: np.ndarray</span>
-<span id="cb1-1892"><a href="#cb1-1892" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Tuple[np.ndarray, np.ndarray, datetime] <span class="op">|</span> <span class="va">None</span>:</span>
-<span id="cb1-1893"><a href="#cb1-1893" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Worker function to regrid a single UV NetCDF file."""</span></span>
-<span id="cb1-1894"><a href="#cb1-1894" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb1-1895"><a href="#cb1-1895" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> Dataset(fl, <span class="st">"r"</span>) <span class="im">as</span> nc:</span>
-<span id="cb1-1896"><a href="#cb1-1896" aria-hidden="true" tabindex="-1"></a>            u <span class="op">=</span> nc[<span class="st">"u_sur"</span>][<span class="dv">0</span>, :, :]</span>
-<span id="cb1-1897"><a href="#cb1-1897" aria-hidden="true" tabindex="-1"></a>            v <span class="op">=</span> nc[<span class="st">"v_sur"</span>][<span class="dv">0</span>, :, :]</span>
-<span id="cb1-1898"><a href="#cb1-1898" aria-hidden="true" tabindex="-1"></a>            lat_u <span class="op">=</span> nc[<span class="st">"lat_u"</span>][:, :]</span>
-<span id="cb1-1899"><a href="#cb1-1899" aria-hidden="true" tabindex="-1"></a>            lon_u <span class="op">=</span> nc[<span class="st">"lon_u"</span>][:, :] <span class="op">+</span> <span class="fl">360.0</span></span>
-<span id="cb1-1900"><a href="#cb1-1900" aria-hidden="true" tabindex="-1"></a>            lat_v <span class="op">=</span> nc[<span class="st">"lat_v"</span>][:, :]</span>
-<span id="cb1-1901"><a href="#cb1-1901" aria-hidden="true" tabindex="-1"></a>            lon_v <span class="op">=</span> nc[<span class="st">"lon_v"</span>][:, :] <span class="op">+</span> <span class="fl">360.0</span></span>
-<span id="cb1-1902"><a href="#cb1-1902" aria-hidden="true" tabindex="-1"></a>            ocean_time <span class="op">=</span> nc[<span class="st">"ocean_time"</span>][<span class="dv">0</span>]</span>
-<span id="cb1-1903"><a href="#cb1-1903" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
-<span id="cb1-1904"><a href="#cb1-1904" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"Failed to read </span><span class="sc">%s</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, fl, e)</span>
-<span id="cb1-1905"><a href="#cb1-1905" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
-<span id="cb1-1906"><a href="#cb1-1906" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1907"><a href="#cb1-1907" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
-<span id="cb1-1908"><a href="#cb1-1908" aria-hidden="true" tabindex="-1"></a>        us_reg <span class="op">=</span> regrid_irr_2_reg(lon_u, lat_u, u, v_2d_lon, v_2d_lat)</span>
-<span id="cb1-1909"><a href="#cb1-1909" aria-hidden="true" tabindex="-1"></a>        vs_reg <span class="op">=</span> regrid_irr_2_reg(lon_v, lat_v, v, v_2d_lon, v_2d_lat)</span>
-<span id="cb1-1910"><a href="#cb1-1910" aria-hidden="true" tabindex="-1"></a>        o_time_obj <span class="op">=</span> datetime(<span class="dv">2016</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">+</span> timedelta(seconds<span class="op">=</span><span class="bu">int</span>(ocean_time))</span>
-<span id="cb1-1911"><a href="#cb1-1911" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1912"><a href="#cb1-1912" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> us_reg, vs_reg, o_time_obj</span>
-<span id="cb1-1913"><a href="#cb1-1913" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
-<span id="cb1-1914"><a href="#cb1-1914" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="st">"Interpolation failed for </span><span class="sc">%s</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, fl, e)</span>
-<span id="cb1-1915"><a href="#cb1-1915" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
-<span id="cb1-1916"><a href="#cb1-1916" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1917"><a href="#cb1-1917" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1918"><a href="#cb1-1918" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> regrid_uv_aws_parallel(</span>
-<span id="cb1-1919"><a href="#cb1-1919" aria-hidden="true" tabindex="-1"></a>    uv_files: List[<span class="bu">str</span>],</span>
-<span id="cb1-1920"><a href="#cb1-1920" aria-hidden="true" tabindex="-1"></a>    work_dir: Path,</span>
-<span id="cb1-1921"><a href="#cb1-1921" aria-hidden="true" tabindex="-1"></a>    v_2d_lon: np.ndarray,</span>
-<span id="cb1-1922"><a href="#cb1-1922" aria-hidden="true" tabindex="-1"></a>    v_2d_lat: np.ndarray,</span>
-<span id="cb1-1923"><a href="#cb1-1923" aria-hidden="true" tabindex="-1"></a>    max_workers: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
-<span id="cb1-1924"><a href="#cb1-1924" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Tuple[ma.MaskedArray, ma.MaskedArray, List[datetime]]:</span>
-<span id="cb1-1925"><a href="#cb1-1925" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb1-1926"><a href="#cb1-1926" aria-hidden="true" tabindex="-1"></a><span class="co">    Regrid WCOFS surface velocity components (U and V) to the CHARM grid in parallel.</span></span>
-<span id="cb1-1927"><a href="#cb1-1927" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1928"><a href="#cb1-1928" aria-hidden="true" tabindex="-1"></a><span class="co">    This function processes multiple WCOFS NetCDF files concurrently. Each file is</span></span>
-<span id="cb1-1929"><a href="#cb1-1929" aria-hidden="true" tabindex="-1"></a><span class="co">    regridded to the CHARM grid using `regrid_irr_2_reg()` and the results are</span></span>
-<span id="cb1-1930"><a href="#cb1-1930" aria-hidden="true" tabindex="-1"></a><span class="co">    collected in the same order as input.</span></span>
-<span id="cb1-1931"><a href="#cb1-1931" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1932"><a href="#cb1-1932" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
-<span id="cb1-1933"><a href="#cb1-1933" aria-hidden="true" tabindex="-1"></a><span class="co">        uv_files (list[str]):</span></span>
-<span id="cb1-1934"><a href="#cb1-1934" aria-hidden="true" tabindex="-1"></a><span class="co">            List of filenames for WCOFS UV NetCDF files to process.</span></span>
-<span id="cb1-1935"><a href="#cb1-1935" aria-hidden="true" tabindex="-1"></a><span class="co">        work_dir (Path | str):</span></span>
-<span id="cb1-1936"><a href="#cb1-1936" aria-hidden="true" tabindex="-1"></a><span class="co">            Directory containing the WCOFS NetCDF input files.</span></span>
-<span id="cb1-1937"><a href="#cb1-1937" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lon (np.ndarray):</span></span>
-<span id="cb1-1938"><a href="#cb1-1938" aria-hidden="true" tabindex="-1"></a><span class="co">            2D array of target longitudes (CHARM grid).</span></span>
-<span id="cb1-1939"><a href="#cb1-1939" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lat (np.ndarray):</span></span>
-<span id="cb1-1940"><a href="#cb1-1940" aria-hidden="true" tabindex="-1"></a><span class="co">            2D array of target latitudes (CHARM grid).</span></span>
-<span id="cb1-1941"><a href="#cb1-1941" aria-hidden="true" tabindex="-1"></a><span class="co">        max_workers (int | None):</span></span>
-<span id="cb1-1942"><a href="#cb1-1942" aria-hidden="true" tabindex="-1"></a><span class="co">            Maximum number of worker processes. Defaults to number of CPU cores.</span></span>
-<span id="cb1-1943"><a href="#cb1-1943" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1944"><a href="#cb1-1944" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
-<span id="cb1-1945"><a href="#cb1-1945" aria-hidden="true" tabindex="-1"></a><span class="co">        tuple[ma.MaskedArray, ma.MaskedArray, list[datetime]]:</span></span>
-<span id="cb1-1946"><a href="#cb1-1946" aria-hidden="true" tabindex="-1"></a><span class="co">            * **us** - Masked array of regridded U-component velocities</span></span>
-<span id="cb1-1947"><a href="#cb1-1947" aria-hidden="true" tabindex="-1"></a><span class="co">              with shape `(ntime, ny, nx)`.</span></span>
-<span id="cb1-1948"><a href="#cb1-1948" aria-hidden="true" tabindex="-1"></a><span class="co">            * **vs** - Masked array of regridded V-component velocities</span></span>
+<span id="cb1-1889"><a href="#cb1-1889" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> time_last[<span class="dv">0</span>]</span>
+<span id="cb1-1890"><a href="#cb1-1890" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1891"><a href="#cb1-1891" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1892"><a href="#cb1-1892" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _regrid_single_uv(</span>
+<span id="cb1-1893"><a href="#cb1-1893" aria-hidden="true" tabindex="-1"></a>    fl: Path, v_2d_lon: np.ndarray, v_2d_lat: np.ndarray</span>
+<span id="cb1-1894"><a href="#cb1-1894" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Tuple[np.ndarray, np.ndarray, datetime] <span class="op">|</span> <span class="va">None</span>:</span>
+<span id="cb1-1895"><a href="#cb1-1895" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Worker function to regrid a single UV NetCDF file."""</span></span>
+<span id="cb1-1896"><a href="#cb1-1896" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb1-1897"><a href="#cb1-1897" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> Dataset(fl, <span class="st">"r"</span>) <span class="im">as</span> nc:</span>
+<span id="cb1-1898"><a href="#cb1-1898" aria-hidden="true" tabindex="-1"></a>            u <span class="op">=</span> nc[<span class="st">"u_sur"</span>][<span class="dv">0</span>, :, :]</span>
+<span id="cb1-1899"><a href="#cb1-1899" aria-hidden="true" tabindex="-1"></a>            v <span class="op">=</span> nc[<span class="st">"v_sur"</span>][<span class="dv">0</span>, :, :]</span>
+<span id="cb1-1900"><a href="#cb1-1900" aria-hidden="true" tabindex="-1"></a>            lat_u <span class="op">=</span> nc[<span class="st">"lat_u"</span>][:, :]</span>
+<span id="cb1-1901"><a href="#cb1-1901" aria-hidden="true" tabindex="-1"></a>            lon_u <span class="op">=</span> nc[<span class="st">"lon_u"</span>][:, :] <span class="op">+</span> <span class="fl">360.0</span></span>
+<span id="cb1-1902"><a href="#cb1-1902" aria-hidden="true" tabindex="-1"></a>            lat_v <span class="op">=</span> nc[<span class="st">"lat_v"</span>][:, :]</span>
+<span id="cb1-1903"><a href="#cb1-1903" aria-hidden="true" tabindex="-1"></a>            lon_v <span class="op">=</span> nc[<span class="st">"lon_v"</span>][:, :] <span class="op">+</span> <span class="fl">360.0</span></span>
+<span id="cb1-1904"><a href="#cb1-1904" aria-hidden="true" tabindex="-1"></a>            ocean_time <span class="op">=</span> nc[<span class="st">"ocean_time"</span>][<span class="dv">0</span>]</span>
+<span id="cb1-1905"><a href="#cb1-1905" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb1-1906"><a href="#cb1-1906" aria-hidden="true" tabindex="-1"></a>        logger.error(<span class="st">"Failed to read </span><span class="sc">%s</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, fl, e)</span>
+<span id="cb1-1907"><a href="#cb1-1907" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb1-1908"><a href="#cb1-1908" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1909"><a href="#cb1-1909" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb1-1910"><a href="#cb1-1910" aria-hidden="true" tabindex="-1"></a>        us_reg <span class="op">=</span> regrid_irr_2_reg(lon_u, lat_u, u, v_2d_lon, v_2d_lat)</span>
+<span id="cb1-1911"><a href="#cb1-1911" aria-hidden="true" tabindex="-1"></a>        vs_reg <span class="op">=</span> regrid_irr_2_reg(lon_v, lat_v, v, v_2d_lon, v_2d_lat)</span>
+<span id="cb1-1912"><a href="#cb1-1912" aria-hidden="true" tabindex="-1"></a>        o_time_obj <span class="op">=</span> datetime(<span class="dv">2016</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">+</span> timedelta(seconds<span class="op">=</span><span class="bu">int</span>(ocean_time))</span>
+<span id="cb1-1913"><a href="#cb1-1913" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1914"><a href="#cb1-1914" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> us_reg, vs_reg, o_time_obj</span>
+<span id="cb1-1915"><a href="#cb1-1915" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb1-1916"><a href="#cb1-1916" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="st">"Interpolation failed for </span><span class="sc">%s</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, fl, e)</span>
+<span id="cb1-1917"><a href="#cb1-1917" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb1-1918"><a href="#cb1-1918" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1919"><a href="#cb1-1919" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1920"><a href="#cb1-1920" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> regrid_uv_aws_parallel(</span>
+<span id="cb1-1921"><a href="#cb1-1921" aria-hidden="true" tabindex="-1"></a>    uv_files: List[<span class="bu">str</span>],</span>
+<span id="cb1-1922"><a href="#cb1-1922" aria-hidden="true" tabindex="-1"></a>    work_dir: Path,</span>
+<span id="cb1-1923"><a href="#cb1-1923" aria-hidden="true" tabindex="-1"></a>    v_2d_lon: np.ndarray,</span>
+<span id="cb1-1924"><a href="#cb1-1924" aria-hidden="true" tabindex="-1"></a>    v_2d_lat: np.ndarray,</span>
+<span id="cb1-1925"><a href="#cb1-1925" aria-hidden="true" tabindex="-1"></a>    max_workers: <span class="bu">int</span> <span class="op">|</span> <span class="va">None</span> <span class="op">=</span> <span class="va">None</span>,</span>
+<span id="cb1-1926"><a href="#cb1-1926" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> Tuple[ma.MaskedArray, ma.MaskedArray, List[datetime]]:</span>
+<span id="cb1-1927"><a href="#cb1-1927" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb1-1928"><a href="#cb1-1928" aria-hidden="true" tabindex="-1"></a><span class="co">    Regrid WCOFS surface velocity components (U and V) to the CHARM grid in parallel.</span></span>
+<span id="cb1-1929"><a href="#cb1-1929" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1930"><a href="#cb1-1930" aria-hidden="true" tabindex="-1"></a><span class="co">    This function processes multiple WCOFS NetCDF files concurrently. Each file is</span></span>
+<span id="cb1-1931"><a href="#cb1-1931" aria-hidden="true" tabindex="-1"></a><span class="co">    regridded to the CHARM grid using `regrid_irr_2_reg()` and the results are</span></span>
+<span id="cb1-1932"><a href="#cb1-1932" aria-hidden="true" tabindex="-1"></a><span class="co">    collected in the same order as input.</span></span>
+<span id="cb1-1933"><a href="#cb1-1933" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1934"><a href="#cb1-1934" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb1-1935"><a href="#cb1-1935" aria-hidden="true" tabindex="-1"></a><span class="co">        uv_files (list[str]):</span></span>
+<span id="cb1-1936"><a href="#cb1-1936" aria-hidden="true" tabindex="-1"></a><span class="co">            List of filenames for WCOFS UV NetCDF files to process.</span></span>
+<span id="cb1-1937"><a href="#cb1-1937" aria-hidden="true" tabindex="-1"></a><span class="co">        work_dir (Path | str):</span></span>
+<span id="cb1-1938"><a href="#cb1-1938" aria-hidden="true" tabindex="-1"></a><span class="co">            Directory containing the WCOFS NetCDF input files.</span></span>
+<span id="cb1-1939"><a href="#cb1-1939" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lon (np.ndarray):</span></span>
+<span id="cb1-1940"><a href="#cb1-1940" aria-hidden="true" tabindex="-1"></a><span class="co">            2D array of target longitudes (CHARM grid).</span></span>
+<span id="cb1-1941"><a href="#cb1-1941" aria-hidden="true" tabindex="-1"></a><span class="co">        v_2d_lat (np.ndarray):</span></span>
+<span id="cb1-1942"><a href="#cb1-1942" aria-hidden="true" tabindex="-1"></a><span class="co">            2D array of target latitudes (CHARM grid).</span></span>
+<span id="cb1-1943"><a href="#cb1-1943" aria-hidden="true" tabindex="-1"></a><span class="co">        max_workers (int | None):</span></span>
+<span id="cb1-1944"><a href="#cb1-1944" aria-hidden="true" tabindex="-1"></a><span class="co">            Maximum number of worker processes. Defaults to number of CPU cores.</span></span>
+<span id="cb1-1945"><a href="#cb1-1945" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1946"><a href="#cb1-1946" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb1-1947"><a href="#cb1-1947" aria-hidden="true" tabindex="-1"></a><span class="co">        tuple[ma.MaskedArray, ma.MaskedArray, list[datetime]]:</span></span>
+<span id="cb1-1948"><a href="#cb1-1948" aria-hidden="true" tabindex="-1"></a><span class="co">            * **us** – Masked array of regridded U-component velocities</span></span>
 <span id="cb1-1949"><a href="#cb1-1949" aria-hidden="true" tabindex="-1"></a><span class="co">              with shape `(ntime, ny, nx)`.</span></span>
-<span id="cb1-1950"><a href="#cb1-1950" aria-hidden="true" tabindex="-1"></a><span class="co">            * **o_time** - List of corresponding Python `datetime` objects.</span></span>
-<span id="cb1-1951"><a href="#cb1-1951" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1952"><a href="#cb1-1952" aria-hidden="true" tabindex="-1"></a><span class="co">    Example:</span></span>
-<span id="cb1-1953"><a href="#cb1-1953" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; us, vs, times = regrid_uv_aws_parallel(</span></span>
-<span id="cb1-1954"><a href="#cb1-1954" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     uv_files=['wcofs_uv_20251006T12.nc', 'wcofs_uv_20251006T18.nc'],</span></span>
-<span id="cb1-1955"><a href="#cb1-1955" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     work_dir=Path('/data/work'),</span></span>
-<span id="cb1-1956"><a href="#cb1-1956" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     v_2d_lon=sat_lon,</span></span>
-<span id="cb1-1957"><a href="#cb1-1957" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     v_2d_lat=sat_lat,</span></span>
-<span id="cb1-1958"><a href="#cb1-1958" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     max_workers=4,</span></span>
-<span id="cb1-1959"><a href="#cb1-1959" aria-hidden="true" tabindex="-1"></a><span class="co">        ... )</span></span>
-<span id="cb1-1960"><a href="#cb1-1960" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; us.shape</span></span>
-<span id="cb1-1961"><a href="#cb1-1961" aria-hidden="true" tabindex="-1"></a><span class="co">        (2, 720, 1440)</span></span>
-<span id="cb1-1962"><a href="#cb1-1962" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; times[0]</span></span>
-<span id="cb1-1963"><a href="#cb1-1963" aria-hidden="true" tabindex="-1"></a><span class="co">        datetime.datetime(2025, 10, 6, 12, 0)</span></span>
-<span id="cb1-1964"><a href="#cb1-1964" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1965"><a href="#cb1-1965" aria-hidden="true" tabindex="-1"></a><span class="co">    Notes:</span></span>
-<span id="cb1-1966"><a href="#cb1-1966" aria-hidden="true" tabindex="-1"></a><span class="co">        * Uses `concurrent.futures.ProcessPoolExecutor` for true parallel CPU processing.</span></span>
-<span id="cb1-1967"><a href="#cb1-1967" aria-hidden="true" tabindex="-1"></a><span class="co">        * Preserves order of input files in returned arrays.</span></span>
-<span id="cb1-1968"><a href="#cb1-1968" aria-hidden="true" tabindex="-1"></a><span class="co">        * Skips files that fail to read or interpolate, logging warnings.</span></span>
-<span id="cb1-1969"><a href="#cb1-1969" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb1-1970"><a href="#cb1-1970" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Starting parallel UV regridding for </span><span class="sc">%d</span><span class="st"> files"</span>, <span class="bu">len</span>(uv_files))</span>
-<span id="cb1-1971"><a href="#cb1-1971" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> max_workers <span class="kw">is</span> <span class="va">None</span>:</span>
-<span id="cb1-1972"><a href="#cb1-1972" aria-hidden="true" tabindex="-1"></a>        max_workers <span class="op">=</span> <span class="bu">min</span>(<span class="bu">len</span>(uv_files), os.cpu_count() <span class="kw">or</span> <span class="dv">4</span>)</span>
-<span id="cb1-1973"><a href="#cb1-1973" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1974"><a href="#cb1-1974" aria-hidden="true" tabindex="-1"></a>    work_dir <span class="op">=</span> Path(work_dir)</span>
+<span id="cb1-1950"><a href="#cb1-1950" aria-hidden="true" tabindex="-1"></a><span class="co">            * **vs** – Masked array of regridded V-component velocities</span></span>
+<span id="cb1-1951"><a href="#cb1-1951" aria-hidden="true" tabindex="-1"></a><span class="co">              with shape `(ntime, ny, nx)`.</span></span>
+<span id="cb1-1952"><a href="#cb1-1952" aria-hidden="true" tabindex="-1"></a><span class="co">            * **o_time** – List of corresponding Python `datetime` objects.</span></span>
+<span id="cb1-1953"><a href="#cb1-1953" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1954"><a href="#cb1-1954" aria-hidden="true" tabindex="-1"></a><span class="co">    Example:</span></span>
+<span id="cb1-1955"><a href="#cb1-1955" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; us, vs, times = regrid_uv_aws_parallel(</span></span>
+<span id="cb1-1956"><a href="#cb1-1956" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     uv_files=['wcofs_uv_20251006T12.nc', 'wcofs_uv_20251006T18.nc'],</span></span>
+<span id="cb1-1957"><a href="#cb1-1957" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     work_dir=Path('/data/work'),</span></span>
+<span id="cb1-1958"><a href="#cb1-1958" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     v_2d_lon=sat_lon,</span></span>
+<span id="cb1-1959"><a href="#cb1-1959" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     v_2d_lat=sat_lat,</span></span>
+<span id="cb1-1960"><a href="#cb1-1960" aria-hidden="true" tabindex="-1"></a><span class="co">        ...     max_workers=4,</span></span>
+<span id="cb1-1961"><a href="#cb1-1961" aria-hidden="true" tabindex="-1"></a><span class="co">        ... )</span></span>
+<span id="cb1-1962"><a href="#cb1-1962" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; us.shape</span></span>
+<span id="cb1-1963"><a href="#cb1-1963" aria-hidden="true" tabindex="-1"></a><span class="co">        (2, 720, 1440)</span></span>
+<span id="cb1-1964"><a href="#cb1-1964" aria-hidden="true" tabindex="-1"></a><span class="co">        &gt;&gt;&gt; times[0]</span></span>
+<span id="cb1-1965"><a href="#cb1-1965" aria-hidden="true" tabindex="-1"></a><span class="co">        datetime.datetime(2025, 10, 6, 12, 0)</span></span>
+<span id="cb1-1966"><a href="#cb1-1966" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1967"><a href="#cb1-1967" aria-hidden="true" tabindex="-1"></a><span class="co">    Notes:</span></span>
+<span id="cb1-1968"><a href="#cb1-1968" aria-hidden="true" tabindex="-1"></a><span class="co">        * Uses `concurrent.futures.ProcessPoolExecutor` for true parallel CPU processing.</span></span>
+<span id="cb1-1969"><a href="#cb1-1969" aria-hidden="true" tabindex="-1"></a><span class="co">        * Preserves order of input files in returned arrays.</span></span>
+<span id="cb1-1970"><a href="#cb1-1970" aria-hidden="true" tabindex="-1"></a><span class="co">        * Skips files that fail to read or interpolate, logging warnings.</span></span>
+<span id="cb1-1971"><a href="#cb1-1971" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-1972"><a href="#cb1-1972" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Starting parallel UV regridding for </span><span class="sc">%d</span><span class="st"> files"</span>, <span class="bu">len</span>(uv_files))</span>
+<span id="cb1-1973"><a href="#cb1-1973" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> max_workers <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb1-1974"><a href="#cb1-1974" aria-hidden="true" tabindex="-1"></a>        max_workers <span class="op">=</span> <span class="bu">min</span>(<span class="bu">len</span>(uv_files), os.cpu_count() <span class="kw">or</span> <span class="dv">4</span>)</span>
 <span id="cb1-1975"><a href="#cb1-1975" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1976"><a href="#cb1-1976" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ProcessPoolExecutor(max_workers<span class="op">=</span>max_workers) <span class="im">as</span> executor:</span>
-<span id="cb1-1977"><a href="#cb1-1977" aria-hidden="true" tabindex="-1"></a>        futures <span class="op">=</span> {</span>
-<span id="cb1-1978"><a href="#cb1-1978" aria-hidden="true" tabindex="-1"></a>            executor.submit(_regrid_single_uv, work_dir <span class="op">/</span> fl, v_2d_lon, v_2d_lat): fl</span>
-<span id="cb1-1979"><a href="#cb1-1979" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> fl <span class="kw">in</span> uv_files</span>
-<span id="cb1-1980"><a href="#cb1-1980" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb1-1981"><a href="#cb1-1981" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1982"><a href="#cb1-1982" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> []</span>
-<span id="cb1-1983"><a href="#cb1-1983" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> fut <span class="kw">in</span> as_completed(futures):</span>
-<span id="cb1-1984"><a href="#cb1-1984" aria-hidden="true" tabindex="-1"></a>            fl <span class="op">=</span> futures[fut]</span>
-<span id="cb1-1985"><a href="#cb1-1985" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
-<span id="cb1-1986"><a href="#cb1-1986" aria-hidden="true" tabindex="-1"></a>                res <span class="op">=</span> fut.result()</span>
-<span id="cb1-1987"><a href="#cb1-1987" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> res:</span>
-<span id="cb1-1988"><a href="#cb1-1988" aria-hidden="true" tabindex="-1"></a>                    results.append((uv_files.index(fl), <span class="op">*</span>res))  <span class="co"># (index, us, vs, time)</span></span>
-<span id="cb1-1989"><a href="#cb1-1989" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
-<span id="cb1-1990"><a href="#cb1-1990" aria-hidden="true" tabindex="-1"></a>                logger.error(<span class="st">"Worker failed for </span><span class="sc">%s</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, fl, e)</span>
-<span id="cb1-1991"><a href="#cb1-1991" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1992"><a href="#cb1-1992" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sort results by original order</span></span>
-<span id="cb1-1993"><a href="#cb1-1993" aria-hidden="true" tabindex="-1"></a>    results.sort(key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="dv">0</span>])</span>
-<span id="cb1-1994"><a href="#cb1-1994" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1995"><a href="#cb1-1995" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> results:</span>
-<span id="cb1-1996"><a href="#cb1-1996" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="st">"No valid velocity fields were successfully regridded."</span>)</span>
-<span id="cb1-1997"><a href="#cb1-1997" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span>, <span class="va">None</span>, []</span>
-<span id="cb1-1998"><a href="#cb1-1998" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-1999"><a href="#cb1-1999" aria-hidden="true" tabindex="-1"></a>    us_list <span class="op">=</span> [np.expand_dims(r[<span class="dv">1</span>], axis<span class="op">=</span><span class="dv">0</span>) <span class="cf">for</span> r <span class="kw">in</span> results]</span>
-<span id="cb1-2000"><a href="#cb1-2000" aria-hidden="true" tabindex="-1"></a>    vs_list <span class="op">=</span> [np.expand_dims(r[<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">0</span>) <span class="cf">for</span> r <span class="kw">in</span> results]</span>
-<span id="cb1-2001"><a href="#cb1-2001" aria-hidden="true" tabindex="-1"></a>    o_time <span class="op">=</span> [r[<span class="dv">3</span>] <span class="cf">for</span> r <span class="kw">in</span> results]</span>
-<span id="cb1-2002"><a href="#cb1-2002" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-2003"><a href="#cb1-2003" aria-hidden="true" tabindex="-1"></a>    us <span class="op">=</span> ma.masked_invalid(ma.vstack(us_list))</span>
-<span id="cb1-2004"><a href="#cb1-2004" aria-hidden="true" tabindex="-1"></a>    vs <span class="op">=</span> ma.masked_invalid(ma.vstack(vs_list))</span>
-<span id="cb1-2005"><a href="#cb1-2005" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-2006"><a href="#cb1-2006" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Completed UV regridding: </span><span class="sc">%d</span><span class="st"> time steps processed"</span>, <span class="bu">len</span>(o_time))</span>
-<span id="cb1-2007"><a href="#cb1-2007" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> us, vs, o_time</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-1976"><a href="#cb1-1976" aria-hidden="true" tabindex="-1"></a>    work_dir <span class="op">=</span> Path(work_dir)</span>
+<span id="cb1-1977"><a href="#cb1-1977" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1978"><a href="#cb1-1978" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ProcessPoolExecutor(max_workers<span class="op">=</span>max_workers) <span class="im">as</span> executor:</span>
+<span id="cb1-1979"><a href="#cb1-1979" aria-hidden="true" tabindex="-1"></a>        futures <span class="op">=</span> {</span>
+<span id="cb1-1980"><a href="#cb1-1980" aria-hidden="true" tabindex="-1"></a>            executor.submit(_regrid_single_uv, work_dir <span class="op">/</span> fl, v_2d_lon, v_2d_lat): fl</span>
+<span id="cb1-1981"><a href="#cb1-1981" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> fl <span class="kw">in</span> uv_files</span>
+<span id="cb1-1982"><a href="#cb1-1982" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-1983"><a href="#cb1-1983" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1984"><a href="#cb1-1984" aria-hidden="true" tabindex="-1"></a>        results <span class="op">=</span> []</span>
+<span id="cb1-1985"><a href="#cb1-1985" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> fut <span class="kw">in</span> as_completed(futures):</span>
+<span id="cb1-1986"><a href="#cb1-1986" aria-hidden="true" tabindex="-1"></a>            fl <span class="op">=</span> futures[fut]</span>
+<span id="cb1-1987"><a href="#cb1-1987" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
+<span id="cb1-1988"><a href="#cb1-1988" aria-hidden="true" tabindex="-1"></a>                res <span class="op">=</span> fut.result()</span>
+<span id="cb1-1989"><a href="#cb1-1989" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> res:</span>
+<span id="cb1-1990"><a href="#cb1-1990" aria-hidden="true" tabindex="-1"></a>                    results.append((uv_files.index(fl), <span class="op">*</span>res))  <span class="co"># (index, us, vs, time)</span></span>
+<span id="cb1-1991"><a href="#cb1-1991" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb1-1992"><a href="#cb1-1992" aria-hidden="true" tabindex="-1"></a>                logger.error(<span class="st">"Worker failed for </span><span class="sc">%s</span><span class="st">: </span><span class="sc">%s</span><span class="st">"</span>, fl, e)</span>
+<span id="cb1-1993"><a href="#cb1-1993" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1994"><a href="#cb1-1994" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sort results by original order</span></span>
+<span id="cb1-1995"><a href="#cb1-1995" aria-hidden="true" tabindex="-1"></a>    results.sort(key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="dv">0</span>])</span>
+<span id="cb1-1996"><a href="#cb1-1996" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-1997"><a href="#cb1-1997" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> results:</span>
+<span id="cb1-1998"><a href="#cb1-1998" aria-hidden="true" tabindex="-1"></a>        logger.warning(<span class="st">"No valid velocity fields were successfully regridded."</span>)</span>
+<span id="cb1-1999"><a href="#cb1-1999" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span>, <span class="va">None</span>, []</span>
+<span id="cb1-2000"><a href="#cb1-2000" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2001"><a href="#cb1-2001" aria-hidden="true" tabindex="-1"></a>    us_list <span class="op">=</span> [np.expand_dims(r[<span class="dv">1</span>], axis<span class="op">=</span><span class="dv">0</span>) <span class="cf">for</span> r <span class="kw">in</span> results]</span>
+<span id="cb1-2002"><a href="#cb1-2002" aria-hidden="true" tabindex="-1"></a>    vs_list <span class="op">=</span> [np.expand_dims(r[<span class="dv">2</span>], axis<span class="op">=</span><span class="dv">0</span>) <span class="cf">for</span> r <span class="kw">in</span> results]</span>
+<span id="cb1-2003"><a href="#cb1-2003" aria-hidden="true" tabindex="-1"></a>    o_time <span class="op">=</span> [r[<span class="dv">3</span>] <span class="cf">for</span> r <span class="kw">in</span> results]</span>
+<span id="cb1-2004"><a href="#cb1-2004" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2005"><a href="#cb1-2005" aria-hidden="true" tabindex="-1"></a>    us <span class="op">=</span> ma.masked_invalid(ma.vstack(us_list))</span>
+<span id="cb1-2006"><a href="#cb1-2006" aria-hidden="true" tabindex="-1"></a>    vs <span class="op">=</span> ma.masked_invalid(ma.vstack(vs_list))</span>
+<span id="cb1-2007"><a href="#cb1-2007" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-2008"><a href="#cb1-2008" aria-hidden="true" tabindex="-1"></a>    logger.info(<span class="st">"Completed UV regridding: </span><span class="sc">%d</span><span class="st"> time steps processed"</span>, <span class="bu">len</span>(o_time))</span>
+<span id="cb1-2009"><a href="#cb1-2009" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> us, vs, o_time</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 

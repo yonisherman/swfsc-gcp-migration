@@ -1,5 +1,5 @@
 ---
-title: "delpoy_job.sh"
+title: "deploy_job.sh"
 toc: false
 page-layout: full
 number-sections: false
@@ -12,7 +12,7 @@ Builds, deploys, and schedules the CHARM Cloud Run job.
 ::: {.code-shell}
 
 ```{.bash}
-{{< include ../../workflows/charm/delpoy_job.sh >}}
+{{< include ../../workflows/charm/deploy_job.sh >}}
 ```
 
 :::

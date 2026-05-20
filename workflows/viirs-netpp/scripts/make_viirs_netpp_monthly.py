@@ -21,11 +21,11 @@ on-prem workflow.
 
 GCS layout (mirrors daily):
   Daily inputs:
-    gs://YOUR_GCS_BUCKET/edge/{sensor}_netpp/1day_nrt/{year}/
-    gs://YOUR_GCS_BUCKET/edge/{sensor}_netpp/1day/{year}/
+    gs://<production-bucket>/edge/{sensor}_netpp/1day_nrt/{year}/
+    gs://<production-bucket>/edge/{sensor}_netpp/1day/{year}/
   Monthly outputs:
-    gs://YOUR_GCS_BUCKET/edge/{sensor}_netpp/mday_nrt/{year}/
-    gs://YOUR_GCS_BUCKET/edge/{sensor}_netpp/mday/{year}/
+    gs://<production-bucket>/edge/{sensor}_netpp/mday_nrt/{year}/
+    gs://<production-bucket>/edge/{sensor}_netpp/mday/{year}/
 
 Output filename convention:
   NRT : productivity_viirs_{sensor}_monthly_nrt_{YYYYMM}.nc
@@ -65,6 +65,7 @@ REPO_ROOT = SCRIPT_DIR.parent
 # ---------------------------------------------------------------------------
 
 def load_config(config_path: str) -> dict:
+    """Load and merge all YAML documents from the workflow config file."""
     with open(config_path, "r") as fh:
         docs = list(yaml.safe_load_all(fh))
     merged = {}
@@ -75,6 +76,7 @@ def load_config(config_path: str) -> dict:
 
 
 def build_paths(cfg: dict) -> dict:
+    """Resolve scratch, template, and NCO binary paths used by monthly jobs."""
     ncgen = shutil.which("ncgen")
     nccopy = shutil.which("nccopy")
     nco_dir = os.environ.get("NPP_NCO_DIR")
@@ -97,6 +99,7 @@ def build_paths(cfg: dict) -> dict:
 # ---------------------------------------------------------------------------
 
 def gcs_upload(local_path: str, gcs_uri: str) -> None:
+    """Upload a local monthly output file to GCS, raising on failure."""
     result = subprocess.run(
         ["gsutil", "-q", "cp", local_path, gcs_uri],
         capture_output=True,
@@ -108,6 +111,7 @@ def gcs_upload(local_path: str, gcs_uri: str) -> None:
 
 
 def gcs_exists(gcs_uri: str) -> bool:
+    """Return True when a GCS object already exists."""
     result = subprocess.run(
         ["gsutil", "-q", "stat", gcs_uri],
         capture_output=True,
@@ -142,6 +146,7 @@ def gcs_download(gcs_uri: str, dest_path: str) -> None:
 
 
 def _validate_nc(path: str) -> bool:
+    """Return True if path can be opened as a NetCDF/HDF5 file."""
     try:
         with Dataset(path, "r"):
             pass
@@ -182,6 +187,7 @@ def monthly_gcs_uri(
 # ---------------------------------------------------------------------------
 
 def monthly_filename(cfg: dict, sensor: str, dtype: str, year: int, month: int) -> str:
+    """Format the configured monthly output filename for one sensor/dtype/month."""
     tmpl = cfg["processing"]["output_filename_template_monthly"][dtype]
     return tmpl.format(sensor=sensor, yearmonth=f"{year:04d}{month:02d}")
 
@@ -200,6 +206,7 @@ def write_monthly_metadata(
     now: datetime,
     cfg: dict,
 ) -> None:
+    """Populate global attributes and center-time metadata for monthly output."""
     start_year = cfg["sensors"][sensor]["start_year"]
     su = sensor.upper()
     dtype_label = "NRT" if dtype == "nrt" else "Science Quality"
@@ -369,7 +376,7 @@ def composite_month(
 
     daily_uris = find_daily_files_for_month(cfg, sensor, dtype, year, month)
     if not daily_uris:
-        print(f"  ⏭  No daily files found in GCS for {year}-{month:02d} [{sensor}/{dtype}] - skipping.")
+        print(f"  ⏭  No daily files found in GCS for {year}-{month:02d} [{sensor}/{dtype}] — skipping.")
         return True
 
     print(f"  Found {len(daily_uris)} daily files.")
@@ -387,11 +394,11 @@ def composite_month(
         try:
             gcs_download(uri, dest_path)
         except RuntimeError as exc:
-            print(f"  ✗ Download failed: {exc} - skipping this file.")
+            print(f"  ✗ Download failed: {exc} — skipping this file.")
             continue
 
         if not _validate_nc(dest_path):
-            print(f"  ✗ Invalid NetCDF after download: {fname} - skipping.")
+            print(f"  ✗ Invalid NetCDF after download: {fname} — skipping.")
             try:
                 os.remove(dest_path)
             except OSError:
@@ -406,6 +413,8 @@ def composite_month(
         print(f"  ✗ No valid daily files downloaded for {year}-{month:02d}.")
         return False
 
+    # Use the first readable daily file to discover array dimensionality.
+    # Some templates include an altitude dimension and some do not.
     with Dataset(first_valid_path, "r") as ds0:
         prod_var = ds0["productivity"]
         ndim = prod_var.ndim
@@ -417,7 +426,7 @@ def composite_month(
             # Fallback: (time, lat, lon)
             _, nlat, nlon = shape
         else:
-            print(f"  ✗ Unexpected productivity shape {shape} - cannot composite.")
+            print(f"  ✗ Unexpected productivity shape {shape} — cannot composite.")
             try:
                 os.remove(first_valid_path)
             except OSError:
@@ -432,6 +441,7 @@ def composite_month(
     valid_days = 0
 
     def accumulate_one_file(local_path: str) -> bool:
+        """Accumulate valid productivity pixels from one downloaded daily file."""
         nonlocal valid_days
         try:
             with Dataset(local_path, "r") as ds:
@@ -490,11 +500,11 @@ def composite_month(
         try:
             gcs_download(uri, dest_path)
         except RuntimeError as exc:
-            print(f"  ✗ Download failed: {exc} - skipping this file.")
+            print(f"  ✗ Download failed: {exc} — skipping this file.")
             continue
 
         if not _validate_nc(dest_path):
-            print(f"  ✗ Invalid NetCDF after download: {fname} - skipping.")
+            print(f"  ✗ Invalid NetCDF after download: {fname} — skipping.")
             try:
                 os.remove(dest_path)
             except OSError:
@@ -541,6 +551,7 @@ def composite_month(
             fill_val = float(getattr(prod_out, "_FillValue", -999.0))
 
             for row0 in range(0, nlat, chunk_rows):
+                # Write strips to keep memory stable on Cloud Run /tmp-limited jobs.
                 row1 = min(row0 + chunk_rows, nlat)
                 sum_chunk = pp_sum[row0:row1, :]
                 count_chunk = pp_count[row0:row1, :]
@@ -597,7 +608,8 @@ def composite_month(
 # Argument parsing
 # ---------------------------------------------------------------------------
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
+    """Parse command-line options for one monthly composite job."""
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -651,7 +663,8 @@ def parse_args():
 # Main
 # ---------------------------------------------------------------------------
 
-def main():
+def main() -> None:
+    """Validate CLI inputs, create scratch space, and run one monthly composite."""
     args = parse_args()
     cfg = load_config(args.config)
     paths = build_paths(cfg)
